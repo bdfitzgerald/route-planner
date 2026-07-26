@@ -12,8 +12,9 @@
 # Reports without blocking:
 #   - the analysis summary
 #
-# Cheapest checks first, so an obvious mistake fails in under a second rather than after
-# the suite. Whole thing is ~6s. Bypass with `git commit --no-verify`.
+# Every check runs even if an earlier one fails, and all failures are reported together:
+# fixing lint, re-committing, and only then discovering a test failure is worse than
+# seeing both at once. ~6s either way. Bypass with `git commit --no-verify`.
 
 set -e
 FAILED=0

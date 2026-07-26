@@ -204,8 +204,9 @@ other dependency. It takes under a second and:
 - **blocks on test failures** — all 202 checks, ~5s
 - **reports the analysis summary** without blocking
 
-Cheapest checks run first, so an obvious mistake fails in under a second rather than
-after the whole suite. The lot takes about six seconds.
+Every check runs even when an earlier one fails, and all failures are reported together
+— fixing lint, re-committing, and only then finding a test failure is worse than seeing
+both at once. About six seconds either way.
 
 If the linter cannot be fetched (no network, cold `npx` cache) the hook warns and lets
 the commit through — refusing to commit offline is worse than deferring the check.
