@@ -131,6 +131,29 @@ Two false positives it used to report, now fixed and worth knowing about if you 
 it: `#a8452a` in the CSS is a colour literal, not an id selector; and an exported
 helper used inside its own module is not dead code.
 
+## Shipping presets
+
+There is no login and no backend, so a preset that lives only in one browser is a
+preset you will lose. Anything worth keeping is committed to
+`routes/<route-id>/presets.json` and baked into the build, which puts it on every origin
+— production, previews, and a local dev server — with nothing to import.
+
+The input is the **Copy link** URL from the planner, which already encodes direction,
+peaks mode and the whole selection:
+
+```bash
+npm run preset list
+npm run preset add "Over the top only" "<paste the copied link>"
+npm run preset remove "Over the top only"
+npm run deploy                       # or npm run build
+```
+
+`scripts/preset.mjs` decodes the link with the same module the page encodes it with
+(`scripts/lib/share.mjs`, generated into `site/share.js` for the browser), so the two
+cannot disagree. A link made against an older build fails the fingerprint check and is
+refused with an explanation, rather than being decoded into a different set of points.
+Stale ids in a committed preset are dropped at build time with a warning.
+
 ## Linting
 
 Nothing is installed — everything runs through `npx`, so there is no `node_modules`.
@@ -389,13 +412,14 @@ description rather than an invented one.
   is highlighted, and a **modified** badge appears when the selection no longer
   matches any of them. Switching preset while modified asks first, and offers to save
   what you have rather than making you choose between losing it and cancelling.
-- **Presets are per-origin, so they can be exported.** `localStorage` is scoped to the
-  domain, which means presets saved on `route-planner.test` do not appear on
-  `lakeland-way.netlify.app`, and every Netlify **preview** deploy is a fresh origin
-  again. *Export* copies them as JSON; *Import* pastes them in on the other site.
-  Nothing existing is overwritten — a clashing name gets a free suffix — and points
-  that no longer exist in the current build are dropped rather than imported blind.
-  Save presets on the production URL if you want them to stick.
+- **Presets you want to keep ship with the site.** `localStorage` is per-origin, so a
+  preset saved in the browser on `route-planner.test` will not appear on
+  `lakeland-way.netlify.app`, and every Netlify preview deploy is a fresh origin again.
+  With no auth and no backend there is nowhere to sync them to, so anything worth
+  keeping is committed instead and baked in by the build — see
+  [Shipping presets](#shipping-presets). Presets saved in the browser still work; they
+  are just local to that browser, and are shown with a `×` to delete, whereas shipped
+  ones are not deletable from the page.
 - **Re-saving a preset never silently overwrites.** `savePreset()` returns `exists` on
   a name collision instead of replacing, and the caller asks: *overwrite it*, or
   *keep both* under a suggested free name (`Coniston plan 2`). Overwriting keeps the

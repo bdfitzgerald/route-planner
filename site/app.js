@@ -100,13 +100,30 @@ function restoreState() {
 // Saved presets live under their own key so clearing a selection never loses them.
 const presetsKey = () => `route-planner:${state.data.route.id}:presets:v1`;
 
+// Presets baked into the build by scripts/preset.mjs. Present on every origin, so they
+// need no login and nothing to import. Read-only here: they are changed by editing
+// routes/<id>/presets.json and rebuilding.
+function shippedPresets() {
+  const valid = new Set(allDetourItems().map((i) => i.id));
+  return (state.data.shippedPresets ?? []).map((p) => ({
+    name: p.name,
+    ids: p.ids.filter((id) => valid.has(id)),
+    direction: state.data.directions[p.direction] ? p.direction : null,
+    mode: ['over', 'over-only', 'back'].includes(p.mode) ? p.mode : null,
+    shipped: true,
+  }));
+}
+
 function loadPresets() {
   try {
     const raw = JSON.parse(localStorage.getItem(presetsKey()) ?? '[]');
     if (!Array.isArray(raw)) return [];
     const valid = new Set(allDetourItems().map((i) => i.id));
+    const shippedNames = new Set(shippedPresets().map((p) => p.name.toLowerCase()));
     return raw
       .filter((p) => p && typeof p.name === 'string' && Array.isArray(p.ids))
+      // A shipped preset of the same name wins; the local copy would only shadow it.
+      .filter((p) => !shippedNames.has(p.name.toLowerCase()))
       .map((p) => ({
         name: p.name,
         // A saved preset can outlive the points it named; drop the missing ones.
@@ -157,84 +174,6 @@ function uniquePresetName(base) {
   return `${stem} ${Date.now()}`;
 }
 
-// Presets live in localStorage, which is per-origin: a preset saved on
-// route-planner.test is invisible on lakeland-way.netlify.app, and every Netlify
-// preview deploy is its own origin again. Export/import is the only way to carry them
-// across, so it exists rather than leaving people to rebuild plans by hand.
-const PRESET_EXPORT_VERSION = 1;
-
-function exportPresets() {
-  return JSON.stringify(
-    {
-      kind: 'route-planner-presets',
-      version: PRESET_EXPORT_VERSION,
-      route: state.data.route.id,
-      exported: new Date().toISOString().slice(0, 10),
-      presets: (state.presets ?? []).map((p) => ({
-        name: p.name,
-        ids: p.ids,
-        direction: p.direction,
-        mode: p.mode,
-      })),
-    },
-    null,
-    2,
-  );
-}
-
-// Returns { imported, renamed, skipped, error }. Clashing names are given a free
-// suffix rather than prompting once per preset — a bulk import should not be twelve
-// dialogs — and nothing existing is ever overwritten.
-function importPresets(text) {
-  let payload;
-  try {
-    payload = JSON.parse(text);
-  } catch {
-    return { error: 'That is not valid JSON.' };
-  }
-  if (payload?.kind !== 'route-planner-presets' || !Array.isArray(payload.presets)) {
-    return { error: 'That does not look like an exported preset file.' };
-  }
-  if (payload.route && payload.route !== state.data.route.id) {
-    return { error: `Those presets are for "${payload.route}", not "${state.data.route.id}".` };
-  }
-
-  const validIds = new Set(allDetourItems().map((i) => i.id));
-  let imported = 0;
-  let renamed = 0;
-  let skipped = 0;
-
-  for (const incoming of payload.presets) {
-    if (!incoming || typeof incoming.name !== 'string' || !Array.isArray(incoming.ids)) {
-      skipped += 1;
-      continue;
-    }
-    // Points can disappear between builds; keep the ones that still exist.
-    const ids = incoming.ids.filter((id) => validIds.has(id));
-    if (!ids.length) {
-      skipped += 1;
-      continue;
-    }
-    const existing = loadPresets();
-    let name = incoming.name.trim().slice(0, 40);
-    if (existing.some((p) => p.name.toLowerCase() === name.toLowerCase())) {
-      name = uniquePresetName(name);
-      renamed += 1;
-    }
-    const list = loadPresets();
-    list.push({
-      name,
-      ids,
-      direction: state.data.directions[incoming.direction] ? incoming.direction : null,
-      mode: ['over', 'over-only', 'back'].includes(incoming.mode) ? incoming.mode : null,
-    });
-    storePresets(list);
-    state.presets = list;
-    imported += 1;
-  }
-  return { imported, renamed, skipped };
-}
-
 function deletePreset(name) {
   const list = loadPresets().filter((p) => p.name !== name);
   storePresets(list);
@@ -274,15 +213,22 @@ const BUILTIN_PRESETS = [
 // Which preset the current selection corresponds to, if any. Null means the
 // selection has been edited away from every preset — "modified".
 function activePreset() {
+  // Named presets are checked before the built-ins. A selection can match both — a
+  // shipped preset built from the "no there-and-back" plan is identical to it — and in
+  // that case the one someone deliberately named and committed is the better answer.
+  for (const p of allPresets()) {
+    if (sameSet(state.selected, new Set(p.ids))) {
+      return { kind: 'custom', key: p.name, label: p.name, shipped: Boolean(p.shipped) };
+    }
+  }
   for (const p of BUILTIN_PRESETS) {
     const set = builtinSet(p.key);
     if (set && sameSet(state.selected, set)) return { kind: 'builtin', key: p.key, label: p.label };
   }
-  for (const p of state.presets ?? []) {
-    if (sameSet(state.selected, new Set(p.ids))) return { kind: 'custom', key: p.name, label: p.name };
-  }
   return null;
 }
+
+const allPresets = () => [...shippedPresets(), ...(state.presets ?? [])];
 
 const isModified = () => activePreset() == null;
 
@@ -291,6 +237,8 @@ const isModified = () => activePreset() == null;
 // working from a saved preset, or it already matches.
 function updatablePreset() {
   if (!state.basePresetName || !isModified()) return null;
+  // Only a locally-saved preset can be updated from the browser; a shipped one is
+  // changed with scripts/preset.mjs and a rebuild.
   return (state.presets ?? []).find((p) => p.name === state.basePresetName) ?? null;
 }
 
@@ -303,84 +251,43 @@ function updatablePreset() {
 // after it. The fingerprint is a hash of that id list, so a link made before a
 // rebuild is detected and declined rather than silently decoded into a different
 // set of points.
-const URL_VERSION = 'v1';
-
-function canonicalIds() {
-  return allDetourItems()
-    .map((i) => i.id)
-    .sort();
-}
-
-// FNV-1a, enough to detect that the point list has changed.
-function fingerprint(ids) {
-  let h = 0x811c9dc5;
-  const s = ids.join(',');
-  for (let i = 0; i < s.length; i += 1) {
-    h ^= s.charCodeAt(i);
-    h = Math.imul(h, 0x01000193) >>> 0;
-  }
-  return h.toString(16).padStart(8, '0').slice(0, 6);
-}
-
-function encodeSelection(selected, ids) {
-  const bytes = new Uint8Array(Math.ceil(ids.length / 8));
-  ids.forEach((id, i) => {
-    if (selected.has(id)) bytes[i >> 3] |= 1 << (i & 7);
+// Encoding lives in site/share.js, generated by the build from scripts/lib/share.mjs
+// — the same code scripts/preset.mjs uses, so a link copied here can be turned into a
+// shipped preset without the two disagreeing.
+const shareHash = () =>
+  window.encodeShare({
+    items: allDetourItems(),
+    direction: state.direction,
+    mode: state.mode,
+    selectedIds: state.selected,
   });
-  return [...bytes].map((b) => b.toString(16).padStart(2, '0')).join('');
-}
 
-function decodeSelection(hex, ids) {
-  const out = new Set();
-  const bytes = hex.match(/../g) ?? [];
-  ids.forEach((id, i) => {
-    const byte = parseInt(bytes[i >> 3] ?? '0', 16);
-    if (byte & (1 << (i & 7))) out.add(id);
-  });
-  return out;
-}
-
-function shareUrl() {
-  const ids = canonicalIds();
-  const hash = [
-    URL_VERSION,
-    fingerprint(ids),
-    state.direction,
-    state.mode,
-    encodeSelection(state.selected, ids),
-  ].join('.');
-  const base = `${location.origin}${location.pathname}`;
-  return `${base}#${hash}`;
-}
+const shareUrl = () => `${location.origin}${location.pathname}#${shareHash()}`;
 
 function updateUrl() {
   if (state.restoring) return;
   try {
-    const ids = canonicalIds();
-    const hash = [URL_VERSION, fingerprint(ids), state.direction, state.mode, encodeSelection(state.selected, ids)].join('.');
-    history.replaceState(null, '', `#${hash}`);
+    history.replaceState(null, '', `#${shareHash()}`);
   } catch {
     // No history API, or a sandboxed frame: sharing is a convenience.
   }
 }
 
-// Returns 'ok', 'stale' (fingerprint mismatch) or null (nothing to read).
+// Returns 'ok', 'stale' (made against an older build) or null (nothing to read).
 function readUrl() {
   let hash = '';
   try {
-    hash = (location.hash ?? '').replace(/^#/, '');
+    hash = location.hash ?? '';
   } catch {
     return null;
   }
-  if (!hash) return null;
-  const parts = hash.split('.');
-  if (parts.length !== 5 || parts[0] !== URL_VERSION) return null;
-  const [, fp, dir, mode, bits] = parts;
-  const ids = canonicalIds();
-  if (fp !== fingerprint(ids)) return 'stale';
-  if (state.data.directions[dir]) state.direction = dir;
-  if (['over', 'over-only', 'back'].includes(mode)) state.mode = mode;
-  state.selected = decodeSelection(bits, ids);
+  if (!hash.replace(/^#/, '')) return null;
+  const decoded = window.decodeShare(hash, allDetourItems());
+  if (decoded.stale) return 'stale';
+  if (!decoded.ok) return null;
+  if (state.data.directions[decoded.direction]) state.direction = decoded.direction;
+  if (['over', 'over-only', 'back'].includes(decoded.mode)) state.mode = decoded.mode;
+  state.selected = new Set(decoded.ids);
   return 'ok';
 }
 
@@ -710,11 +617,11 @@ function paletteCommands() {
       run: () => switchPreset(() => applyPreset(p.key)),
       active: () => activePreset()?.kind === 'builtin' && activePreset().key === p.key,
     })),
-    ...(state.presets ?? []).map((p) => ({
+    ...allPresets().map((p) => ({
       id: `preset:custom:${p.name}`,
       group: 'Plan',
       title: `Preset: ${p.name}`,
-      hint: `${p.ids.length} point(s), saved by you`,
+      hint: `${p.ids.length} point(s), ${p.shipped ? 'ships with the site' : 'saved in this browser'}`,
       run: () => switchPreset(() => applyCustomPreset(p.name)),
       active: () => activePreset()?.kind === 'custom' && activePreset().key === p.name,
     })),
@@ -730,20 +637,6 @@ function paletteCommands() {
         ]
       : []),
     { id: 'preset:save', group: 'Plan', title: 'Save this selection as a new preset', run: () => promptForPresetName() },
-    {
-      id: 'preset:export',
-      group: 'Plan',
-      title: 'Export presets',
-      hint: 'Copy them to move to another site or browser',
-      run: () => exportPresetsFlow(),
-    },
-    {
-      id: 'preset:import',
-      group: 'Plan',
-      title: 'Import presets',
-      hint: 'Paste an export from elsewhere',
-      run: () => importPresetsFlow(),
-    },
     { id: 'share:copy', group: 'Plan', title: 'Copy a shareable link', hint: 'Carries direction, peaks setting and selection', run: () => $('copy-link').click() },
     { id: 'preset:reset', group: 'Plan', title: 'Reset — forget saved changes', hint: 'Clears stored selection and returns to recommended', run: () => { clearSaved(); applyPreset('recommended'); } },
     { id: 'days:open', group: 'View', title: 'Expand every day', run: () => { for (const day of currentDays()) state.openDays.add(day.day); render(); saveState(); } },
@@ -1171,18 +1064,25 @@ function fullGpx() {
 
 function renderPresets() {
   const active = activePreset();
-  const custom = state.presets ?? [];
   const parts = ['<span class="glabel">Preset</span>'];
   for (const p of BUILTIN_PRESETS) {
     const on = active?.kind === 'builtin' && active.key === p.key;
     parts.push(`<button data-preset="${p.key}" aria-pressed="${on}">${p.label}</button>`);
   }
-  for (const p of custom) {
+  for (const p of allPresets()) {
     const on = active?.kind === 'custom' && active.key === p.name;
-    parts.push(
-      `<span class="preset-custom"><button data-custom="${escapeAttr(p.name)}" aria-pressed="${on}">${p.name}</button>` +
-        `<button class="preset-del" data-del="${escapeAttr(p.name)}" title="Delete this preset">×</button></span>`,
-    );
+    if (p.shipped) {
+      // No delete: it comes from routes/<id>/presets.json, not this browser.
+      parts.push(
+        `<button data-custom="${escapeAttr(p.name)}" aria-pressed="${on}" ` +
+          `title="Ships with the site — edit with scripts/preset.mjs">${p.name}</button>`,
+      );
+    } else {
+      parts.push(
+        `<span class="preset-custom"><button data-custom="${escapeAttr(p.name)}" aria-pressed="${on}">${p.name}</button>` +
+          `<button class="preset-del" data-del="${escapeAttr(p.name)}" title="Delete this preset (saved in this browser only)">×</button></span>`,
+      );
+    }
   }
   if (!active) {
     parts.push(
@@ -1253,7 +1153,6 @@ function showDialog({
   altLabel = null,
   prompt = false,
   initial = '',
-  multiline = false,
 }) {
   return new Promise((resolve) => {
     const el = $('confirm');
@@ -1266,14 +1165,9 @@ function showDialog({
     const wrap = $('confirm-input-wrap');
     wrap.hidden = !prompt;
     const input = $('confirm-input');
-    const area = $('confirm-area');
-    // A preset export is far too long for a one-line input.
-    area.hidden = !multiline;
-    input.hidden = Boolean(multiline);
-    if (prompt) (multiline ? area : input).value = initial;
+    if (prompt) input.value = initial;
     el.hidden = false;
-    if (prompt) (multiline ? area : input).focus();
-    if (prompt && multiline && initial) area.select();
+    if (prompt) input.focus();
 
     const done = (result) => {
       el.hidden = true;
@@ -1307,7 +1201,7 @@ function applyPreset(name) {
 }
 
 function applyCustomPreset(name) {
-  const p = (state.presets ?? []).find((x) => x.name === name);
+  const p = allPresets().find((x) => x.name === name);
   if (!p) return;
   if (p.direction && p.direction !== state.direction) {
     state.direction = p.direction;
@@ -1359,53 +1253,6 @@ function updateCurrentPreset() {
   renderPresets();
   toast(`Updated “${target.name}” — ${state.selected.size} point(s)`);
   return true;
-}
-
-async function exportPresetsFlow() {
-  if (!(state.presets ?? []).length) {
-    toast('No saved presets to export');
-    return;
-  }
-  const json = exportPresets();
-  let copied = false;
-  try {
-    await navigator.clipboard.writeText(json);
-    copied = true;
-  } catch {
-    copied = false;
-  }
-  await showDialog({
-    title: `Export ${state.presets.length} preset(s)`,
-    body: copied
-      ? 'Copied to your clipboard. Paste it into Import on the other site — presets are stored per domain, so they do not travel on their own.'
-      : 'Copy this and paste it into Import on the other site.',
-    okLabel: 'Done',
-    prompt: true,
-    multiline: true,
-    initial: json,
-  });
-}
-
-async function importPresetsFlow() {
-  const answer = await showDialog({
-    title: 'Import presets',
-    body: 'Paste an export from another site or browser. Nothing existing is overwritten — a clashing name is given a free suffix.',
-    okLabel: 'Import',
-    prompt: true,
-    multiline: true,
-    initial: '',
-  });
-  if (answer === 'cancel') return;
-  const result = importPresets($('confirm-area').value);
-  if (result.error) {
-    toast(result.error);
-    return;
-  }
-  renderPresets();
-  const bits = [`Imported ${result.imported}`];
-  if (result.renamed) bits.push(`${result.renamed} renamed to avoid a clash`);
-  if (result.skipped) bits.push(`${result.skipped} skipped`);
-  toast(bits.join(' · '));
 }
 
 async function promptForPresetName() {
@@ -1539,8 +1386,6 @@ function wireEvents() {
     }
   });
 
-  $('export-presets').addEventListener('click', () => exportPresetsFlow());
-  $('import-presets').addEventListener('click', () => importPresetsFlow());
   $('update-preset').addEventListener('click', () => updateCurrentPreset());
   $('save-preset').addEventListener('click', () => promptForPresetName());
 
@@ -1566,10 +1411,6 @@ function wireEvents() {
   });
   $('confirm-input').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') dialogAnswer('ok');
-    if (e.key === 'Escape') dialogAnswer('cancel');
-  });
-  // In the textarea, Enter has to insert a newline; only Escape and the buttons act.
-  $('confirm-area').addEventListener('keydown', (e) => {
     if (e.key === 'Escape') dialogAnswer('cancel');
   });
   $('mode-over').addEventListener('click', () => setMode('over'));

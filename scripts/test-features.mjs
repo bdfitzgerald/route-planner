@@ -59,7 +59,7 @@ function makeCtx(store) {
   ctx.APP_CONFIG = { osMapsKey: 'test-key-not-real' };
   ctx.globalThis = ctx; ctx.window = ctx;
   vm.createContext(ctx);
-  for (const f of ['site/resolve.js','site/app.js']) {
+  for (const f of ['site/share.js','site/resolve.js','site/app.js']) {
     new vm.Script(fs.readFileSync(f,'utf8'), { filename: f }).runInContext(ctx);
   }
   // Top-level `const` is lexical, not a property of globalThis, so reach it by
@@ -181,21 +181,21 @@ close();
 
 // --- shareable URL ---
 const ev = s4.evalIn;
-const ids = ev('canonicalIds()');
+const ids = ev('canonicalIds(allDetourItems())');
 check('canonical id order is stable and complete', ids.length === all_count(s4) && ids.join() === [...ids].sort().join(),
       `${ids.length} ids, sorted`);
 const url = ev('shareUrl()');
 check('share url has the documented shape', /#v1\.[0-9a-f]{6}\.(cw|acw)\.(over|over-only|back)\.[0-9a-f]+$/.test(url), url.slice(-70));
 // round-trip
 const sel = ev('state').selected;
-const hex = ev('encodeSelection(state.selected, canonicalIds())');
-const back = ev(`decodeSelection('${hex}', canonicalIds())`);
+const hex = ev('encodeSelection(state.selected, canonicalIds(allDetourItems()))');
+const back = ev(`decodeSelection('${hex}', canonicalIds(allDetourItems()))`);
 check('selection round-trips through the url encoding',
       back.size === sel.size && [...sel].every(x => back.has(x)), `${sel.size} ids`);
-const emptyHex = ev('encodeSelection(new Set(), canonicalIds())');
-check('empty selection round-trips', ev(`decodeSelection('${emptyHex}', canonicalIds())`).size === 0);
-const allHex = ev('encodeSelection(new Set(canonicalIds()), canonicalIds())');
-check('full selection round-trips', ev(`decodeSelection('${allHex}', canonicalIds())`).size === ids.length);
+const emptyHex = ev('encodeSelection(new Set(), canonicalIds(allDetourItems()))');
+check('empty selection round-trips', ev(`decodeSelection('${emptyHex}', canonicalIds(allDetourItems()))`).size === 0);
+const allHex = ev('encodeSelection(new Set(canonicalIds(allDetourItems())), canonicalIds(allDetourItems()))');
+check('full selection round-trips', ev(`decodeSelection('${allHex}', canonicalIds(allDetourItems()))`).size === ids.length);
 check('url stays a sane length', url.length < 200, `${url.length} chars`);
 
 // a stale fingerprint must be refused, not mis-decoded
@@ -226,7 +226,7 @@ check('re-using a name reports a collision', ev("savePreset('My plan')") === 'ex
 check('a refused save leaves the stored preset untouched',
       ev('loadPresets()').filter(p => p.name === 'My plan').length === 1);
 const beforeIds = ev("loadPresets().find(p => p.name === 'My plan').ids").length;
-ev("state.selected = new Set([...canonicalIds()].slice(0, 3));");
+ev("state.selected = new Set([...canonicalIds(allDetourItems())].slice(0, 3));");
 check('overwrite only happens when asked for', ev("savePreset('My plan')") === 'exists');
 check('and the old contents survive that refusal',
       ev("loadPresets().find(p => p.name === 'My plan').ids").length === beforeIds, `${beforeIds} ids`);
@@ -285,53 +285,42 @@ check('updateCurrentPreset is a no-op with no target', ev('updateCurrentPreset()
 ev("storePresets([]); state.presets = [];");
 check('deleting a preset works', !ev('loadPresets()').some(p => p.name === 'My plan'));
 check('base route preset is detected', (() => { ev("state.selected = new Set();"); return ev('activePreset()')?.key === 'none'; })());
-check('everything preset is detected', (() => { ev("state.selected = new Set(canonicalIds());"); return ev('activePreset()')?.key === 'all'; })());
+check('everything preset is detected', (() => { ev("state.selected = new Set(canonicalIds(allDetourItems()));"); return ev('activePreset()')?.key === 'all'; })());
 
 function all_count(sess) { return sess.evalIn('allDetourItems()').length; }
 
-// --- preset export / import (moving between origins) ---
+// --- shipped presets (baked in by scripts/preset.mjs, present on every origin) ---
 ev("storePresets([]); state.presets = []; state.basePresetName = null;");
-ev("state.selected = new Set(builtinSet('recommended')); savePreset('Origin A plan');");
-ev("state.selected = new Set([...canonicalIds()].slice(0, 5)); savePreset('Second plan');");
-const exported = ev('exportPresets()');
-const parsed = JSON.parse(exported);
-check('export is valid JSON with a kind marker', parsed.kind === 'route-planner-presets');
-check('export names its route', parsed.route === 'lakeland-way', parsed.route);
-check('export carries both presets', parsed.presets.length === 2, `${parsed.presets.length}`);
-check('export keeps direction and mode', parsed.presets[0].direction != null && parsed.presets[0].mode != null);
-
-// simulate arriving on a different origin: empty storage, then import
+const shipped = ev('shippedPresets()');
+check('shipped presets load from the build', Array.isArray(shipped), `${shipped.length} shipped`);
+check('shipped presets are marked as such', shipped.every(p => p.shipped === true));
+check('shipped presets appear in the combined list',
+      ev('allPresets()').length === shipped.length, `${ev('allPresets()').length}`);
+if (shipped.length) {
+  const name = shipped[0].name;
+  ev(`applyCustomPreset(${JSON.stringify(name)})`);
+  check('a shipped preset can be applied', ev('activePreset()')?.key === name, ev('activePreset()')?.key);
+  check('and is recognised as shipped', ev('activePreset()')?.shipped === true);
+  ev("state.selected.delete([...state.selected][0]);");
+  check('a shipped preset cannot be updated from the browser', ev('updatablePreset()') === null);
+}
+// a local preset of the same name must not shadow a shipped one
+if (shipped.length) {
+  ev(`state.selected = new Set(canonicalIds(allDetourItems()).slice(0,3)); savePreset(${JSON.stringify(shipped[0].name)}, { overwrite: true });`);
+  check('a local preset cannot shadow a shipped name',
+        ev('loadPresets()').every(p => p.name.toLowerCase() !== shipped[0].name.toLowerCase()));
+}
 ev("storePresets([]); state.presets = [];");
-check('storage starts empty on the new origin', ev('loadPresets()').length === 0);
-let r = ev(`importPresets(${JSON.stringify(exported)})`);
-check('import restores both presets', r.imported === 2 && !r.error, JSON.stringify(r));
-check('names survive the round trip',
-      ev('loadPresets()').map(p => p.name).sort().join(',') === 'Origin A plan,Second plan',
-      ev('loadPresets()').map(p => p.name).join(','));
-check('selections survive the round trip',
-      ev("loadPresets().find(p => p.name === 'Second plan').ids").length === 5);
 
-// re-importing must not overwrite, it renames
-r = ev(`importPresets(${JSON.stringify(exported)})`);
-check('a second import renames rather than overwriting', r.imported === 2 && r.renamed === 2, JSON.stringify(r));
-check('nothing was lost', ev('loadPresets()').length === 4, `${ev('loadPresets()').length} presets`);
-
-// rubbish input
-check('invalid JSON is reported', Boolean(ev("importPresets('not json')").error));
-check('wrong file shape is reported', Boolean(ev(`importPresets('{"a":1}')`).error));
-check('a different route is refused',
-      Boolean(ev(`importPresets(${JSON.stringify(JSON.stringify({kind:'route-planner-presets',route:'other-route',presets:[]}))}).error`)));
-// ids that no longer exist are dropped, not imported blind
-const stale = JSON.stringify({kind:'route-planner-presets',route:'lakeland-way',
-  presets:[{name:'Stale',ids:['peak-gone','swim-gone'],direction:'cw',mode:'over'}]});
-r = ev(`importPresets(${JSON.stringify(stale)})`);
-check('a preset of only-missing points is skipped', r.imported === 0 && r.skipped === 1, JSON.stringify(r));
-const partlyStale = JSON.stringify({kind:'route-planner-presets',route:'lakeland-way',
-  presets:[{name:'Mixed',ids:['peak-gone', ev('canonicalIds()')[0]],direction:'cw',mode:'over'}]});
-r = ev(`importPresets(${JSON.stringify(partlyStale)})`);
-check('missing points are dropped but the preset survives',
-      r.imported === 1 && ev("loadPresets().find(p => p.name === 'Mixed').ids").length === 1, JSON.stringify(r));
-ev("storePresets([]); state.presets = [];");
+// --- share encoding comes from the generated module, shared with the CLI ---
+check('the generated share module is loaded', typeof ev('window.encodeShare') === 'function');
+const hash = ev('shareHash()');
+check('encodes to the documented shape', /^v1\.[0-9a-f]{6}\.(cw|acw)\.(over|over-only|back)\.[0-9a-f]+$/.test(hash), hash.slice(0, 40));
+const rt = ev(`window.decodeShare(${JSON.stringify(hash)}, allDetourItems())`);
+check('round-trips through decodeShare', rt.ok === true && rt.ids.length === ev('state').selected.size,
+      `${rt.ids?.length} vs ${ev('state').selected.size}`);
+check('a stale fingerprint is refused',
+      ev("window.decodeShare('v1.000000.cw.over.ff00', allDetourItems()).stale") === true);
 
 console.log(`\n${fails === 0 ? 'ALL FEATURE CHECKS PASSED' : fails + ' FAILED'}`);
 process.exit(fails ? 1 : 0);

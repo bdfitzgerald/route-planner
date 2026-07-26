@@ -22,7 +22,9 @@
     "check": "npm run lint && npm test && npm run analyse",
     "deploy": "npm run build && npm test && npx --yes netlify-cli@latest deploy --prod --dir=site",
     "deploy:preview": "npm run build && npm test && npx --yes netlify-cli@latest deploy --dir=site",
-    "deploy:anon": "npm run build && npm test && npx --yes netlify-cli@latest deploy --dir=site --allow-anonymous"
+    "deploy:anon": "npm run build && npm test && npx --yes netlify-cli@latest deploy --dir=site --allow-anonymous",
+    "preset": "node scripts/preset.mjs",
+    "preset:list": "node scripts/preset.mjs list"
   },
   "engines": {
     "node": ">=20"

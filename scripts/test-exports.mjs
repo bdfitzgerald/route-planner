@@ -51,7 +51,7 @@ function boot() {
   ctx.APP_CONFIG={osMapsKey:'test-key-not-real'};
   ctx.globalThis=ctx; ctx.window=ctx;
   vm.createContext(ctx);
-  for(const f of ['site/resolve.js','site/app.js'])
+  for(const f of ['site/share.js','site/resolve.js','site/app.js'])
     new vm.Script(fs.readFileSync(f,'utf8'),{filename:f}).runInContext(ctx);
   return {ctx, evalIn:(c)=>new vm.Script(c).runInContext(ctx), mapCalls, downloads, mapObj};
 }

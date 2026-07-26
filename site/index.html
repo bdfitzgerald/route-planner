@@ -53,8 +53,6 @@
     <div class="control-group">
       <button id="update-preset" class="accent" hidden></button>
       <button id="save-preset">Save preset…</button>
-      <button id="export-presets" title="Copy your presets, to move them to another site or browser">Export</button>
-      <button id="import-presets" title="Paste presets exported from another site or browser">Import</button>
       <button id="copy-link">Copy link</button>
     </div>
     <div class="control-group">
@@ -120,8 +118,6 @@
     <p id="confirm-body"></p>
     <div id="confirm-input-wrap" hidden>
       <input id="confirm-input" type="text" maxlength="40" placeholder="Preset name">
-      <textarea id="confirm-area" rows="8" spellcheck="false" hidden
-                placeholder="Paste exported preset JSON here"></textarea>
     </div>
     <div class="confirm-actions">
       <button id="confirm-cancel">Cancel</button>
@@ -149,6 +145,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="config.js"></script>
+<script src="share.js"></script>
 <script src="resolve.js"></script>
 <script src="app.js"></script>
 </body>
