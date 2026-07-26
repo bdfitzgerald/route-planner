@@ -28,11 +28,14 @@ await new Promise((r) => setTimeout(r, 900));
 
 const B = `http://localhost:${PORT}`;
 const j = async (m, p, body) => {
-  const r = await fetch(B + p, {
-    method: m,
-    headers: body ? { 'Content-Type': 'application/json' } : {},
-    body: body ? JSON.stringify(body) : undefined,
-  });
+  // Build the init without a body key at all for GET/DELETE: passing body: undefined is
+  // still passing a body, which is invalid for those methods.
+  const init = { method: m };
+  if (body !== undefined) {
+    init.headers = { 'Content-Type': 'application/json' };
+    init.body = JSON.stringify(body);
+  }
+  const r = await fetch(B + p, init);
   return { status: r.status, body: await r.json().catch(() => null) };
 };
 

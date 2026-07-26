@@ -33,7 +33,6 @@ export function dayWindow(day, reverse, totalKm) {
     : { fromKm: day.startKm, toKm: day.endKm };
 }
 
-const overlaps = (a, b) => a.fromKm < b.toKm - EPS && a.toKm > b.fromKm + EPS;
 
 export function resolveSelection({
   items,

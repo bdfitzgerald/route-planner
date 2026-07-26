@@ -16,7 +16,7 @@ function boot() {
     set textContent(v){this._text=String(v)},get textContent(){return this._text},
     setAttribute(){},getAttribute(){return null},addEventListener(){},tagName:'DIV',
     querySelectorAll(){return[]},querySelector(){return null},closest(){return null},
-    remove(){},appendChild(){},click(){},select(){},focus(){},blur(){},scrollIntoView(){},hidden:false,setSelectionRange(){},
+    remove(){},appendChild(){},click(){},select(){},focus(){},blur(){},scrollIntoView(){},setSelectionRange(){},
     getBoundingClientRect(){return{height:500,width:900}}};}
   const reg=new Map();
   const document={title:'',addEventListener(){},
