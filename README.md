@@ -201,10 +201,11 @@ other dependency. It takes under a second and:
   `site/share.js` come from `scripts/lib/*.mjs`; committing a source edit without
   rebuilding ships a page whose logic disagrees with the exports and the CLI, which on
   this project has repeatedly meant the figures shown not matching the GPX downloaded
+- **blocks on test failures** — all 202 checks, ~5s
 - **reports the analysis summary** without blocking
 
-It does **not** run the tests. They only take ~5s, so add `npm test` to
-`.githooks/pre-commit` if you want that too. `npm run check` runs all three.
+Cheapest checks run first, so an obvious mistake fails in under a second rather than
+after the whole suite. The lot takes about six seconds.
 
 If the linter cannot be fetched (no network, cold `npx` cache) the hook warns and lets
 the commit through — refusing to commit offline is worse than deferring the check.

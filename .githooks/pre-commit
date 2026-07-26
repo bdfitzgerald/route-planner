@@ -7,11 +7,13 @@
 #   - lint errors (warnings are reported, not blocking)
 #   - the generated browser copies drifting from their sources
 #
+#   - test failures
+#
 # Reports without blocking:
 #   - the analysis summary
 #
-# Deliberately not running the test suite: it is only ~5s, so add `npm test` below if
-# you want it. Bypass the whole hook with `git commit --no-verify`.
+# Cheapest checks first, so an obvious mistake fails in under a second rather than after
+# the suite. Whole thing is ~6s. Bypass with `git commit --no-verify`.
 
 set -e
 FAILED=0
@@ -44,6 +46,19 @@ if DRIFT=$(node scripts/check-generated.mjs 2>&1); then
 else
   printf '\033[31mSTALE\033[0m\n'
   printf '%s\n' "$DRIFT" | sed 's/^/    /'
+  FAILED=1
+fi
+
+# --- tests ----------------------------------------------------------------------
+# Runs against the committed data, so it also catches a source change that invalidates
+# route-data.json without the build having been re-run.
+printf '  tests         '
+if TEST_OUT=$(npm test --silent 2>&1); then
+  PASSED=$(printf '%s' "$TEST_OUT" | grep -c '^  PASS' || true)
+  printf '\033[32mok\033[0m (%s checks)\n' "$PASSED"
+else
+  printf '\033[31mFAILED\033[0m\n'
+  printf '%s\n' "$TEST_OUT" | grep -E '^  FAIL|^[0-9]+ FAILED|FEATURE CHECKS|threw' | sed 's/^/    /'
   FAILED=1
 fi
 
