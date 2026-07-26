@@ -1119,7 +1119,7 @@ function fullGpx() {
 
 function renderPresets() {
   const active = activePreset();
-  const parts = ['<span class="glabel">Preset</span>'];
+  const parts = ['<button class="glabel" type="button">Preset</button>'];
   for (const p of BUILTIN_PRESETS) {
     const on = active?.kind === 'builtin' && active.key === p.key;
     parts.push(`<button data-preset="${p.key}" aria-pressed="${on}">${p.label}</button>`);
@@ -1139,11 +1139,6 @@ function renderPresets() {
       );
     }
   }
-  parts.push(
-    IS_LOCAL
-      ? '<span class="mode-badge local" title="Saving a preset writes it to routes/&lt;route&gt;/presets.json, which deploys with the site">local</span>'
-      : '<span class="mode-badge" title="Saving a preset stores it in this browser only. To keep one, save it locally and deploy.">this browser</span>',
-  );
   if (!active) {
     parts.push(
       state.basePresetName
@@ -1563,6 +1558,15 @@ function wireEvents() {
   $('tiles-osm').addEventListener('click', () => setBasemap('osm'));
 
   $('palette-open').addEventListener('click', openPalette);
+
+  // Accordion headers. Delegated from .controls so it keeps working after
+  // renderPresets() replaces the preset group's contents. Only meaningful at the
+  // narrow breakpoint; harmless on desktop, where the groups are always shown.
+  document.querySelector?.('.controls')?.addEventListener('click', (e) => {
+    const label = e.target.closest('.glabel');
+    if (!label) return;
+    label.parentElement.classList.toggle('open');
+  });
 
   const input = $('palette-input');
   input.addEventListener('input', () => {

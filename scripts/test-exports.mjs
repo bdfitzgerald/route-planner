@@ -21,7 +21,7 @@ function boot() {
   const reg=new Map();
   const document={title:'',addEventListener(){},
     getElementById(id){if(!reg.has(id))reg.set(id,el(id));return reg.get(id)},
-    querySelectorAll(){return[]},createElement(){return el('c')},
+    querySelectorAll(){return[]},querySelector(){return el('q')},createElement(){return el('c')},
     body:{appendChild(){},removeChild(){}},execCommand(){return true}};
   // Track what the map is asked to do, and let the test move the view.
   const mapCalls=[];

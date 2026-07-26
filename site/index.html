@@ -43,29 +43,34 @@
 
   <div class="controls">
     <div class="control-group">
-      <span class="glabel">Direction</span>
+      <button class="glabel" type="button">Direction</button>
       <button id="dir-cw" class="accent" aria-pressed="true">↻ Clockwise</button>
       <button id="dir-acw" class="alt" aria-pressed="false">↺ Anticlockwise</button>
     </div>
     <div class="control-group" id="presets">
-      <span class="glabel">Preset</span>
+      <button class="glabel" type="button">Preset</button>
     </div>
     <div class="control-group">
+      <button class="glabel" type="button">Manage</button>
       <button id="update-preset" class="accent" hidden></button>
       <button id="save-preset">Save preset…</button>
       <button id="copy-link">Copy link</button>
     </div>
     <div class="control-group">
-      <span class="glabel">Peaks</span>
+      <button class="glabel" type="button">Peaks</button>
       <button id="mode-over" aria-pressed="true">Over the top</button>
       <button id="mode-only" aria-pressed="false">No there-and-back</button>
       <button id="mode-back" aria-pressed="false">There and back</button>
     </div>
     <div class="control-group">
-      <button id="palette-open" class="palette-trigger">Search <kbd>⌘K</kbd></button>
+      <button id="palette-open" class="palette-trigger" aria-label="Search">
+        <span class="palette-icon" aria-hidden="true">⌕</span>
+        <span class="palette-text">Search</span>
+        <kbd class="palette-kbd">⌘K</kbd>
+      </button>
     </div>
     <div class="control-group">
-      <span class="glabel">Basemap</span>
+      <button class="glabel" type="button">Basemap</button>
       <button id="tiles-os" aria-pressed="true">OS</button>
       <button id="tiles-osm" aria-pressed="false">OSM</button>
     </div>

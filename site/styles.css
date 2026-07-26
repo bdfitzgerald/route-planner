@@ -68,13 +68,21 @@ h1 {
   margin-bottom: 1rem;
 }
 .control-group { display: flex; align-items: center; gap: 0.4rem; }
+/* A label is a <button> so it can be an accordion header on narrow screens, but on
+   desktop it must read as a label: no border, no background, not interactive. */
 .control-group > .glabel {
   font-family: var(--mono);
   font-size: 0.6rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--muted);
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: default;
+  text-align: left;
 }
+.control-group > .glabel:hover { border: 0; }
 
 button, .btn {
   font-family: var(--mono);
@@ -477,17 +485,7 @@ kbd {
 }
 #confirm-area:focus { outline: none; border-color: var(--ink); }
 
-.mode-badge {
-  font-family: var(--mono);
-  font-size: 0.53rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted);
-  border: 1px solid var(--rule);
-  border-radius: 2px;
-  padding: 0.15rem 0.35rem;
-}
-.mode-badge.local { color: var(--green); border-color: var(--green); }
+
 
 /* A long value shown for copying: wraps, selectable, monospace so it reads as data. */
 #confirm-value {
@@ -506,3 +504,78 @@ kbd {
   word-break: break-all;
 }
 #confirm-value:focus { outline: none; border-color: var(--ink); }
+
+/* ---------- search trigger ---------- */
+.palette-trigger { display: inline-flex; align-items: center; gap: 0.4rem; }
+.palette-icon { font-size: 1rem; line-height: 1; }
+
+/* ---------- narrow screens ---------- */
+/* Below this width the control bar wraps into an unreadable thicket, so each group
+   collapses behind its own label and its items stack full width. */
+@media (max-width: 780px) {
+  .wrap { padding: 1.25rem 0.85rem 3rem; }
+
+  .controls { flex-direction: column; align-items: stretch; gap: 0.35rem; }
+
+  .control-group {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  /* The label becomes the header: full width, tappable, with a caret. */
+  .control-group > .glabel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 0.8rem;
+    cursor: pointer;
+    font-size: 0.62rem;
+    color: var(--ink);
+  }
+  .control-group > .glabel::after {
+    content: '＋';
+    font-family: var(--mono);
+    color: var(--muted);
+  }
+  .control-group.open > .glabel::after { content: '−'; }
+
+  /* Collapsed by default; a group with no label has nothing to collapse behind and
+     stays visible. */
+  .control-group:has(> .glabel) > *:not(.glabel) { display: none; }
+  .control-group.open > *:not(.glabel) { display: flex; }
+
+  .control-group > *:not(.glabel) {
+    width: 100%;
+    justify-content: center;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+    border-top: 1px solid var(--rule);
+    padding: 0.7rem 0.8rem;
+    font-size: 0.72rem;
+  }
+
+  /* A custom preset keeps its delete button beside it rather than stacking. */
+  .control-group.open > .preset-custom { display: flex; }
+  .preset-custom { width: 100%; }
+  .preset-custom button:first-child { flex: 1; border-right: 1px solid var(--rule); }
+  .preset-del { flex: none; width: 3rem; }
+
+  /* Search is a single icon: no label to collapse behind, no keyboard hint to show. */
+  .palette-text, .palette-kbd { display: none; }
+  .palette-trigger { justify-content: center; padding: 0.7rem; font-size: 0.95rem; }
+
+  .modified-badge { align-self: flex-start; margin: 0.5rem 0.8rem; }
+
+  #map { height: min(52vh, 380px); }
+  .stats { gap: 1rem 1.25rem; }
+  .stat .value { font-size: 1.35rem; }
+  .palette-panel { margin-top: 4vh; width: calc(100vw - 1rem); }
+  .day-figs { font-size: 0.62rem; }
+}

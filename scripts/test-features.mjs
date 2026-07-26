@@ -31,7 +31,7 @@ function makeCtx(store) {
   const document = {
     title: '', addEventListener(){},
     getElementById(id){ if(!registry.has(id)) registry.set(id, el(id)); return registry.get(id); },
-    querySelectorAll(){ return [] }, createElement(){ return el('c') },
+    querySelectorAll(){ return [] }, querySelector(){ return el('q') }, createElement(){ return el('c') },
     body: { appendChild(){}, removeChild(){} },
     execCommand(){ return true },
   };
