@@ -361,12 +361,15 @@ ev("storePresets([]); state.presets = [];");
 // working that out from the UI was not obvious.
 {
   ev("storePresets([]); state.presets = []; state.basePresetName = null;");
-  ev("state.selected = new Set(canonicalIds(allDetourItems()).slice(0, 9)); savePreset('Planned Route');");
-  const preset = ev("allPresets().find((p) => p.name === 'Planned Route')");
-  check('the browser preset exists', Boolean(preset), preset?.name);
-  const cmd = ev("deployCommandFor(allPresets().find((p) => p.name === 'Planned Route'))");
+  const NAME = '__test browser preset__';
+  check('the test name does not clash with a shipped preset',
+        !ev('shippedPresets()').some((p) => p.name === NAME));
+  ev(`state.selected = new Set(canonicalIds(allDetourItems()).slice(0, 9)); savePreset(${JSON.stringify(NAME)});`);
+  const preset = ev(`allPresets().find((p) => p.name === ${JSON.stringify(NAME)})`);
+  check('the browser preset exists', Boolean(preset), `${preset?.ids?.length} points`);
+  const cmd = ev(`deployCommandFor(allPresets().find((p) => p.name === ${JSON.stringify(NAME)}))`);
   check('a deploy command is produced', cmd.startsWith('npm run preset add'), cmd.slice(0, 40) + '…');
-  check('it quotes the name', cmd.includes('"Planned Route"'));
+  check('it quotes the name', cmd.includes(JSON.stringify(NAME)));
   check('it carries a share link', /#v1\.[0-9a-f]{6}\.(cw|acw)\.(over|over-only|back)\./.test(cmd));
 
   // the link in that command must decode back to exactly the preset's points
