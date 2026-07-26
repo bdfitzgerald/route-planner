@@ -1,0 +1,73 @@
+{
+  "plugins": [
+    "import",
+    "unicorn",
+    "oxc"
+  ],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn"
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2024": true
+  },
+  "globals": {
+    "L": "readonly",
+    "resolveSelection": "readonly",
+    "dayWindow": "readonly"
+  },
+  "ignorePatterns": [
+    "site/resolve.js",
+    "dist/**",
+    "cache/**",
+    "routes/**",
+    "node_modules/**"
+  ],
+  "rules": {
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+    "eqeqeq": [
+      "error",
+      "smart"
+    ],
+    "no-var": "error",
+    "prefer-const": "error",
+    "no-throw-literal": "error",
+    "require-await": "off",
+    "no-await-in-loop": "off",
+    "no-console": "off",
+    "unicorn/no-new-array": "error",
+    "unicorn/prefer-node-protocol": "error",
+    "unicorn/no-array-for-each": "off",
+    "unicorn/no-null": "off",
+    "unicorn/prefer-query-selector": "off",
+    "unicorn/prefer-string-raw": "off",
+    "import/no-cycle": "error",
+    "import/no-self-import": "error",
+    "unicorn/no-array-sort": "off",
+    "unicorn/no-array-reverse": "off",
+    "no-underscore-dangle": [
+      "warn",
+      {
+        "allow": [
+          "_cat",
+          "_html",
+          "_text",
+          "_pts",
+          "_isMap",
+          "__isMap"
+        ]
+      }
+    ],
+    "unicorn/consistent-function-scoping": "off",
+    "unicorn/prefer-set-has": "off"
+  }
+}

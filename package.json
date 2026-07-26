@@ -1,0 +1,27 @@
+{
+  "name": "route-planner",
+  "version": "1.0.0",
+  "description": "Turn an established GPX route into a detailed multi-day itinerary with researched detours, accurate distance and ascent, and per-day GPX exports.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "verify": "node scripts/verify.mjs",
+    "test:site": "node scripts/test-site.mjs",
+    "test:features": "node scripts/test-features.mjs",
+    "test:exports": "node scripts/test-exports.mjs",
+    "test": "node scripts/verify.mjs && node scripts/test-site.mjs && node scripts/test-features.mjs && node scripts/test-exports.mjs",
+    "package": "node scripts/package.mjs",
+    "analyse": "node scripts/analyse.mjs",
+    "serve": "node -e \"const h=require('http'),f=require('fs'),p=require('path');const r=p.resolve('site'),t={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.gpx':'application/gpx+xml'};h.createServer((q,s)=>{let u=decodeURIComponent(q.url.split('?')[0]);if(u==='/')u='/index.html';const x=p.resolve(p.join(r,u));if(!x.startsWith(r))return s.writeHead(403).end();f.readFile(x,(e,d)=>e?s.writeHead(404).end():(s.writeHead(200,{'Content-Type':t[p.extname(x)]||'application/octet-stream'}),s.end(d)))}).listen(8080,()=>console.log('serving site/ on http://localhost:8080'))\"",
+    "lint": "npx --yes oxlint@latest",
+    "lint:fix": "npx --yes oxlint@latest --fix",
+    "lint:dead": "npx --yes knip@latest --no-progress",
+    "format:check": "npx --yes prettier@latest --check .",
+    "format": "npx --yes prettier@latest --write .",
+    "check": "npm run lint && npm test && npm run analyse"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
