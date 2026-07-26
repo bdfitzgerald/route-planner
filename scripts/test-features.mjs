@@ -344,6 +344,30 @@ ev("storePresets([]); state.presets = [];");
         b.evalIn('state').basePresetName === 'Refresh test', b.evalIn('state').basePresetName ?? 'null');
 }
 
+// --- promoting a browser preset to a shipped one ---
+// The gap this closes: a preset in localStorage cannot reach the deployed site, and
+// working that out from the UI was not obvious.
+{
+  ev("storePresets([]); state.presets = []; state.basePresetName = null;");
+  ev("state.selected = new Set(canonicalIds(allDetourItems()).slice(0, 9)); savePreset('Planned Route');");
+  const preset = ev("allPresets().find((p) => p.name === 'Planned Route')");
+  check('the browser preset exists', Boolean(preset), preset?.name);
+  const cmd = ev("deployCommandFor(allPresets().find((p) => p.name === 'Planned Route'))");
+  check('a deploy command is produced', cmd.startsWith('npm run preset add'), cmd.slice(0, 40) + '…');
+  check('it quotes the name', cmd.includes('"Planned Route"'));
+  check('it carries a share link', /#v1\.[0-9a-f]{6}\.(cw|acw)\.(over|over-only|back)\./.test(cmd));
+
+  // the link in that command must decode back to exactly the preset's points
+  const url = cmd.match(/"(https?:[^"]+)"/)?.[1];
+  const decoded = ev(`window.decodeShare(${JSON.stringify(url)}, allDetourItems())`);
+  check('the link decodes', decoded.ok === true);
+  check('to the same 9 points', decoded.ids.length === 9, `${decoded.ids.length}`);
+  check('and the same direction and mode',
+        decoded.direction === preset.direction && decoded.mode === preset.mode,
+        `${decoded.direction}/${decoded.mode}`);
+  ev("storePresets([]); state.presets = [];");
+}
+
 // --- clipboard ---
 // navigator.clipboard is unavailable over plain http, which is how a local dev domain
 // is served, so the fallback path is the one that actually matters day to day.

@@ -439,6 +439,13 @@ kbd {
 #presets { flex-wrap: wrap; }
 .preset-custom { display: inline-flex; align-items: stretch; }
 .preset-custom button:first-child { border-right: 0; border-radius: 2px 0 0 2px; }
+.preset-ship {
+  border-radius: 0;
+  border-right: 0;
+  padding: 0.4rem 0.4rem;
+  color: var(--accent-2);
+}
+.preset-ship:hover { color: var(--ink); border-color: var(--ink); }
 .preset-del {
   border-radius: 0 2px 2px 0;
   padding: 0.4rem 0.4rem;
@@ -565,6 +572,7 @@ kbd {
   .control-group.open > .preset-custom { display: flex; }
   .preset-custom { width: 100%; }
   .preset-custom button:first-child { flex: 1; border-right: 1px solid var(--rule); }
+  .preset-ship { flex: none; width: 3rem; border-right: 1px solid var(--rule); }
   .preset-del { flex: none; width: 3rem; }
 
   /* Search is a single icon: no label to collapse behind, no keyboard hint to show. */

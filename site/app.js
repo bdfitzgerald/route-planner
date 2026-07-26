@@ -692,6 +692,15 @@ function paletteCommands() {
         ]
       : []),
     { id: 'preset:save', group: 'Plan', title: 'Save this selection as a new preset', run: () => promptForPresetName() },
+    ...allPresets()
+      .filter((p) => !p.shipped)
+      .map((p) => ({
+        id: `preset:ship:${p.name}`,
+        group: 'Plan',
+        title: `Ship preset “${p.name}” — copy the command`,
+        hint: 'Saved in this browser only; this makes it deploy',
+        run: () => copyDeployCommand(p.name),
+      })),
     { id: 'share:copy', group: 'Plan', title: 'Copy a shareable link', hint: 'Carries direction, peaks setting and selection', run: () => $('copy-link').click() },
     { id: 'preset:reset', group: 'Plan', title: 'Reset — forget saved changes', hint: 'Clears stored selection and returns to recommended', run: () => { clearSaved(); applyPreset('recommended'); } },
     { id: 'days:open', group: 'View', title: 'Expand every day', run: () => { for (const day of currentDays()) state.openDays.add(day.day); render(); saveState(); } },
@@ -1135,6 +1144,8 @@ function renderPresets() {
     } else {
       parts.push(
         `<span class="preset-custom"><button data-custom="${escapeAttr(p.name)}" aria-pressed="${on}">${p.name}</button>` +
+          `<button class="preset-ship" data-ship="${escapeAttr(p.name)}" ` +
+          `title="Saved in this browser only. Copy the command that ships it with the site.">⤴</button>` +
           `<button class="preset-del" data-del="${escapeAttr(p.name)}" title="Delete this preset (saved in this browser only)">×</button></span>`,
       );
     }
@@ -1361,6 +1372,36 @@ async function updateCurrentPreset() {
   return true;
 }
 
+// A preset saved in the browser cannot reach the deployed site on its own: localStorage
+// is per-origin and there is no backend. This builds the one command that promotes it —
+// the same share encoding scripts/preset.mjs decodes — so it is a copy and a paste
+// rather than rebuilding the plan by hand.
+function deployCommandFor(preset) {
+  const hash = window.encodeShare({
+    items: allDetourItems(),
+    direction: preset.direction ?? state.direction,
+    mode: preset.mode ?? state.mode,
+    selectedIds: preset.ids,
+  });
+  const url = `${location.origin}${location.pathname}#${hash}`;
+  return `npm run preset add ${JSON.stringify(preset.name)} ${JSON.stringify(url)}`;
+}
+
+async function copyDeployCommand(name) {
+  const preset = allPresets().find((p) => p.name === name);
+  if (!preset) return;
+  const command = deployCommandFor(preset);
+  const copied = await copyToClipboard(command);
+  await showDialog({
+    title: copied ? 'Command copied' : `Ship “${preset.name}”`,
+    body: copied
+      ? 'Paste it into your terminal, then npm run deploy. That writes the preset into presets.json, which ships with the site.'
+      : 'Run this in your terminal, then npm run deploy. It is already selected, so Cmd-C or Ctrl-C will take it.',
+    value: command,
+    okLabel: 'Close',
+  });
+}
+
 async function promptForPresetName() {
   // Always starts empty: this flow creates a preset. Updating an existing one is the
   // Update button's job.
@@ -1415,7 +1456,7 @@ async function promptForPresetName() {
     toast(
       IS_LOCAL
         ? `Saved "${name.trim()}" to presets.json — deploy to publish it`
-        : `Saved "${name.trim()}" in this browser only`,
+        : `Saved "${name.trim()}" in this browser — use ⤴ to ship it`,
     );
     return true;
   }
@@ -1495,6 +1536,11 @@ function wireEvents() {
         renderPresets();
         toast(`Deleted "${name}"${IS_LOCAL && shipped ? ' from presets.json' : ''}`);
       });
+      return;
+    }
+    const ship = e.target.closest('[data-ship]');
+    if (ship) {
+      copyDeployCommand(ship.dataset.ship);
       return;
     }
     const builtin = e.target.closest('[data-preset]');
