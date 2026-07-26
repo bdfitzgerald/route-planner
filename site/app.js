@@ -691,7 +691,17 @@ function paletteCommands() {
           },
         ]
       : []),
-    { id: 'preset:save', group: 'Plan', title: 'Save this selection as a new preset', run: () => promptForPresetName() },
+    ...(IS_LOCAL
+      ? [
+          {
+            id: 'preset:save',
+            group: 'Plan',
+            title: 'Save this selection as a new preset',
+            hint: 'Written to presets.json, so it deploys',
+            run: () => promptForPresetName(),
+          },
+        ]
+      : []),
     ...allPresets()
       .filter((p) => !p.shipped)
       .map((p) => ({
@@ -1159,12 +1169,21 @@ function renderPresets() {
   }
   $('presets').innerHTML = parts.join('');
 
+  // Saving is only offered locally. On the deployed site a save would go to this
+  // browser alone, which reads as making a preset when it does not — the whole
+  // confusion the ⤴ button exists to resolve. Copy link stays either way: it is how a
+  // plan travels, and how one made on a phone gets promoted later.
+  const save = $('save-preset');
+  if (save) save.hidden = !IS_LOCAL;
+
   // Update appears only when there is a saved preset your selection has moved away
   // from. Naming the target on the button makes the click unambiguous, so it needs no
   // confirmation of its own.
   const update = $('update-preset');
   if (update) {
     const target = updatablePreset();
+    // A browser-only preset from an earlier visit can still be updated, but nothing new
+    // can be created in production, so this only ever appears for a pre-existing one.
     update.hidden = !target;
     if (target) {
       update.textContent = `Update “${target.name}”`;

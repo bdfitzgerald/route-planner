@@ -142,8 +142,11 @@ either way.
 | `local` | `npm run dev` | `routes/<route-id>/presets.json`, via the dev server | permanently, and deploys |
 | `production` | the default, and forced by `deploy`/`package` | the browser's `localStorage` | that browser only |
 
-The page shows which it is next to the presets, so it is never a mystery where a preset
-went.
+*Save preset…* only appears in local mode. On the deployed site a save would go to that
+browser alone, which reads as making a preset when it does not — so instead each
+browser-saved preset carries a **⤴** button that copies the one command which promotes
+it (`npm run preset add "name" "<link>"`). *Copy link* is available in both modes: it is
+how a plan travels, and how one built on a phone gets promoted later.
 
 ```bash
 npm run dev        # build in local mode + serve on :8080 with the write API

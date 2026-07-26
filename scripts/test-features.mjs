@@ -344,6 +344,18 @@ ev("storePresets([]); state.presets = [];");
         b.evalIn('state').basePresetName === 'Refresh test', b.evalIn('state').basePresetName ?? 'null');
 }
 
+// --- saving is offered locally only ---
+{
+  // The harness runs in production mode, so the save affordances must be absent.
+  ev('renderPresets()');
+  check('Save preset is hidden in production', ev("document.getElementById('save-preset').hidden") === true);
+  check('and the palette does not offer it',
+        !ev('paletteCommands()').some((c) => c.id === 'preset:save'));
+  check('Copy link is still there', ev("typeof document.getElementById('copy-link')") === 'object');
+  check('and shipping a browser preset is still offered',
+        typeof ev('copyDeployCommand') === 'function');
+}
+
 // --- promoting a browser preset to a shipped one ---
 // The gap this closes: a preset in localStorage cannot reach the deployed site, and
 // working that out from the UI was not obvious.
