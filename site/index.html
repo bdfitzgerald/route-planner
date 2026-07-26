@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lakeland Way — route planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1 id="route-name">Lakeland Way</h1>
+    <div class="subtitle" id="route-sub">loading…</div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="value" id="stat-distance">—</div>
+        <div class="label">Total distance</div>
+      </div>
+      <div class="stat">
+        <div class="value" id="stat-ascent">—</div>
+        <div class="label">Total ascent</div>
+      </div>
+      <div class="stat">
+        <div class="value" id="stat-avg">—</div>
+        <div class="label">Average day</div>
+      </div>
+      <div class="stat">
+        <div class="value" id="stat-longest">—</div>
+        <div class="label">Longest day</div>
+      </div>
+      <div class="stat">
+        <div class="value" id="stat-selected">—</div>
+        <div class="label">Detours selected</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <div class="control-group">
+      <span class="glabel">Direction</span>
+      <button id="dir-cw" class="accent" aria-pressed="true">↻ Clockwise</button>
+      <button id="dir-acw" class="alt" aria-pressed="false">↺ Anticlockwise</button>
+    </div>
+    <div class="control-group" id="presets">
+      <span class="glabel">Preset</span>
+    </div>
+    <div class="control-group">
+      <button id="update-preset" class="accent" hidden></button>
+      <button id="save-preset">Save preset…</button>
+      <button id="copy-link">Copy link</button>
+    </div>
+    <div class="control-group">
+      <span class="glabel">Peaks</span>
+      <button id="mode-over" aria-pressed="true">Over the top</button>
+      <button id="mode-only" aria-pressed="false">No there-and-back</button>
+      <button id="mode-back" aria-pressed="false">There and back</button>
+    </div>
+    <div class="control-group">
+      <button id="palette-open" class="palette-trigger">Search <kbd>⌘K</kbd></button>
+    </div>
+    <div class="control-group">
+      <span class="glabel">Basemap</span>
+      <button id="tiles-os" aria-pressed="true">OS</button>
+      <button id="tiles-osm" aria-pressed="false">OSM</button>
+    </div>
+  </div>
+
+  <div id="map"></div>
+  <div class="map-note">
+    <span id="map-legend">Solid line = what you walk · faint dashed = route as drawn (bypassed where they differ) · ▲ peaks · ~ swims · numbered = camps · faded markers are not in the plan</span>
+    <span id="map-attr"></span>
+  </div>
+
+  <div class="columns">
+    <section>
+      <h2>Day by day</h2>
+      <div class="notice" id="budget-note"></div>
+      <div id="days"></div>
+    </section>
+
+    <section>
+      <h2>Downloads — GPX</h2>
+      <div class="notice">
+        Generated live in your browser from what you have ticked — a day file contains
+        exactly that day's selected detours, spliced into the line. Panning or zooming
+        the map makes no difference: <strong>nothing is clipped to the current view</strong>.
+        Direction and the peaks setting do change what you get. Every point carries
+        elevation, and selected points plus camps come through as named waypoints.
+      </div>
+      <div class="export-grid" id="exports"></div>
+
+      <h2 style="margin-top:2rem">Pre-built files</h2>
+      <div class="notice">
+        These were generated at build time from the <strong>recommended plan</strong>,
+        so they do not include changes you have made above. For your own selection,
+        use the buttons at the top of this section.
+      </div>
+      <div class="export-grid" id="prebuilt"></div>
+
+      <h2 style="margin-top:2rem">How this was measured</h2>
+      <div id="provenance" style="font-size:0.78rem;color:var(--ink-soft)"></div>
+    </section>
+  </div>
+
+  <footer id="footer"></footer>
+</div>
+
+<div id="confirm" class="palette" hidden>
+  <div class="palette-backdrop" data-confirm-cancel></div>
+  <div class="palette-panel confirm-panel" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+    <h3 id="confirm-title"></h3>
+    <p id="confirm-body"></p>
+    <div id="confirm-input-wrap" hidden>
+      <input id="confirm-input" type="text" maxlength="40" placeholder="Preset name">
+    </div>
+    <div class="confirm-actions">
+      <button id="confirm-cancel">Cancel</button>
+      <button id="confirm-alt" hidden></button>
+      <button id="confirm-ok" class="accent" aria-pressed="true"></button>
+    </div>
+  </div>
+</div>
+
+<div id="palette" class="palette" hidden>
+  <div class="palette-backdrop" data-palette-close></div>
+  <div class="palette-panel" role="dialog" aria-modal="true" aria-label="Search and commands">
+    <input id="palette-input" type="text" autocomplete="off" spellcheck="false"
+           role="combobox" aria-expanded="true" aria-controls="palette-results"
+           placeholder="Search peaks, swims, camps — or type a command…">
+    <div id="palette-results" class="palette-results" role="listbox"></div>
+    <div class="palette-foot">
+      <span><kbd>↑</kbd><kbd>↓</kbd> move</span>
+      <span><kbd>↵</kbd> go</span>
+      <span><kbd>⇧↵</kbd> add / remove</span>
+      <span><kbd>esc</kbd> close</span>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="config.js"></script>
+<script src="resolve.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
