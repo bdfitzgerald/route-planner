@@ -389,6 +389,13 @@ description rather than an invented one.
   is highlighted, and a **modified** badge appears when the selection no longer
   matches any of them. Switching preset while modified asks first, and offers to save
   what you have rather than making you choose between losing it and cancelling.
+- **Presets are per-origin, so they can be exported.** `localStorage` is scoped to the
+  domain, which means presets saved on `route-planner.test` do not appear on
+  `lakeland-way.netlify.app`, and every Netlify **preview** deploy is a fresh origin
+  again. *Export* copies them as JSON; *Import* pastes them in on the other site.
+  Nothing existing is overwritten — a clashing name gets a free suffix — and points
+  that no longer exist in the current build are dropped rather than imported blind.
+  Save presets on the production URL if you want them to stick.
 - **Re-saving a preset never silently overwrites.** `savePreset()` returns `exists` on
   a name collision instead of replacing, and the caller asks: *overwrite it*, or
   *keep both* under a suggested free name (`Coniston plan 2`). Overwriting keeps the

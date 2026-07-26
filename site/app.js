@@ -157,6 +157,84 @@ function uniquePresetName(base) {
   return `${stem} ${Date.now()}`;
 }
 
+// Presets live in localStorage, which is per-origin: a preset saved on
+// route-planner.test is invisible on lakeland-way.netlify.app, and every Netlify
+// preview deploy is its own origin again. Export/import is the only way to carry them
+// across, so it exists rather than leaving people to rebuild plans by hand.
+const PRESET_EXPORT_VERSION = 1;
+
+function exportPresets() {
+  return JSON.stringify(
+    {
+      kind: 'route-planner-presets',
+      version: PRESET_EXPORT_VERSION,
+      route: state.data.route.id,
+      exported: new Date().toISOString().slice(0, 10),
+      presets: (state.presets ?? []).map((p) => ({
+        name: p.name,
+        ids: p.ids,
+        direction: p.direction,
+        mode: p.mode,
+      })),
+    },
+    null,
+    2,
+  );
+}
+
+// Returns { imported, renamed, skipped, error }. Clashing names are given a free
+// suffix rather than prompting once per preset — a bulk import should not be twelve
+// dialogs — and nothing existing is ever overwritten.
+function importPresets(text) {
+  let payload;
+  try {
+    payload = JSON.parse(text);
+  } catch {
+    return { error: 'That is not valid JSON.' };
+  }
+  if (payload?.kind !== 'route-planner-presets' || !Array.isArray(payload.presets)) {
+    return { error: 'That does not look like an exported preset file.' };
+  }
+  if (payload.route && payload.route !== state.data.route.id) {
+    return { error: `Those presets are for "${payload.route}", not "${state.data.route.id}".` };
+  }
+
+  const validIds = new Set(allDetourItems().map((i) => i.id));
+  let imported = 0;
+  let renamed = 0;
+  let skipped = 0;
+
+  for (const incoming of payload.presets) {
+    if (!incoming || typeof incoming.name !== 'string' || !Array.isArray(incoming.ids)) {
+      skipped += 1;
+      continue;
+    }
+    // Points can disappear between builds; keep the ones that still exist.
+    const ids = incoming.ids.filter((id) => validIds.has(id));
+    if (!ids.length) {
+      skipped += 1;
+      continue;
+    }
+    const existing = loadPresets();
+    let name = incoming.name.trim().slice(0, 40);
+    if (existing.some((p) => p.name.toLowerCase() === name.toLowerCase())) {
+      name = uniquePresetName(name);
+      renamed += 1;
+    }
+    const list = loadPresets();
+    list.push({
+      name,
+      ids,
+      direction: state.data.directions[incoming.direction] ? incoming.direction : null,
+      mode: ['over', 'over-only', 'back'].includes(incoming.mode) ? incoming.mode : null,
+    });
+    storePresets(list);
+    state.presets = list;
+    imported += 1;
+  }
+  return { imported, renamed, skipped };
+}
+
 function deletePreset(name) {
   const list = loadPresets().filter((p) => p.name !== name);
   storePresets(list);
@@ -652,6 +730,20 @@ function paletteCommands() {
         ]
       : []),
     { id: 'preset:save', group: 'Plan', title: 'Save this selection as a new preset', run: () => promptForPresetName() },
+    {
+      id: 'preset:export',
+      group: 'Plan',
+      title: 'Export presets',
+      hint: 'Copy them to move to another site or browser',
+      run: () => exportPresetsFlow(),
+    },
+    {
+      id: 'preset:import',
+      group: 'Plan',
+      title: 'Import presets',
+      hint: 'Paste an export from elsewhere',
+      run: () => importPresetsFlow(),
+    },
     { id: 'share:copy', group: 'Plan', title: 'Copy a shareable link', hint: 'Carries direction, peaks setting and selection', run: () => $('copy-link').click() },
     { id: 'preset:reset', group: 'Plan', title: 'Reset — forget saved changes', hint: 'Clears stored selection and returns to recommended', run: () => { clearSaved(); applyPreset('recommended'); } },
     { id: 'days:open', group: 'View', title: 'Expand every day', run: () => { for (const day of currentDays()) state.openDays.add(day.day); render(); saveState(); } },
@@ -1154,7 +1246,15 @@ function renderExports() {
 
 // A small in-page dialog rather than window.confirm: it can carry three actions
 // (discard / save first / cancel), doubles as the name prompt, and matches the page.
-function showDialog({ title, body, okLabel = 'OK', altLabel = null, prompt = false, initial = '' }) {
+function showDialog({
+  title,
+  body,
+  okLabel = 'OK',
+  altLabel = null,
+  prompt = false,
+  initial = '',
+  multiline = false,
+}) {
   return new Promise((resolve) => {
     const el = $('confirm');
     $('confirm-title').textContent = title;
@@ -1166,9 +1266,14 @@ function showDialog({ title, body, okLabel = 'OK', altLabel = null, prompt = fal
     const wrap = $('confirm-input-wrap');
     wrap.hidden = !prompt;
     const input = $('confirm-input');
-    if (prompt) input.value = initial;
+    const area = $('confirm-area');
+    // A preset export is far too long for a one-line input.
+    area.hidden = !multiline;
+    input.hidden = Boolean(multiline);
+    if (prompt) (multiline ? area : input).value = initial;
     el.hidden = false;
-    if (prompt) input.focus();
+    if (prompt) (multiline ? area : input).focus();
+    if (prompt && multiline && initial) area.select();
 
     const done = (result) => {
       el.hidden = true;
@@ -1254,6 +1359,53 @@ function updateCurrentPreset() {
   renderPresets();
   toast(`Updated “${target.name}” — ${state.selected.size} point(s)`);
   return true;
+}
+
+async function exportPresetsFlow() {
+  if (!(state.presets ?? []).length) {
+    toast('No saved presets to export');
+    return;
+  }
+  const json = exportPresets();
+  let copied = false;
+  try {
+    await navigator.clipboard.writeText(json);
+    copied = true;
+  } catch {
+    copied = false;
+  }
+  await showDialog({
+    title: `Export ${state.presets.length} preset(s)`,
+    body: copied
+      ? 'Copied to your clipboard. Paste it into Import on the other site — presets are stored per domain, so they do not travel on their own.'
+      : 'Copy this and paste it into Import on the other site.',
+    okLabel: 'Done',
+    prompt: true,
+    multiline: true,
+    initial: json,
+  });
+}
+
+async function importPresetsFlow() {
+  const answer = await showDialog({
+    title: 'Import presets',
+    body: 'Paste an export from another site or browser. Nothing existing is overwritten — a clashing name is given a free suffix.',
+    okLabel: 'Import',
+    prompt: true,
+    multiline: true,
+    initial: '',
+  });
+  if (answer === 'cancel') return;
+  const result = importPresets($('confirm-area').value);
+  if (result.error) {
+    toast(result.error);
+    return;
+  }
+  renderPresets();
+  const bits = [`Imported ${result.imported}`];
+  if (result.renamed) bits.push(`${result.renamed} renamed to avoid a clash`);
+  if (result.skipped) bits.push(`${result.skipped} skipped`);
+  toast(bits.join(' · '));
 }
 
 async function promptForPresetName() {
@@ -1387,6 +1539,8 @@ function wireEvents() {
     }
   });
 
+  $('export-presets').addEventListener('click', () => exportPresetsFlow());
+  $('import-presets').addEventListener('click', () => importPresetsFlow());
   $('update-preset').addEventListener('click', () => updateCurrentPreset());
   $('save-preset').addEventListener('click', () => promptForPresetName());
 
@@ -1412,6 +1566,10 @@ function wireEvents() {
   });
   $('confirm-input').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') dialogAnswer('ok');
+    if (e.key === 'Escape') dialogAnswer('cancel');
+  });
+  // In the textarea, Enter has to insert a newline; only Escape and the buttons act.
+  $('confirm-area').addEventListener('keydown', (e) => {
     if (e.key === 'Escape') dialogAnswer('cancel');
   });
   $('mode-over').addEventListener('click', () => setMode('over'));

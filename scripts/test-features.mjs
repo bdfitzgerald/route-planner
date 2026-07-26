@@ -289,5 +289,49 @@ check('everything preset is detected', (() => { ev("state.selected = new Set(can
 
 function all_count(sess) { return sess.evalIn('allDetourItems()').length; }
 
+// --- preset export / import (moving between origins) ---
+ev("storePresets([]); state.presets = []; state.basePresetName = null;");
+ev("state.selected = new Set(builtinSet('recommended')); savePreset('Origin A plan');");
+ev("state.selected = new Set([...canonicalIds()].slice(0, 5)); savePreset('Second plan');");
+const exported = ev('exportPresets()');
+const parsed = JSON.parse(exported);
+check('export is valid JSON with a kind marker', parsed.kind === 'route-planner-presets');
+check('export names its route', parsed.route === 'lakeland-way', parsed.route);
+check('export carries both presets', parsed.presets.length === 2, `${parsed.presets.length}`);
+check('export keeps direction and mode', parsed.presets[0].direction != null && parsed.presets[0].mode != null);
+
+// simulate arriving on a different origin: empty storage, then import
+ev("storePresets([]); state.presets = [];");
+check('storage starts empty on the new origin', ev('loadPresets()').length === 0);
+let r = ev(`importPresets(${JSON.stringify(exported)})`);
+check('import restores both presets', r.imported === 2 && !r.error, JSON.stringify(r));
+check('names survive the round trip',
+      ev('loadPresets()').map(p => p.name).sort().join(',') === 'Origin A plan,Second plan',
+      ev('loadPresets()').map(p => p.name).join(','));
+check('selections survive the round trip',
+      ev("loadPresets().find(p => p.name === 'Second plan').ids").length === 5);
+
+// re-importing must not overwrite, it renames
+r = ev(`importPresets(${JSON.stringify(exported)})`);
+check('a second import renames rather than overwriting', r.imported === 2 && r.renamed === 2, JSON.stringify(r));
+check('nothing was lost', ev('loadPresets()').length === 4, `${ev('loadPresets()').length} presets`);
+
+// rubbish input
+check('invalid JSON is reported', Boolean(ev("importPresets('not json')").error));
+check('wrong file shape is reported', Boolean(ev(`importPresets('{"a":1}')`).error));
+check('a different route is refused',
+      Boolean(ev(`importPresets(${JSON.stringify(JSON.stringify({kind:'route-planner-presets',route:'other-route',presets:[]}))}).error`)));
+// ids that no longer exist are dropped, not imported blind
+const stale = JSON.stringify({kind:'route-planner-presets',route:'lakeland-way',
+  presets:[{name:'Stale',ids:['peak-gone','swim-gone'],direction:'cw',mode:'over'}]});
+r = ev(`importPresets(${JSON.stringify(stale)})`);
+check('a preset of only-missing points is skipped', r.imported === 0 && r.skipped === 1, JSON.stringify(r));
+const partlyStale = JSON.stringify({kind:'route-planner-presets',route:'lakeland-way',
+  presets:[{name:'Mixed',ids:['peak-gone', ev('canonicalIds()')[0]],direction:'cw',mode:'over'}]});
+r = ev(`importPresets(${JSON.stringify(partlyStale)})`);
+check('missing points are dropped but the preset survives',
+      r.imported === 1 && ev("loadPresets().find(p => p.name === 'Mixed').ids").length === 1, JSON.stringify(r));
+ev("storePresets([]); state.presets = [];");
+
 console.log(`\n${fails === 0 ? 'ALL FEATURE CHECKS PASSED' : fails + ' FAILED'}`);
 process.exit(fails ? 1 : 0);
