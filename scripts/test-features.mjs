@@ -344,6 +344,40 @@ ev("storePresets([]); state.presets = [];");
         b.evalIn('state').basePresetName === 'Refresh test', b.evalIn('state').basePresetName ?? 'null');
 }
 
+// --- overlapping traverses: why a ticked peak can be left out ---
+// Scafell, Great Gable and Scafell Pike all want the same stretch of route. Only one can
+// have it, so the others were silently dropped: ticking them appeared to do nothing, and
+// the row still advertised the traverse cost it could not deliver.
+{
+  const items = ev('allDetourItems()');
+  const find = (n) => items.find((i) => i.title === n);
+  const sp = find('Scafell Pike');
+  const sf = find('Scafell');
+  const gg = find('Great Gable');
+  check('the three summits share a day', sp && sf && gg && sf.dayByDirection.cw === sp.dayByDirection.cw);
+  check('and their traverse stretches overlap',
+        sf.traverse.fromKm < sp.traverse.toKm && sf.traverse.toKm > sp.traverse.fromKm);
+
+  ev("setMode('over-only'); setDirection('cw'); state.selected = new Set();");
+  ev(`state.selected.add(${JSON.stringify(sp.id)}); state.selected.add(${JSON.stringify(sf.id)}); state.selected.add(${JSON.stringify(gg.id)});`);
+  const f = ev(`dayFigures(currentDays().find((d) => d.day === ${sp.dayByDirection.cw}))`);
+  const mode = (id) => f.modes.get(id);
+  check('the cheapest traverse wins the stretch', mode(sp.id) === 'traverse', mode(sp.id));
+  check('the others are excluded, not silently costed',
+        mode(sf.id) === 'excluded' && mode(gg.id) === 'excluded', `${mode(sf.id)}/${mode(gg.id)}`);
+  check('and the reason given is the clash, not "needs doubling back"',
+        f.excludedInfo.get(sf.id)?.reason === 'stretch-taken', f.excludedInfo.get(sf.id)?.reason);
+  check('naming the summit that took it',
+        (f.excludedInfo.get(sf.id)?.blockedBy ?? []).includes(sp.id));
+
+  // The advice the row gives must actually work.
+  ev(`state.selected.delete(${JSON.stringify(sp.id)});`);
+  const f2 = ev(`dayFigures(currentDays().find((d) => d.day === ${sp.dayByDirection.cw}))`);
+  check('unticking the winner frees the stretch, as the row says',
+        f2.modes.get(sf.id) === 'traverse', f2.modes.get(sf.id));
+  ev("state.selected = new Set(); setMode('over');");
+}
+
 // --- saving is offered locally only ---
 {
   // The harness runs in production mode, so the save affordances must be absent.

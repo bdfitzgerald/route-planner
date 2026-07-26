@@ -194,6 +194,10 @@ function finish(
   const inserting = [];
   let fallbacks = 0;
   let excluded = 0;
+  // Why each excluded point was dropped. "It needs doubling back" is only one of the
+  // reasons, and saying that when a point has a perfectly good traverse that simply lost
+  // the stretch to a neighbour is actively misleading.
+  const excludedInfo = new Map();
   for (const item of picked) {
     if (covered.has(item.id)) continue;
     // Passed on the way by a chosen traverse: nothing to add, nothing to splice.
@@ -203,10 +207,23 @@ function finish(
     }
     const isOnRoute = item.detour.kind === 'on-route';
     if (!isOnRoute && excludeOutAndBack && excludeCategories.includes(item.category)) {
-      // Left out entirely: it can only be reached by doubling back, and the
-      // caller has asked for none of that. Costs nothing and is not spliced.
+      // Left out entirely: reaching it would mean doubling back, which the caller has
+      // asked for none of. Costs nothing and is not spliced.
       modes.set(item.id, 'excluded');
       excluded += 1;
+      if (!item.traverse) {
+        excludedInfo.set(item.id, { reason: 'no-traverse' });
+      } else {
+        // It has a traverse, so something else must have taken the stretch. Name it:
+        // the fix is to untick the other summit, which is not otherwise discoverable.
+        const clash = chosen.find(
+          (c) => item.traverse.fromKm < c.toKm - EPS && item.traverse.toKm > c.fromKm + EPS,
+        );
+        excludedInfo.set(item.id, {
+          reason: clash ? 'stretch-taken' : 'unavailable',
+          blockedBy: clash ? clash.covers.slice() : [],
+        });
+      }
       continue;
     }
     modes.set(item.id, isOnRoute ? 'on-route' : 'out-and-back');
@@ -230,6 +247,7 @@ function finish(
     chosen,
     fallbacks,
     excluded,
+    excludedInfo,
     outOfWindow,
     addedKm: parts.reduce((s, p) => s + (p.addedKm ?? 0), 0),
     addedAscentM: parts.reduce((s, p) => s + (p.addedAscentM ?? 0), 0),

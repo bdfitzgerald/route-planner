@@ -505,7 +505,7 @@ const MODE_LABEL = {
   collected: 'passed on the way',
   'out-and-back': 'there and back',
   'on-route': 'on the route',
-  excluded: 'left out — needs doubling back',
+  excluded: 'left out',
   unselected: 'not selected',
 };
 
@@ -513,19 +513,34 @@ function poiRow(item, dayOverBudget, figures) {
   const selected = state.selected.has(item.id);
   const resolved = selected ? itemCost(item, figures) : null;
   // Unselected rows preview the cheapest option they would use.
-  const preview = item.traverse && state.mode !== 'back' ? item.traverse : item.detour;
+  // Preview the option that is always available, not the best case. A traverse can lose
+  // its stretch to a neighbouring summit, and a row promising +3km that then cost +5km —
+  // or nothing at all — was the worst of the reporting bugs here.
+  const preview = item.detour;
   const shown = resolved ?? { ...preview, mode: resolved?.mode };
-  const mode = resolved?.mode ?? (item.traverse && state.mode !== 'back' ? 'traverse' : item.detour.kind);
+  const mode = resolved?.mode ?? item.detour.kind;
 
   let cost;
   if (mode === 'excluded') {
-    cost = `<span class="poi-cost muted">left out — ${MODE_LABEL.excluded} (+${km(item.detour.addedKm ?? 0)} km)</span>`;
+    const info = figures?.excludedInfo?.get(item.id);
+    const blockers = (info?.blockedBy ?? [])
+      .map((id) => allDetourItems().find((x) => x.id === id)?.title)
+      .filter(Boolean);
+    let why = 'only reachable by doubling back';
+    if (info?.reason === 'stretch-taken') {
+      why = blockers.length
+        ? `${blockers.join(' + ')} already uses this stretch — untick to walk over ${item.title} instead`
+        : 'another summit already uses this stretch';
+    } else if (info?.reason === 'unavailable') {
+      why = 'its line cannot be used alongside the rest of this day';
+    }
+    cost = `<span class="poi-cost muted">left out — ${why}</span>`;
   } else if (mode === 'collected') {
     cost = '<span class="poi-cost free">free · passed on the way</span>';
   } else if ((shown.addedKm ?? 0) > 0) {
     const alt =
       item.traverse && mode !== 'traverse' && mode !== 'chain'
-        ? ` <span class="alt-cost">(+${km(item.traverse.addedKm)} km over the top)</span>`
+        ? ` <span class="alt-cost">or +${km(item.traverse.addedKm)} km if walked over</span>`
         : '';
     cost =
       `<span class="poi-cost">+${km(shown.addedKm)} km · +${shown.addedAscentM} m` +
