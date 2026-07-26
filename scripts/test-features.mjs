@@ -271,7 +271,7 @@ ev("state.selected.delete([...state.selected][0]);");
 check('update becomes available once edited', ev('updatablePreset()')?.name === 'Trip A',
       ev('updatablePreset()')?.name ?? 'null');
 const countBefore = ev("loadPresets().find(p => p.name === 'Trip A').ids").length;
-check('update overwrites without prompting', ev('updateCurrentPreset()') === true);
+check('update overwrites without prompting', (await ev('updateCurrentPreset()')) === true);
 const countAfter = ev("loadPresets().find(p => p.name === 'Trip A').ids").length;
 check('the preset now holds the edited selection', countAfter === countBefore - 1,
       `${countBefore} -> ${countAfter}`);
@@ -281,7 +281,7 @@ ev("applyPreset('all');");
 check('no update offered after switching to a built-in', ev('updatablePreset()') === null);
 ev("applyCustomPreset('Trip A'); state.selected.clear(); deletePreset('Trip A');");
 check('no update offered once the preset is deleted', ev('updatablePreset()') === null);
-check('updateCurrentPreset is a no-op with no target', ev('updateCurrentPreset()') === false);
+check('updateCurrentPreset is a no-op with no target', (await ev('updateCurrentPreset()')) === false);
 ev("storePresets([]); state.presets = [];");
 check('deleting a preset works', !ev('loadPresets()').some(p => p.name === 'My plan'));
 check('base route preset is detected', (() => { ev("state.selected = new Set();"); return ev('activePreset()')?.key === 'none'; })());
