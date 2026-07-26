@@ -1,0 +1,238 @@
+{
+  "category": "wildcamp-spots",
+  "label": "Wild camps",
+  "glyph": "▲",
+  "source": "Sited by scoring the route every 250m on DEM altitude and gradient, distance to open water, and proximity to a named fell, then choosing the day boundaries by dynamic programming. Height dominates the score: these are fell pitches, not valley ones. Day length is bounded (7-30km) rather than optimised, so a good pitch is not passed over for an even itinerary. One set serves both directions.",
+  "legalNote": "There is no general right to wild camp in the Lake District. These pitches are chosen to suit the accepted convention: high ground well above the enclosed valley land, arriving late, leaving early, one night only, no fires, and no trace. Pitches near a farm or in a valley bottom may need the landowner's permission.",
+  "items": [
+    {
+      "id": "camp-night-1",
+      "title": "Night 1",
+      "night": 1,
+      "lat": 54.422524,
+      "lon": -3.256495,
+      "routeKm": 16.28,
+      "elevationM": 275,
+      "gradient": 0.0047,
+      "nearestWater": "Burnmoor Tarn",
+      "nearestWaterM": 671,
+      "nearestFell": "Illgill Head",
+      "nearestFellM": 2031,
+      "nearestFellHeightM": 609,
+      "labels": [
+        "low pitch",
+        "water nearby"
+      ],
+      "description": null
+    },
+    {
+      "id": "camp-night-2",
+      "title": "Night 2",
+      "night": 2,
+      "lat": 54.460007,
+      "lon": -3.162841,
+      "routeKm": 29.07,
+      "elevationM": 564,
+      "gradient": 0.0022,
+      "nearestWater": "Angle Tarn",
+      "nearestWaterM": 325,
+      "nearestFell": "Rossett Pike",
+      "nearestFellM": 354,
+      "nearestFellHeightM": 651,
+      "labels": [
+        "fell pitch",
+        "water on site",
+        "below Rossett Pike"
+      ],
+      "description": null
+    },
+    {
+      "id": "camp-night-3",
+      "title": "Night 3",
+      "night": 3,
+      "lat": 54.511615,
+      "lon": -3.212557,
+      "routeKm": 46.63,
+      "elevationM": 524,
+      "gradient": 0.0065,
+      "nearestWater": null,
+      "nearestWaterM": 447,
+      "nearestFell": "Grey Knotts",
+      "nearestFellM": 1005,
+      "nearestFellHeightM": 697,
+      "labels": [
+        "fell pitch",
+        "water nearby",
+        "below Grey Knotts"
+      ],
+      "description": null
+    },
+    {
+      "id": "camp-night-4",
+      "title": "Night 4",
+      "night": 4,
+      "lat": 54.578964,
+      "lon": -3.255136,
+      "routeKm": 65.42,
+      "elevationM": 601,
+      "gradient": 0.0919,
+      "nearestWater": null,
+      "nearestWaterM": 1225,
+      "nearestFell": "Crag Hill",
+      "nearestFellM": 903,
+      "nearestFellHeightM": 839,
+      "labels": [
+        "high fell pitch",
+        "water nearby",
+        "below Crag Hill"
+      ],
+      "description": null
+    },
+    {
+      "id": "camp-night-5",
+      "title": "Night 5",
+      "night": 5,
+      "lat": 54.600984,
+      "lon": -3.018955,
+      "routeKm": 88.92,
+      "elevationM": 436,
+      "gradient": 0.0142,
+      "nearestWater": null,
+      "nearestWaterM": 1348,
+      "nearestFell": "Clough Head",
+      "nearestFellM": 1211,
+      "nearestFellHeightM": 726,
+      "labels": [
+        "fell pitch",
+        "water nearby",
+        "below Clough Head"
+      ],
+      "description": null
+    },
+    {
+      "id": "camp-night-6",
+      "title": "Night 6",
+      "night": 6,
+      "lat": 54.556807,
+      "lon": -2.989121,
+      "routeKm": 103.4,
+      "elevationM": 621,
+      "gradient": 0,
+      "nearestWater": null,
+      "nearestWaterM": 686,
+      "nearestFell": "Sheffield Pike",
+      "nearestFellM": 795,
+      "nearestFellHeightM": 675,
+      "labels": [
+        "high fell pitch",
+        "water nearby",
+        "below Sheffield Pike"
+      ],
+      "description": null
+    },
+    {
+      "id": "camp-night-7",
+      "title": "Night 7",
+      "night": 7,
+      "lat": 54.481241,
+      "lon": -2.873929,
+      "routeKm": 120.99,
+      "elevationM": 760,
+      "gradient": 0.0367,
+      "nearestWater": null,
+      "nearestWaterM": 11,
+      "nearestFell": "Thornthwaite Crag",
+      "nearestFellM": 293,
+      "nearestFellHeightM": 784,
+      "labels": [
+        "high fell pitch",
+        "water on site",
+        "below Thornthwaite Crag"
+      ],
+      "description": null
+    },
+    {
+      "id": "camp-night-8",
+      "title": "Night 8",
+      "night": 8,
+      "lat": 54.444492,
+      "lon": -3.037079,
+      "routeKm": 144.55,
+      "elevationM": 248,
+      "gradient": 0.0726,
+      "nearestWater": null,
+      "nearestWaterM": 101,
+      "nearestFell": "Silver How",
+      "nearestFellM": 734,
+      "nearestFellHeightM": 395,
+      "labels": [
+        "low pitch",
+        "water on site",
+        "below Silver How"
+      ],
+      "description": null
+    },
+    {
+      "id": "camp-night-9",
+      "title": "Night 9",
+      "night": 9,
+      "lat": 54.381255,
+      "lon": -3.11008,
+      "routeKm": 162.9,
+      "elevationM": 437,
+      "gradient": 0.0419,
+      "nearestWater": "Levers Water",
+      "nearestWaterM": 331,
+      "nearestFell": "Brim Fell",
+      "nearestFellM": 1019,
+      "nearestFellHeightM": 796,
+      "labels": [
+        "fell pitch",
+        "water on site",
+        "below Brim Fell"
+      ],
+      "description": null
+    },
+    {
+      "id": "camp-night-10",
+      "title": "Night 10",
+      "night": 10,
+      "lat": 54.402838,
+      "lon": -3.185492,
+      "routeKm": 182.15,
+      "elevationM": 398,
+      "gradient": 0.0142,
+      "nearestWater": null,
+      "nearestWaterM": 267,
+      "nearestFell": "Hard Knott",
+      "nearestFellM": 833,
+      "nearestFellHeightM": 549,
+      "labels": [
+        "fell pitch",
+        "water on site",
+        "below Hard Knott"
+      ],
+      "description": null
+    },
+    {
+      "id": "camp-night-11",
+      "title": "Night 11",
+      "night": 11,
+      "lat": 54.35969,
+      "lon": -3.293832,
+      "routeKm": 195.91,
+      "elevationM": 234,
+      "gradient": 0.0046,
+      "nearestWater": "Devoke Water",
+      "nearestWaterM": 296,
+      "nearestFell": "Green Crag",
+      "nearestFellM": 4245,
+      "nearestFellHeightM": 489,
+      "labels": [
+        "low pitch",
+        "water on site"
+      ],
+      "description": null
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "id": "lakeland-way",
+  "name": "Lakeland Way",
+  "baseGpx": "lakeland-way-original.gpx",
+  "closedLoop": true,
+  "days": 12,
+  "startDate": "2026-08-31",
+  "directions": {
+    "cw": {
+      "label": "Clockwise",
+      "reverse": false
+    },
+    "acw": {
+      "label": "Anticlockwise",
+      "reverse": true
+    }
+  },
+  "planning": {
+    "maxDayKm": 30,
+    "targetAverageKm": 25,
+    "maxConsecutiveLongDays": 2,
+    "longDayKm": 27,
+    "endDayMaxKm": 20,
+    "easyDayKm": 18,
+    "minEasyMiddleDays": 2,
+    "_note": "endDayMaxKm caps the first and last legs because both are travel days. It applies to BOTH ends rather than one, because anticlockwise day 1 is the clockwise final leg reversed - a cap on only one end would be broken by walking the other way. 20km is the stated comfortable first-day distance and sits inside the 25km tolerance for the finish. easyDayKm/minEasyMiddleDays reserve short walking days among days 2-11 - still a full day's walk, just an easier one, not a rest day off the trail."
+  },
+  "ascent": {
+    "smoothWindow": 5,
+    "thresholdM": 10,
+    "note": "Base GPX carries no elevation; all heights are sampled from srtm30m. Validated on the closed loop: ascent and descent agree to within 12m over ~6400m of climbing."
+  },
+  "measured": {
+    "distanceKm": 208.3,
+    "ascentM": 6426,
+    "elevationRangeM": [
+      0,
+      827
+    ],
+    "trackPoints": 4697,
+    "note": "Distance measured directly along the 4697-point OS Maps track. The old site's x1.20 buffer was unnecessary and has been removed."
+  },
+  "attribution": {
+    "baseRoute": "Drawn in OS Maps (OS Maps - Web export)",
+    "elevation": "SRTM 30m via Open Topo Data",
+    "detourRouting": "BRouter hiking-mountain profile (OpenStreetMap)"
+  }
+}

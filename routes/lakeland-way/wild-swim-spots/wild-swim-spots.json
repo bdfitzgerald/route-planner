@@ -1,0 +1,1540 @@
+{
+  "category": "wild-swim-spots",
+  "label": "Wild swims",
+  "glyph": "~",
+  "source": "Discovered from OpenStreetMap water features within 4km of the route, then curated. Positions are OSM centroids: accurate for tarns and pools, but flagged needsEntryPoint for large lakes where the centroid lies offshore.",
+  "items": [
+    {
+      "id": "swim-blea-tarn",
+      "title": "Blea Tarn",
+      "lat": 54.397863,
+      "lon": -3.286649,
+      "kind": "water",
+      "elevationM": 220,
+      "labels": [
+        "tarn",
+        "remote"
+      ],
+      "starred": false,
+      "description": "A small tarn on the Eskdale moor at 220m, quiet and rarely visited.",
+      "offRouteKm": 0.986,
+      "routeKm": 11.42,
+      "needsEntryPoint": false,
+      "osmId": "way/4583930"
+    },
+    {
+      "id": "swim-eel-tarn",
+      "title": "Eel Tarn",
+      "lat": 54.406232,
+      "lon": -3.250651,
+      "kind": "water",
+      "elevationM": 210,
+      "labels": [
+        "tarn",
+        "remote"
+      ],
+      "starred": false,
+      "description": "A boggy little tarn on the moor above Boot at 210m; peaty and mild.",
+      "offRouteKm": 0.887,
+      "routeKm": 14.68,
+      "needsEntryPoint": false,
+      "osmId": "way/4583973"
+    },
+    {
+      "id": "swim-stony-tarn",
+      "title": "Stony Tarn",
+      "lat": 54.411431,
+      "lon": -3.235193,
+      "kind": "water",
+      "elevationM": 306,
+      "labels": [
+        "tarn",
+        "remote"
+      ],
+      "starred": false,
+      "description": "Rocky-shored tarn at 306m on the Eskdale moor, harder to reach than nearby Eel Tarn.",
+      "offRouteKm": 1.644,
+      "routeKm": 15.39,
+      "needsEntryPoint": false,
+      "osmId": "way/4583974"
+    },
+    {
+      "id": "swim-burnmoor-tarn",
+      "title": "Burnmoor Tarn",
+      "lat": 54.428301,
+      "lon": -3.259506,
+      "kind": "water",
+      "elevationM": 254,
+      "labels": [
+        "tarn",
+        "remote"
+      ],
+      "starred": false,
+      "description": "A wide shallow tarn on the moor between Eskdale and Wasdale at 254m. Peaty and comparatively mild; the surrounding ground is boggy, so use the firmer northern shore.",
+      "offRouteKm": 0.218,
+      "routeKm": 16.84,
+      "needsEntryPoint": false,
+      "osmId": "way/217878284"
+    },
+    {
+      "id": "swim-wast-water",
+      "title": "Wast Water",
+      "lat": 54.439266,
+      "lon": -3.292009,
+      "kind": "lake",
+      "elevationM": 61,
+      "labels": [
+        "lake",
+        "no powerboats",
+        "deepest lake"
+      ],
+      "starred": false,
+      "description": "England's deepest lake at 79m, with no motorised craft and the screes plunging straight into it. Long shingle shore for easy entry; cold at any time of year.",
+      "offRouteKm": 1.94,
+      "routeKm": 18.97,
+      "needsEntryPoint": true,
+      "osmId": "relation/14386805"
+    },
+    {
+      "id": "swim-greendale-tarn",
+      "title": "Greendale Tarn",
+      "lat": 54.455374,
+      "lon": -3.316741,
+      "kind": "water",
+      "elevationM": 404,
+      "labels": [
+        "high tarn",
+        "wild"
+      ],
+      "starred": false,
+      "description": "A quiet tarn at 404m between Middle Fell and Seatallan above Wasdale.",
+      "offRouteKm": 3.585,
+      "routeKm": 20.4,
+      "needsEntryPoint": false,
+      "osmId": "way/4583896"
+    },
+    {
+      "id": "swim-low-tarn",
+      "title": "Low Tarn",
+      "lat": 54.472317,
+      "lon": -3.294942,
+      "kind": "water",
+      "elevationM": 517,
+      "labels": [
+        "high tarn",
+        "wild"
+      ],
+      "starred": false,
+      "description": "A remote pair of small tarns at 517m on the flank of Yewbarrow above Wasdale.",
+      "offRouteKm": 2.56,
+      "routeKm": 21.87,
+      "needsEntryPoint": false,
+      "osmId": "way/4583895"
+    },
+    {
+      "id": "swim-ritson-force",
+      "title": "Ritson Force",
+      "lat": 54.472348,
+      "lon": -3.258305,
+      "kind": "waterfall",
+      "elevationM": 116,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "A short fall in woodland behind the Wasdale Head Inn, with a small pool beneath.",
+      "offRouteKm": 0.533,
+      "routeKm": 21.93,
+      "needsEntryPoint": false,
+      "osmId": "node/6088387937"
+    },
+    {
+      "id": "swim-scoat-tarn",
+      "title": "Scoat Tarn",
+      "lat": 54.481574,
+      "lon": -3.298879,
+      "kind": "water",
+      "elevationM": 600,
+      "labels": [
+        "high tarn",
+        "wild",
+        "remote"
+      ],
+      "starred": false,
+      "description": "A deep, cold tarn at 600m under Scoat Fell, one of the remotest on the route.",
+      "offRouteKm": 3.171,
+      "routeKm": 21.93,
+      "needsEntryPoint": false,
+      "osmId": "way/4583894"
+    },
+    {
+      "id": "swim-emerald-pools",
+      "title": "Emerald Pools",
+      "lat": 54.472261,
+      "lon": -3.219753,
+      "kind": "river",
+      "elevationM": 217,
+      "labels": [
+        "river pool",
+        "gorge"
+      ],
+      "starred": true,
+      "description": "Green-tinted pools in the bed of Lingmell Beck below Wasdale Head, where the water has cut into clean rock. Cold and clear; easy entry from the shingle.",
+      "offRouteKm": 0.232,
+      "routeKm": 24.52,
+      "needsEntryPoint": false,
+      "osmId": "relation/16098855"
+    },
+    {
+      "id": "swim-styhead-tarn",
+      "title": "Styhead Tarn",
+      "lat": 54.478084,
+      "lon": -3.202674,
+      "kind": "water",
+      "elevationM": 440,
+      "labels": [
+        "high tarn"
+      ],
+      "starred": false,
+      "description": "Beneath Great Gable at 440m, right on the pass. Popular by day, quiet at either end of it. Mountain rescue stretcher box nearby.",
+      "offRouteKm": 0.376,
+      "routeKm": 25.75,
+      "needsEntryPoint": false,
+      "osmId": "way/4583808"
+    },
+    {
+      "id": "swim-taylorgill-force",
+      "title": "Taylorgill Force",
+      "lat": 54.488177,
+      "lon": -3.19066,
+      "kind": "waterfall",
+      "elevationM": 302,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "A 40m fall on Styhead Gill above Seathwaite, seen from the Styhead path.",
+      "offRouteKm": 1.631,
+      "routeKm": 25.97,
+      "needsEntryPoint": false,
+      "osmId": "node/310755020"
+    },
+    {
+      "id": "swim-sprinkling-tarn",
+      "title": "Sprinkling Tarn",
+      "lat": 54.47189,
+      "lon": -3.193005,
+      "kind": "water",
+      "elevationM": 602,
+      "labels": [
+        "high tarn",
+        "wild"
+      ],
+      "starred": true,
+      "description": "At 602m below Great End, one of the highest sizeable tarns in the district and a superb place to swim on a clear evening. Exposed — there is no shelter if the weather turns.",
+      "offRouteKm": 0.14,
+      "routeKm": 26.52,
+      "needsEntryPoint": false,
+      "osmId": "relation/8896609"
+    },
+    {
+      "id": "swim-cam-spout",
+      "title": "Cam Spout",
+      "lat": 54.4424,
+      "lon": -3.208612,
+      "kind": "waterfall",
+      "elevationM": 474,
+      "labels": [
+        "waterfall",
+        "gorge"
+      ],
+      "starred": false,
+      "description": "A long cascade at 474m where the upper Esk drops beneath Scafell.",
+      "offRouteKm": 2.974,
+      "routeKm": 27.7,
+      "needsEntryPoint": false,
+      "osmId": "node/1917669693"
+    },
+    {
+      "id": "swim-angle-tarn",
+      "title": "Angle Tarn",
+      "lat": 54.458658,
+      "lon": -3.167308,
+      "kind": "water",
+      "elevationM": 557,
+      "labels": [
+        "high tarn",
+        "wild"
+      ],
+      "starred": true,
+      "description": "Sitting at 557m under Bowfell and Rossett Pike, dark and deep with a boulder shore. Reached directly by the route over Rossett Gill.",
+      "offRouteKm": 0.157,
+      "routeKm": 28.88,
+      "needsEntryPoint": false,
+      "osmId": "way/281575720"
+    },
+    {
+      "id": "swim-three-tarns",
+      "title": "Three Tarns",
+      "lat": 54.44425,
+      "lon": -3.161208,
+      "kind": "water",
+      "elevationM": 724,
+      "labels": [
+        "high tarn",
+        "wild"
+      ],
+      "starred": false,
+      "description": "A cluster of small pools on the col at 724m between Bowfell and Crinkle Crags — more a place to dip than to swim, and utterly exposed.",
+      "offRouteKm": 1.746,
+      "routeKm": 28.93,
+      "needsEntryPoint": false,
+      "osmId": "way/41905889"
+    },
+    {
+      "id": "swim-whorneyside-force",
+      "title": "Whorneyside Force",
+      "lat": 54.438324,
+      "lon": -3.140617,
+      "kind": "waterfall",
+      "elevationM": 310,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "A clean fall on Buscoe Sike below Three Tarns, in upper Langdale.",
+      "offRouteKm": 2.796,
+      "routeKm": 29.76,
+      "needsEntryPoint": false,
+      "osmId": "node/30814254"
+    },
+    {
+      "id": "swim-dungeon-ghyll-waterfall",
+      "title": "Dungeon Ghyll Waterfall",
+      "lat": 54.451724,
+      "lon": -3.101073,
+      "kind": "waterfall",
+      "elevationM": 360,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": null,
+      "offRouteKm": 2.869,
+      "routeKm": 31.41,
+      "needsEntryPoint": false,
+      "osmId": "node/1162019877"
+    },
+    {
+      "id": "swim-dungeon-ghyll-force",
+      "title": "Dungeon Ghyll Force",
+      "lat": 54.449604,
+      "lon": -3.096419,
+      "kind": "waterfall",
+      "elevationM": 212,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "A fall in a narrow cleft above Great Langdale, behind the old hotel.",
+      "offRouteKm": 3.251,
+      "routeKm": 31.41,
+      "needsEntryPoint": false,
+      "osmId": "node/5344647534"
+    },
+    {
+      "id": "swim-stickle-tarn",
+      "title": "Stickle Tarn",
+      "lat": 54.459362,
+      "lon": -3.100687,
+      "kind": "pond",
+      "elevationM": 475,
+      "labels": [
+        "high tarn",
+        "dramatic"
+      ],
+      "starred": true,
+      "description": "Dammed at 475m directly beneath the face of Pavey Ark, reached by a steep 40 minutes up Stickle Ghyll. The crag rising straight from the far shore is the draw.",
+      "offRouteKm": 2.438,
+      "routeKm": 31.41,
+      "needsEntryPoint": false,
+      "osmId": "relation/14372158"
+    },
+    {
+      "id": "swim-tray-dub",
+      "title": "Tray Dub",
+      "lat": 54.48044,
+      "lon": -3.137482,
+      "kind": "river",
+      "elevationM": 209,
+      "labels": [
+        "river pool"
+      ],
+      "starred": false,
+      "description": "A quiet plunge pool on Langstrath Beck, a few metres off the path.",
+      "offRouteKm": 0.02,
+      "routeKm": 33.03,
+      "needsEntryPoint": false,
+      "osmId": "way/572856795"
+    },
+    {
+      "id": "swim-swan-dub",
+      "title": "Swan Dub",
+      "lat": 54.481883,
+      "lon": -3.13775,
+      "kind": "river",
+      "elevationM": 203,
+      "labels": [
+        "river pool"
+      ],
+      "starred": false,
+      "description": "Small deep pool on Langstrath Beck, immediately beside the route.",
+      "offRouteKm": 0.025,
+      "routeKm": 33.18,
+      "needsEntryPoint": false,
+      "osmId": "way/572853903"
+    },
+    {
+      "id": "swim-black-moss-pot",
+      "title": "Black Moss Pot",
+      "lat": 54.491915,
+      "lon": -3.132924,
+      "kind": "pond",
+      "elevationM": 184,
+      "labels": [
+        "river pool",
+        "classic",
+        "jump"
+      ],
+      "starred": true,
+      "description": "A deep rock-walled pool in Langstrath, reached by a flat walk up the valley. Sheer sides give a natural jump of a few metres into water deep enough for it; a sloping slab at the downstream end is the easy way out. One of the best-known wild swims in the Lakes, and the route passes within 20m of it.",
+      "offRouteKm": 0.024,
+      "routeKm": 34.4,
+      "needsEntryPoint": false,
+      "osmId": "way/697598214"
+    },
+    {
+      "id": "swim-galleny-force",
+      "title": "Galleny Force",
+      "lat": 54.508016,
+      "lon": -3.124697,
+      "kind": "waterfall",
+      "elevationM": 124,
+      "labels": [
+        "river pool",
+        "classic",
+        "waterfall"
+      ],
+      "starred": true,
+      "description": "Known locally as the Fairy Glen — a chain of clear pools and small falls on Greenup Gill above Stonethwaite. Shallower and gentler than Black Moss Pot, with slabs to sit on. Directly on the route.",
+      "offRouteKm": 0.063,
+      "routeKm": 36.41,
+      "needsEntryPoint": false,
+      "osmId": "node/1523942862"
+    },
+    {
+      "id": "swim-dock-tarn",
+      "title": "Dock Tarn",
+      "lat": 54.519264,
+      "lon": -3.12342,
+      "kind": "water",
+      "elevationM": 411,
+      "labels": [
+        "tarn",
+        "wild"
+      ],
+      "starred": false,
+      "description": "A shallow tarn at 411m on the shelf above Stonethwaite, ringed by heather.",
+      "offRouteKm": 1.105,
+      "routeKm": 37.94,
+      "needsEntryPoint": false,
+      "osmId": "relation/11512851"
+    },
+    {
+      "id": "swim-watendlath-tarn",
+      "title": "Watendlath Tarn",
+      "lat": 54.535317,
+      "lon": -3.121719,
+      "kind": "water",
+      "elevationM": 259,
+      "labels": [
+        "tarn",
+        "hamlet"
+      ],
+      "starred": false,
+      "description": "A tarn at 259m beside the hamlet of Watendlath, reached by a packhorse track.",
+      "offRouteKm": 1.982,
+      "routeKm": 39.27,
+      "needsEntryPoint": false,
+      "osmId": "way/4579733"
+    },
+    {
+      "id": "swim-dalehead-tarn",
+      "title": "Dalehead Tarn",
+      "lat": 54.526511,
+      "lon": -3.191458,
+      "kind": "water",
+      "elevationM": 504,
+      "labels": [
+        "high tarn",
+        "wild"
+      ],
+      "starred": false,
+      "description": "A small tarn on the col at 504m below Dale Head, a common wild camp stop.",
+      "offRouteKm": 1.432,
+      "routeKm": 42.66,
+      "needsEntryPoint": false,
+      "osmId": "way/4583235"
+    },
+    {
+      "id": "swim-scaleclose-force",
+      "title": "Scaleclose Force",
+      "lat": 54.522538,
+      "lon": -3.165788,
+      "kind": "waterfall",
+      "elevationM": 167,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "A fall on the beck below Honister, close to the route.",
+      "offRouteKm": 0.261,
+      "routeKm": 42.83,
+      "needsEntryPoint": false,
+      "osmId": "node/1943030354"
+    },
+    {
+      "id": "swim-blackbeck-tarn",
+      "title": "Blackbeck Tarn",
+      "lat": 54.504258,
+      "lon": -3.234004,
+      "kind": "water",
+      "elevationM": 487,
+      "labels": [
+        "high tarn",
+        "wild"
+      ],
+      "starred": false,
+      "description": "Just east of Innominate Tarn at 487m, a little larger and usually deserted.",
+      "offRouteKm": 0.552,
+      "routeKm": 48.12,
+      "needsEntryPoint": false,
+      "osmId": "way/4583207"
+    },
+    {
+      "id": "swim-innominate-tarn",
+      "title": "Innominate Tarn",
+      "lat": 54.505491,
+      "lon": -3.24077,
+      "kind": "water",
+      "elevationM": 528,
+      "labels": [
+        "high tarn",
+        "wild",
+        "heritage"
+      ],
+      "starred": true,
+      "description": "The tarn on Haystacks where Wainwright's ashes were scattered, at 528m. Small, peat-bedded and ringed by rock — the view down Ennerdale is the reason to stop.",
+      "offRouteKm": 0.642,
+      "routeKm": 48.14,
+      "needsEntryPoint": false,
+      "osmId": "relation/11133190"
+    },
+    {
+      "id": "swim-buttermere",
+      "title": "Buttermere",
+      "lat": 54.529919,
+      "lon": -3.265554,
+      "kind": "lake",
+      "elevationM": 104,
+      "labels": [
+        "lake",
+        "no powerboats"
+      ],
+      "starred": true,
+      "description": "No motorised craft, ringed by Haystacks, Fleetwith Pike and High Stile. Easy grassy entry from the shore path near the Gatesgarth end. One of the finest lake swims on the route.",
+      "offRouteKm": 0.08,
+      "routeKm": 52.12,
+      "needsEntryPoint": true,
+      "osmId": "way/4580534"
+    },
+    {
+      "id": "swim-bleaberry-tarn",
+      "title": "Bleaberry Tarn",
+      "lat": 54.527351,
+      "lon": -3.290136,
+      "kind": "water",
+      "elevationM": 493,
+      "labels": [
+        "high tarn",
+        "wild"
+      ],
+      "starred": false,
+      "description": "In the corrie between Red Pike and High Stile at 493m, above Buttermere.",
+      "offRouteKm": 1.064,
+      "routeKm": 53.14,
+      "needsEntryPoint": false,
+      "osmId": "way/4583154"
+    },
+    {
+      "id": "swim-moss-force",
+      "title": "Moss Force",
+      "lat": 54.544983,
+      "lon": -3.249309,
+      "kind": "waterfall",
+      "elevationM": 424,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "A stepped fall beside the Newlands Hause road, visible from the top of the pass.",
+      "offRouteKm": 1.809,
+      "routeKm": 54.16,
+      "needsEntryPoint": false,
+      "osmId": "node/253376790"
+    },
+    {
+      "id": "swim-scale-force",
+      "title": "Scale Force",
+      "lat": 54.541814,
+      "lon": -3.314638,
+      "kind": "waterfall",
+      "elevationM": 243,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "The highest single drop in the Lake District at around 52m, in a mossy cleft above Crummock Water. The plunge pool is small and shaded.",
+      "offRouteKm": 0.833,
+      "routeKm": 56.65,
+      "needsEntryPoint": false,
+      "osmId": "node/333588288"
+    },
+    {
+      "id": "swim-crummock-water",
+      "title": "Crummock Water",
+      "lat": 54.558358,
+      "lon": -3.302403,
+      "kind": "lake",
+      "elevationM": 99,
+      "labels": [
+        "lake",
+        "no powerboats"
+      ],
+      "starred": false,
+      "description": "Larger and deeper than neighbouring Buttermere, with no powerboats. Scale Force, the highest fall in the Lakes, comes down into its western side.",
+      "offRouteKm": 0.45,
+      "routeKm": 58.13,
+      "needsEntryPoint": true,
+      "osmId": "relation/6980593"
+    },
+    {
+      "id": "swim-holme-force",
+      "title": "Holme Force",
+      "lat": 54.580314,
+      "lon": -3.363899,
+      "kind": "waterfall",
+      "elevationM": 204,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "A wooded fall above Loweswater, quiet and little visited.",
+      "offRouteKm": 3.212,
+      "routeKm": 60.54,
+      "needsEntryPoint": false,
+      "osmId": "node/4843887481"
+    },
+    {
+      "id": "swim-loweswater",
+      "title": "Loweswater",
+      "lat": 54.583357,
+      "lon": -3.35594,
+      "kind": "lake",
+      "elevationM": 121,
+      "labels": [
+        "lake",
+        "quiet"
+      ],
+      "starred": false,
+      "description": "The quietest of the western lakes at 121m, with no powerboats and a wooded shore.",
+      "offRouteKm": 2.787,
+      "routeKm": 60.79,
+      "needsEntryPoint": true,
+      "osmId": "way/4580532"
+    },
+    {
+      "id": "swim-derwent-water",
+      "title": "Derwent Water",
+      "lat": 54.578911,
+      "lon": -3.145973,
+      "kind": "lake",
+      "elevationM": 75,
+      "labels": [
+        "lake",
+        "islands"
+      ],
+      "starred": false,
+      "description": "Broad and shallow at 75m with wooded islands; busy with launches near Keswick.",
+      "offRouteKm": 0.849,
+      "routeKm": 78.77,
+      "needsEntryPoint": true,
+      "osmId": "relation/12702"
+    },
+    {
+      "id": "swim-lodore-falls",
+      "title": "Lodore Falls",
+      "lat": 54.55785,
+      "lon": -3.138046,
+      "kind": "waterfall",
+      "elevationM": 163,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "A fall in a wooded ravine at the head of Derwent Water; impressive only after rain.",
+      "offRouteKm": 2.747,
+      "routeKm": 79.21,
+      "needsEntryPoint": false,
+      "osmId": "node/310684391"
+    },
+    {
+      "id": "swim-ashness-bridge",
+      "title": "Ashness Bridge",
+      "lat": 54.567273,
+      "lon": -3.130235,
+      "kind": "waterfall",
+      "elevationM": 170,
+      "labels": [
+        "waterfall",
+        "viewpoint"
+      ],
+      "starred": false,
+      "description": "The much-photographed packhorse bridge on Watendlath Beck, with pools below.",
+      "offRouteKm": 1.656,
+      "routeKm": 79.23,
+      "needsEntryPoint": false,
+      "osmId": "node/1277039400"
+    },
+    {
+      "id": "swim-watendlath-beck",
+      "title": "Watendlath Beck",
+      "lat": 54.555681,
+      "lon": -3.135056,
+      "kind": "waterfall",
+      "elevationM": 219,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "Falls on the beck between Watendlath and Derwent Water.",
+      "offRouteKm": 2.96,
+      "routeKm": 79.23,
+      "needsEntryPoint": false,
+      "osmId": "way/446110292"
+    },
+    {
+      "id": "swim-tewet-tarn",
+      "title": "Tewet Tarn",
+      "lat": 54.602286,
+      "lon": -3.078034,
+      "kind": "water",
+      "elevationM": 205,
+      "labels": [
+        "tarn"
+      ],
+      "starred": false,
+      "description": "A shallow field tarn at 205m near Castlerigg, with a view to Blencathra.",
+      "offRouteKm": 0.897,
+      "routeKm": 85.2,
+      "needsEntryPoint": false,
+      "osmId": "way/4707365"
+    },
+    {
+      "id": "swim-high-cascades",
+      "title": "High Cascades",
+      "lat": 54.581691,
+      "lon": -2.929985,
+      "kind": "waterfall",
+      "elevationM": 249,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "Upper falls in the Aira Beck glen.",
+      "offRouteKm": 0.019,
+      "routeKm": 97.45,
+      "needsEntryPoint": false,
+      "osmId": "node/8078738111"
+    },
+    {
+      "id": "swim-ullswater",
+      "title": "Ullswater",
+      "lat": 54.575128,
+      "lon": -2.887456,
+      "kind": "lake",
+      "elevationM": 145,
+      "labels": [
+        "lake",
+        "boat traffic"
+      ],
+      "starred": false,
+      "description": "The second largest lake, with steamer traffic — swim only in sheltered bays such as Glencoyne, and wear a bright cap.",
+      "offRouteKm": 2.721,
+      "routeKm": 97.68,
+      "needsEntryPoint": true,
+      "osmId": "relation/2186112"
+    },
+    {
+      "id": "swim-high-force",
+      "title": "High Force",
+      "lat": 54.579303,
+      "lon": -2.929251,
+      "kind": "waterfall",
+      "elevationM": 233,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "A fall in the Aira Beck glen above Ullswater, upstream of Aira Force.",
+      "offRouteKm": 0.021,
+      "routeKm": 97.73,
+      "needsEntryPoint": false,
+      "osmId": "node/254339669"
+    },
+    {
+      "id": "swim-lanty-tarn",
+      "title": "Lanty Tarn",
+      "lat": 54.562967,
+      "lon": -2.873733,
+      "kind": "water",
+      "elevationM": 236,
+      "labels": [],
+      "starred": false,
+      "description": null,
+      "offRouteKm": 3.946,
+      "routeKm": 98.08,
+      "needsEntryPoint": false,
+      "osmId": "way/886145349"
+    },
+    {
+      "id": "swim-aira-force",
+      "title": "Aira Force",
+      "lat": 54.576634,
+      "lon": -2.930656,
+      "kind": "waterfall",
+      "elevationM": 201,
+      "labels": [
+        "waterfall",
+        "busy"
+      ],
+      "starred": false,
+      "description": "A 20m fall in a landscaped glen above Ullswater, crossed by two stone bridges. Popular and well made — not a swim, but a good stop.",
+      "offRouteKm": 0.023,
+      "routeKm": 98.11,
+      "needsEntryPoint": false,
+      "osmId": "node/254339680"
+    },
+    {
+      "id": "swim-stybeck-waterfall",
+      "title": "Stybeck Waterfall",
+      "lat": 54.561033,
+      "lon": -3.050705,
+      "kind": "waterfall",
+      "elevationM": 235,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "A fall on the fellside above Thirlmere near Stybeck Farm.",
+      "offRouteKm": 3.632,
+      "routeKm": 103.8,
+      "needsEntryPoint": false,
+      "osmId": "node/6942618650"
+    },
+    {
+      "id": "swim-fisherplace-gill-waterfall",
+      "title": "Fisherplace Gill Waterfall",
+      "lat": 54.554766,
+      "lon": -3.051361,
+      "kind": "waterfall",
+      "elevationM": 269,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "A cascade on Fisherplace Gill above Thirlspot.",
+      "offRouteKm": 3.638,
+      "routeKm": 103.8,
+      "needsEntryPoint": false,
+      "osmId": "node/6942618653"
+    },
+    {
+      "id": "swim-brown-cove-tarn",
+      "title": "Brown Cove Tarn",
+      "lat": 54.53514,
+      "lon": -3.017068,
+      "kind": "water",
+      "elevationM": 617,
+      "labels": [
+        "high tarn",
+        "wild"
+      ],
+      "starred": false,
+      "description": "A small dammed tarn at 617m in the cove north of Helvellyn.",
+      "offRouteKm": 2.318,
+      "routeKm": 105.11,
+      "needsEntryPoint": false,
+      "osmId": "way/4579637"
+    },
+    {
+      "id": "swim-red-tarn",
+      "title": "Red Tarn",
+      "lat": 54.528344,
+      "lon": -3.008854,
+      "kind": "water",
+      "elevationM": 717,
+      "labels": [
+        "high tarn",
+        "wild"
+      ],
+      "starred": false,
+      "description": "In Helvellyn's eastern corrie at 717m between Striding and Swirral Edges. Snow lingers here into spring; expect it to be bitter.",
+      "offRouteKm": 2.536,
+      "routeKm": 105.11,
+      "needsEntryPoint": false,
+      "osmId": "relation/5455826"
+    },
+    {
+      "id": "swim-lanty-s-tarn",
+      "title": "Lanty's Tarn",
+      "lat": 54.537865,
+      "lon": -2.953966,
+      "kind": "water",
+      "elevationM": 285,
+      "labels": [
+        "tarn",
+        "sheltered"
+      ],
+      "starred": false,
+      "description": "A small wooded tarn above Glenridding at 285m, dammed to supply ice to the estate. Sheltered and easy to reach — a good option in poor weather.",
+      "offRouteKm": 0.039,
+      "routeKm": 108.08,
+      "needsEntryPoint": false,
+      "osmId": "way/121627430"
+    },
+    {
+      "id": "swim-brothers-water",
+      "title": "Brothers Water",
+      "lat": 54.507521,
+      "lon": -2.923946,
+      "kind": "lake",
+      "elevationM": 161,
+      "labels": [
+        "tarn"
+      ],
+      "starred": false,
+      "description": "A small shallow water at 161m in Patterdale, with a reedy margin.",
+      "offRouteKm": 0.465,
+      "routeKm": 114.15,
+      "needsEntryPoint": true,
+      "osmId": "way/4582720"
+    },
+    {
+      "id": "swim-hayeswater",
+      "title": "Hayeswater",
+      "lat": 54.502068,
+      "lon": -2.879572,
+      "kind": "water",
+      "elevationM": 428,
+      "labels": [
+        "tarn"
+      ],
+      "starred": false,
+      "description": "A former reservoir at 428m under Gray Crag, now returned to a natural tarn.",
+      "offRouteKm": 0.594,
+      "routeKm": 116.58,
+      "needsEntryPoint": false,
+      "osmId": "way/4582861"
+    },
+    {
+      "id": "swim-small-water",
+      "title": "Small Water",
+      "lat": 54.482566,
+      "lon": -2.842269,
+      "kind": "water",
+      "elevationM": 455,
+      "labels": [
+        "high tarn",
+        "wild"
+      ],
+      "starred": false,
+      "description": "Below Nan Bield Pass at 455m, with stone shelters on its shore. Smaller and shallower than Blea Water just over the ridge.",
+      "offRouteKm": 1.714,
+      "routeKm": 119.82,
+      "needsEntryPoint": false,
+      "osmId": "way/4275263"
+    },
+    {
+      "id": "swim-blea-water",
+      "title": "Blea Water",
+      "lat": 54.48892,
+      "lon": -2.852351,
+      "kind": "water",
+      "elevationM": 486,
+      "labels": [
+        "high tarn",
+        "wild",
+        "deepest"
+      ],
+      "starred": true,
+      "description": "The deepest tarn in England at around 63m, held in a textbook glacial corrie under High Street at 486m. Very cold, very clear, with a boulder shore and no easy shallows.",
+      "offRouteKm": 0.841,
+      "routeKm": 119.82,
+      "needsEntryPoint": false,
+      "osmId": "way/4275264"
+    },
+    {
+      "id": "swim-force-jump",
+      "title": "Force Jump",
+      "lat": 54.431981,
+      "lon": -2.833288,
+      "kind": "waterfall",
+      "elevationM": 196,
+      "labels": [
+        "river pool"
+      ],
+      "starred": false,
+      "description": "A pool below a fall on the River Kent above Staveley.",
+      "offRouteKm": 3.75,
+      "routeKm": 126.21,
+      "needsEntryPoint": false,
+      "osmId": "node/12519337469"
+    },
+    {
+      "id": "swim-stock-ghyll-force-waterfall",
+      "title": "Stock Ghyll Force Waterfall",
+      "lat": 54.432689,
+      "lon": -2.95121,
+      "kind": "waterfall",
+      "elevationM": 142,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "A 21m fall in woodland immediately above Ambleside.",
+      "offRouteKm": 0.694,
+      "routeKm": 135.93,
+      "needsEntryPoint": false,
+      "osmId": "node/1377739489"
+    },
+    {
+      "id": "swim-buckstones-jump",
+      "title": "Buckstones Jump",
+      "lat": 54.461156,
+      "lon": -2.978492,
+      "kind": "waterfall",
+      "elevationM": 242,
+      "labels": [
+        "river pool"
+      ],
+      "starred": false,
+      "description": "A pool on Rydal Beck, upstream in the valley behind Rydal.",
+      "offRouteKm": 1.276,
+      "routeKm": 138.71,
+      "needsEntryPoint": false,
+      "osmId": "node/1751214097"
+    },
+    {
+      "id": "swim-high-fall",
+      "title": "High Fall",
+      "lat": 54.452227,
+      "lon": -2.979696,
+      "kind": "waterfall",
+      "elevationM": 146,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "A fall in the Rydal Beck valley behind Rydal Hall.",
+      "offRouteKm": 0.283,
+      "routeKm": 138.71,
+      "needsEntryPoint": false,
+      "osmId": "node/2403562827"
+    },
+    {
+      "id": "swim-rydal-water",
+      "title": "Rydal Water",
+      "lat": 54.447219,
+      "lon": -2.994644,
+      "kind": "lake",
+      "elevationM": 57,
+      "labels": [
+        "lake",
+        "sheltered"
+      ],
+      "starred": false,
+      "description": "Small, shallow and sheltered at 57m, with easy shore access and a rock island to swim out to.",
+      "offRouteKm": 0.364,
+      "routeKm": 139.59,
+      "needsEntryPoint": true,
+      "osmId": "relation/402811"
+    },
+    {
+      "id": "swim-alcock-tarn",
+      "title": "Alcock Tarn",
+      "lat": 54.462203,
+      "lon": -3.005654,
+      "kind": "water",
+      "elevationM": 370,
+      "labels": [
+        "tarn",
+        "viewpoint"
+      ],
+      "starred": false,
+      "description": "A small dammed tarn at 370m above Grasmere, with a fine view down the vale.",
+      "offRouteKm": 0.989,
+      "routeKm": 140.58,
+      "needsEntryPoint": false,
+      "osmId": "way/4679708"
+    },
+    {
+      "id": "swim-sourmilk-gill-falls",
+      "title": "Sourmilk Gill Falls",
+      "lat": 54.469727,
+      "lon": -3.054192,
+      "kind": "waterfall",
+      "elevationM": 179,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "The cascade below Easedale Tarn, white against the fellside after rain.",
+      "offRouteKm": 2.196,
+      "routeKm": 142.84,
+      "needsEntryPoint": false,
+      "osmId": "node/1781889684"
+    },
+    {
+      "id": "swim-easedale-tarn",
+      "title": "Easedale Tarn",
+      "lat": 54.469181,
+      "lon": -3.06935,
+      "kind": "water",
+      "elevationM": 283,
+      "labels": [
+        "tarn"
+      ],
+      "starred": false,
+      "description": "A 45-minute climb from Grasmere past Sour Milk Gill to 283m. Cold and clear, in a broad bowl under Tarn Crag.",
+      "offRouteKm": 2.959,
+      "routeKm": 143.15,
+      "needsEntryPoint": false,
+      "osmId": "way/4579440"
+    },
+    {
+      "id": "swim-grasmere",
+      "title": "Grasmere",
+      "lat": 54.449504,
+      "lon": -3.022421,
+      "kind": "lake",
+      "elevationM": 64,
+      "labels": [
+        "lake"
+      ],
+      "starred": false,
+      "description": "Gentle shelving shore at 64m; busy in the day, calm early and late.",
+      "offRouteKm": 0.588,
+      "routeKm": 143.65,
+      "needsEntryPoint": true,
+      "osmId": "relation/350299"
+    },
+    {
+      "id": "swim-loughrigg-tarn",
+      "title": "Loughrigg Tarn",
+      "lat": 54.430354,
+      "lon": -3.0115,
+      "kind": "water",
+      "elevationM": 97,
+      "labels": [
+        "tarn"
+      ],
+      "starred": false,
+      "description": "A pretty lowland tarn at 97m below Loughrigg Fell, in pasture.",
+      "offRouteKm": 1.73,
+      "routeKm": 147.06,
+      "needsEntryPoint": false,
+      "osmId": "way/4569100"
+    },
+    {
+      "id": "swim-elter-water",
+      "title": "Elter Water",
+      "lat": 54.427755,
+      "lon": -3.02935,
+      "kind": "water",
+      "elevationM": 56,
+      "labels": [
+        "lake",
+        "reedy"
+      ],
+      "starred": false,
+      "description": "Shallow and reed-fringed at 56m, with the Langdale Pikes filling the view. Warmest water on the route by some margin.",
+      "offRouteKm": 0.714,
+      "routeKm": 147.11,
+      "needsEntryPoint": true,
+      "osmId": "relation/336078"
+    },
+    {
+      "id": "swim-skelwith-force",
+      "title": "Skelwith Force",
+      "lat": 54.421995,
+      "lon": -3.016517,
+      "kind": "waterfall",
+      "elevationM": 70,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "A short but powerful fall on the Brathay near Elterwater, with a viewing platform.",
+      "offRouteKm": 1.761,
+      "routeKm": 147.2,
+      "needsEntryPoint": false,
+      "osmId": "node/4857778292"
+    },
+    {
+      "id": "swim-colwith-force",
+      "title": "Colwith Force",
+      "lat": 54.419412,
+      "lon": -3.037337,
+      "kind": "waterfall",
+      "elevationM": 92,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "A 15m fall in woodland on the River Brathay between Little and Great Langdale.",
+      "offRouteKm": 0.941,
+      "routeKm": 148.4,
+      "needsEntryPoint": false,
+      "osmId": "node/759707540"
+    },
+    {
+      "id": "swim-little-langdale-tarn",
+      "title": "Little Langdale Tarn",
+      "lat": 54.419693,
+      "lon": -3.066548,
+      "kind": "lake",
+      "elevationM": 104,
+      "labels": [
+        "tarn"
+      ],
+      "starred": false,
+      "description": "A quiet valley tarn at 104m with a reedy shore; much less visited than Elter Water.",
+      "offRouteKm": 0.361,
+      "routeKm": 149.59,
+      "needsEntryPoint": false,
+      "osmId": "relation/16713216"
+    },
+    {
+      "id": "swim-tom-ghyll-waterfalls",
+      "title": "Tom Ghyll Waterfalls",
+      "lat": 54.390308,
+      "lon": -3.040939,
+      "kind": "waterfall",
+      "elevationM": 171,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "Falls on the outflow below Tarn Hows.",
+      "offRouteKm": 1.969,
+      "routeKm": 151.95,
+      "needsEntryPoint": false,
+      "osmId": "node/4451988373"
+    },
+    {
+      "id": "swim-tarn-hows",
+      "title": "Tarn Hows",
+      "lat": 54.39168,
+      "lon": -3.033305,
+      "kind": "water",
+      "elevationM": 207,
+      "labels": [
+        "tarn",
+        "busy"
+      ],
+      "starred": false,
+      "description": "A landscaped tarn at 207m with a surfaced circular path. Very busy, and swimming is discouraged here.",
+      "offRouteKm": 2.1,
+      "routeKm": 151.95,
+      "needsEntryPoint": false,
+      "osmId": "relation/1932934"
+    },
+    {
+      "id": "swim-tilberthwaite-gill-waterfall",
+      "title": "Tilberthwaite Gill Waterfall",
+      "lat": 54.397342,
+      "lon": -3.079845,
+      "kind": "waterfall",
+      "elevationM": 295,
+      "labels": [
+        "waterfall",
+        "mining"
+      ],
+      "starred": false,
+      "description": "Falls in a narrow mined ravine above Tilberthwaite, on the route to Wetherlam.",
+      "offRouteKm": 0.064,
+      "routeKm": 155.19,
+      "needsEntryPoint": false,
+      "osmId": "node/5504622571"
+    },
+    {
+      "id": "swim-coniston-waterfall",
+      "title": "Coniston Waterfall",
+      "lat": 54.372717,
+      "lon": -3.087524,
+      "kind": "waterfall",
+      "elevationM": 149,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "Falls on Church Beck in the Coppermines valley above Coniston.",
+      "offRouteKm": 0.014,
+      "routeKm": 158.41,
+      "needsEntryPoint": false,
+      "osmId": "node/5125973144"
+    },
+    {
+      "id": "swim-levers-water",
+      "title": "Levers Water",
+      "lat": 54.384129,
+      "lon": -3.111418,
+      "kind": "water",
+      "elevationM": 413,
+      "labels": [
+        "high tarn",
+        "wild"
+      ],
+      "starred": false,
+      "description": "A dammed tarn at 413m in the Coppermines valley above Coniston, surrounded by mine workings. Deep, clear and cold.",
+      "offRouteKm": 0.233,
+      "routeKm": 162.64,
+      "needsEntryPoint": false,
+      "osmId": "way/4584092"
+    },
+    {
+      "id": "swim-low-water",
+      "title": "Low Water",
+      "lat": 54.374549,
+      "lon": -3.117781,
+      "kind": "water",
+      "elevationM": 546,
+      "labels": [
+        "high tarn",
+        "wild"
+      ],
+      "starred": false,
+      "description": "A shelf tarn at 546m directly below the summit of Coniston Old Man.",
+      "offRouteKm": 0.576,
+      "routeKm": 163.45,
+      "needsEntryPoint": false,
+      "osmId": "way/4584109"
+    },
+    {
+      "id": "swim-coniston-water",
+      "title": "Coniston Water",
+      "lat": 54.335032,
+      "lon": -3.074183,
+      "kind": "lake",
+      "elevationM": 46,
+      "labels": [],
+      "starred": false,
+      "description": null,
+      "offRouteKm": 3.566,
+      "routeKm": 166,
+      "needsEntryPoint": true,
+      "osmId": "relation/6156946"
+    },
+    {
+      "id": "swim-goats-water",
+      "title": "Goats Water",
+      "lat": 54.36898,
+      "lon": -3.131326,
+      "kind": "water",
+      "elevationM": 505,
+      "labels": [
+        "high tarn",
+        "wild"
+      ],
+      "starred": false,
+      "description": "Squeezed between Dow Crag and Coniston Old Man at 505m, with a boulder shore beneath the crag. Sunless for much of the day.",
+      "offRouteKm": 1.219,
+      "routeKm": 167.58,
+      "needsEntryPoint": false,
+      "osmId": "way/4584110"
+    },
+    {
+      "id": "swim-blind-tarn",
+      "title": "Blind Tarn",
+      "lat": 54.360667,
+      "lon": -3.13662,
+      "kind": "water",
+      "elevationM": 565,
+      "labels": [
+        "high tarn",
+        "wild"
+      ],
+      "starred": false,
+      "description": "A true corrie tarn at 565m on Dow Crag with no inlet or outlet stream — it is fed entirely by the fell around it.",
+      "offRouteKm": 0.367,
+      "routeKm": 167.95,
+      "needsEntryPoint": false,
+      "osmId": "way/4584111"
+    },
+    {
+      "id": "swim-seathwaite-tarn",
+      "title": "Seathwaite Tarn",
+      "lat": 54.379281,
+      "lon": -3.150259,
+      "kind": "reservoir",
+      "elevationM": 372,
+      "labels": [
+        "reservoir",
+        "remote"
+      ],
+      "starred": false,
+      "description": "A dammed tarn at 372m in a remote hollow under Grey Friar in the Duddon fells.",
+      "offRouteKm": 2.29,
+      "routeKm": 170.15,
+      "needsEntryPoint": false,
+      "osmId": "relation/12615999"
+    },
+    {
+      "id": "swim-lingcove-beck-falls",
+      "title": "Lingcove Beck Falls",
+      "lat": 54.422366,
+      "lon": -3.192164,
+      "kind": "waterfall",
+      "elevationM": 194,
+      "labels": [
+        "river pool",
+        "gorge"
+      ],
+      "starred": false,
+      "description": "Pools on Lingcove Beck just above its junction with the Esk, beside the old packhorse bridge.",
+      "offRouteKm": 2.007,
+      "routeKm": 183.16,
+      "needsEntryPoint": false,
+      "osmId": "node/1917668429"
+    },
+    {
+      "id": "swim-esk-falls",
+      "title": "Esk Falls",
+      "lat": 54.422883,
+      "lon": -3.193924,
+      "kind": "waterfall",
+      "elevationM": 210,
+      "labels": [
+        "river pool",
+        "gorge",
+        "classic"
+      ],
+      "starred": true,
+      "description": "The upper Esk gorge below Lingcove Bridge, a sequence of deep emerald pools cut into bare rock with falls between them — the Tongue Pot area. Pebble entry, jumps possible, and arguably the finest river swimming in England. Worth timing the day around.",
+      "offRouteKm": 2.037,
+      "routeKm": 183.16,
+      "needsEntryPoint": false,
+      "osmId": "node/1917672395"
+    },
+    {
+      "id": "swim-lingcove-beck-falls-upper",
+      "title": "Lingcove Beck Falls (upper)",
+      "lat": 54.423,
+      "lon": -3.191802,
+      "kind": "waterfall",
+      "elevationM": 212,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": null,
+      "offRouteKm": 2.081,
+      "routeKm": 183.16,
+      "needsEntryPoint": false,
+      "osmId": "node/5714633628"
+    },
+    {
+      "id": "swim-birker-force",
+      "title": "Birker Force",
+      "lat": 54.388219,
+      "lon": -3.252579,
+      "kind": "waterfall",
+      "elevationM": 227,
+      "labels": [
+        "waterfall"
+      ],
+      "starred": false,
+      "description": "A fall on the edge of Birker Fell above Eskdale.",
+      "offRouteKm": 0.567,
+      "routeKm": 187.78,
+      "needsEntryPoint": false,
+      "osmId": "node/312313360"
+    },
+    {
+      "id": "swim-gill-force",
+      "title": "Gill Force",
+      "lat": 54.390868,
+      "lon": -3.267857,
+      "kind": "waterfall",
+      "elevationM": 55,
+      "labels": [
+        "river pool",
+        "gorge",
+        "classic"
+      ],
+      "starred": true,
+      "description": "Where the Esk narrows into a rock gorge below Doctor Bridge, with a deep green pool and slabs above it. Directly on the route in lower Eskdale.",
+      "offRouteKm": 0.013,
+      "routeKm": 190.81,
+      "needsEntryPoint": false,
+      "osmId": "node/4942172701"
+    },
+    {
+      "id": "swim-stanley-force",
+      "title": "Stanley Force",
+      "lat": 54.384022,
+      "lon": -3.272991,
+      "kind": "waterfall",
+      "elevationM": 153,
+      "labels": [
+        "waterfall",
+        "gorge"
+      ],
+      "starred": false,
+      "description": "A 20m fall in a wooded ravine off Eskdale, with a pool at its foot. The gorge path is slippery — care on the approach.",
+      "offRouteKm": 0.025,
+      "routeKm": 192.13,
+      "needsEntryPoint": false,
+      "osmId": "node/1725131241"
+    },
+    {
+      "id": "swim-devoke-water",
+      "title": "Devoke Water",
+      "lat": 54.361363,
+      "lon": -3.29738,
+      "kind": "water",
+      "elevationM": 234,
+      "labels": [
+        "tarn",
+        "remote"
+      ],
+      "starred": false,
+      "description": "The largest tarn in the district at 234m, alone on Birker Fell with no fells immediately around it. Big skies, no shelter, rarely anyone there.",
+      "offRouteKm": 0.247,
+      "routeKm": 196.07,
+      "needsEntryPoint": true,
+      "osmId": "relation/17779544"
+    }
+  ]
+}

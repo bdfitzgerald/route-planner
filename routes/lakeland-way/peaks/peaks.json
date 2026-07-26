@@ -1,0 +1,3001 @@
+{
+  "category": "peaks",
+  "label": "Peaks",
+  "glyph": "▲",
+  "source": "OS grid references converted to WGS84, each validated against SRTM 30m elevation; positions failing the height check were excluded.",
+  "items": [
+    {
+      "id": "peak-muncaster-fell",
+      "title": "Muncaster Fell",
+      "lat": 54.372438,
+      "lon": -3.368438,
+      "gridref": "SD112983",
+      "heightM": 231,
+      "labels": [
+        "easy",
+        "low"
+      ],
+      "starred": false,
+      "description": "A 231m wooded ridge near the coast at the very start and end of the route.",
+      "offRouteKm": 0.659,
+      "routeKm": 5.32,
+      "wainwright": false,
+      "verified": {
+        "demM": 220,
+        "deltaM": -11,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-whin-rigg",
+      "title": "Whin Rigg",
+      "lat": 54.418943,
+      "lon": -3.30834,
+      "gridref": "NY152034",
+      "heightM": 535,
+      "labels": [
+        "dramatic",
+        "quiet"
+      ],
+      "starred": false,
+      "description": "The 535m southern end of the Wast Water Screes, above deep gullies.",
+      "offRouteKm": 3.078,
+      "routeKm": 14.46,
+      "wainwright": true,
+      "verified": {
+        "demM": 530,
+        "deltaM": -5,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-slight-side",
+      "title": "Slight Side",
+      "lat": 54.434254,
+      "lon": -3.219408,
+      "gridref": "NY210050",
+      "heightM": 762,
+      "labels": [
+        "quiet",
+        "rocky"
+      ],
+      "starred": false,
+      "description": "The 762m southern outpost of Scafell, a rocky top on the long Eskdale approach.",
+      "offRouteKm": 2.325,
+      "routeKm": 17.22,
+      "wainwright": true,
+      "verified": {
+        "demM": 742,
+        "deltaM": -20,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-illgill-head",
+      "title": "Illgill Head",
+      "lat": 54.432701,
+      "lon": -3.28257,
+      "gridref": "NY169049",
+      "heightM": 609,
+      "labels": [
+        "dramatic",
+        "quiet"
+      ],
+      "starred": true,
+      "description": "A 609m fell forming the top of the Wast Water Screes, which fall 500m straight into the deepest lake in England. Grassy and gentle from behind, spectacular at the edge.",
+      "offRouteKm": 1.502,
+      "routeKm": 17.87,
+      "wainwright": true,
+      "verified": {
+        "demM": 607,
+        "deltaM": -2,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-scafell",
+      "title": "Scafell",
+      "lat": 54.44677,
+      "lon": -3.225948,
+      "gridref": "NY206064",
+      "heightM": 964,
+      "labels": [
+        "serious",
+        "scramble"
+      ],
+      "starred": true,
+      "description": "Scafell Pike's separate and quieter neighbour at 964m. The direct link across Mickledore is blocked by Broad Stand, a rock climb — the walkers' ways round are Lord's Rake or the Foxes Tarn gully, both loose and both requiring care.",
+      "offRouteKm": 2.212,
+      "routeKm": 19.64,
+      "wainwright": true,
+      "verified": {
+        "demM": 920,
+        "deltaM": -44,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-yewbarrow",
+      "title": "Yewbarrow",
+      "lat": 54.464213,
+      "lon": -3.277384,
+      "gridref": "NY173084",
+      "heightM": 628,
+      "labels": [
+        "ridge",
+        "steep"
+      ],
+      "starred": false,
+      "description": "A 628m ridge above Wasdale with steep ends at both extremities.",
+      "offRouteKm": 1.323,
+      "routeKm": 21.48,
+      "wainwright": true,
+      "verified": {
+        "demM": 598,
+        "deltaM": -30,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-haycock",
+      "title": "Haycock",
+      "lat": 54.484413,
+      "lon": -3.321235,
+      "gridref": "NY145107",
+      "heightM": 797,
+      "labels": [
+        "remote"
+      ],
+      "starred": false,
+      "description": "A 797m remote top on the western fells above Ennerdale.",
+      "offRouteKm": 4.607,
+      "routeKm": 21.93,
+      "wainwright": true,
+      "verified": {
+        "demM": 794,
+        "deltaM": -3,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-kirk-fell",
+      "title": "Kirk Fell",
+      "lat": 54.482536,
+      "lon": -3.243997,
+      "gridref": "NY195104",
+      "heightM": 802,
+      "labels": [
+        "steep",
+        "quiet"
+      ],
+      "starred": false,
+      "description": "An 802m fell between Great Gable and Pillar, with steep grass on the Wasdale side.",
+      "offRouteKm": 1.208,
+      "routeKm": 23.41,
+      "wainwright": true,
+      "verified": {
+        "demM": 794,
+        "deltaM": -8,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-lingmell",
+      "title": "Lingmell",
+      "lat": 54.46299,
+      "lon": -3.221805,
+      "gridref": "NY209082",
+      "heightM": 800,
+      "labels": [
+        "viewpoint"
+      ],
+      "starred": false,
+      "description": "An 800m shoulder of Scafell Pike with a tremendous view of the Gable and down Wasdale — often walked over without being noticed.",
+      "offRouteKm": 1.231,
+      "routeKm": 24.44,
+      "wainwright": true,
+      "verified": {
+        "demM": 795,
+        "deltaM": -5,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-great-gable",
+      "title": "Great Gable",
+      "lat": 54.481889,
+      "lon": -3.219281,
+      "gridref": "NY211103",
+      "heightM": 899,
+      "labels": [
+        "classic",
+        "heritage"
+      ],
+      "starred": true,
+      "description": "The 899m fell on the Lake District National Park emblem, with the war memorial of the Fell and Rock Climbing Club on its summit rocks. Steep on every side; the usual line from Styhead is the Breast Route.",
+      "offRouteKm": 0.825,
+      "routeKm": 24.64,
+      "wainwright": true,
+      "verified": {
+        "demM": 886,
+        "deltaM": -13,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-green-gable",
+      "title": "Green Gable",
+      "lat": 54.485546,
+      "lon": -3.213216,
+      "gridref": "NY215107",
+      "heightM": 801,
+      "labels": [
+        "quiet",
+        "viewpoint"
+      ],
+      "starred": false,
+      "description": "An 801m top separated from Great Gable by Windy Gap, with the best close view of the parent fell.",
+      "offRouteKm": 1.2,
+      "routeKm": 24.97,
+      "wainwright": true,
+      "verified": {
+        "demM": 791,
+        "deltaM": -10,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-seathwaite-fell",
+      "title": "Seathwaite Fell",
+      "lat": 54.476745,
+      "lon": -3.194435,
+      "gridref": "NY227097",
+      "heightM": 632,
+      "labels": [
+        "tarns",
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 632m knobbly fell of small tarns above Sprinkling Tarn.",
+      "offRouteKm": 0.417,
+      "routeKm": 25.99,
+      "wainwright": false,
+      "verified": {
+        "demM": 616,
+        "deltaM": -16,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-scafell-pike",
+      "title": "Scafell Pike",
+      "lat": 54.454098,
+      "lon": -3.212285,
+      "gridref": "NY215072",
+      "heightM": 978,
+      "labels": [
+        "England’s highest",
+        "rocky",
+        "navigation"
+      ],
+      "starred": true,
+      "description": "England's highest ground at 978m. A boulder-strewn summit plateau with a huge cairn; cairned throughout but genuinely serious in mist, where the plateau defeats casual navigation. Usual approach from the route is via Lingmell Col.",
+      "offRouteKm": 2.063,
+      "routeKm": 26.99,
+      "wainwright": true,
+      "verified": {
+        "demM": 963,
+        "deltaM": -15,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-great-end",
+      "title": "Great End",
+      "lat": 54.465065,
+      "lon": -3.194095,
+      "gridref": "NY227084",
+      "heightM": 910,
+      "labels": [
+        "wild",
+        "gullies"
+      ],
+      "starred": false,
+      "description": "The 910m northern buttress of the Scafell massif, with deep gullies holding snow late. Easily reached from Esk Hause and often missed by people hurrying to the Pike.",
+      "offRouteKm": 0.369,
+      "routeKm": 26.99,
+      "wainwright": true,
+      "verified": {
+        "demM": 897,
+        "deltaM": -13,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-allen-crags",
+      "title": "Allen Crags",
+      "lat": 54.466099,
+      "lon": -3.180239,
+      "gridref": "NY236085",
+      "heightM": 785,
+      "labels": [
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 785m top on the Esk Hause crossing, an easy addition to a Scafell day.",
+      "offRouteKm": 0.208,
+      "routeKm": 27.62,
+      "wainwright": true,
+      "verified": {
+        "demM": 767,
+        "deltaM": -18,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-esk-pike",
+      "title": "Esk Pike",
+      "lat": 54.457129,
+      "lon": -3.178438,
+      "gridref": "NY237075",
+      "heightM": 885,
+      "labels": [
+        "quiet"
+      ],
+      "starred": false,
+      "description": "An 885m rocky top between Bowfell and Great End, on the Esk Hause crossing.",
+      "offRouteKm": 0.618,
+      "routeKm": 28.27,
+      "wainwright": true,
+      "verified": {
+        "demM": 874,
+        "deltaM": -11,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-bowfell",
+      "title": "Bowfell",
+      "lat": 54.447366,
+      "lon": -3.16582,
+      "gridref": "NY245064",
+      "heightM": 902,
+      "labels": [
+        "classic",
+        "rocky"
+      ],
+      "starred": true,
+      "description": "A 902m pyramid at the head of Langdale with a genuinely rocky top and the Great Slab on its flank. The Band gives a long but never technical ascent.",
+      "offRouteKm": 1.38,
+      "routeKm": 28.88,
+      "wainwright": true,
+      "verified": {
+        "demM": 865,
+        "deltaM": -37,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-crinkle-crags",
+      "title": "Crinkle Crags",
+      "lat": 54.433947,
+      "lon": -3.159272,
+      "gridref": "NY249049",
+      "heightM": 859,
+      "labels": [
+        "scramble",
+        "navigation"
+      ],
+      "starred": true,
+      "description": "A 859m switchback of five distinct tops. The Bad Step on the second crinkle is a short awkward scramble — it can be bypassed on the west. Confusing ground in cloud.",
+      "offRouteKm": 2.898,
+      "routeKm": 28.93,
+      "wainwright": true,
+      "verified": {
+        "demM": 847,
+        "deltaM": -12,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-rossett-pike",
+      "title": "Rossett Pike",
+      "lat": 54.457309,
+      "lon": -3.159932,
+      "gridref": "NY249075",
+      "heightM": 651,
+      "labels": [
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 651m top above Rossett Gill and Angle Tarn at the head of Langdale.",
+      "offRouteKm": 0.345,
+      "routeKm": 29.11,
+      "wainwright": true,
+      "verified": {
+        "demM": 599,
+        "deltaM": -52,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-pike-o-blisco",
+      "title": "Pike o’ Blisco",
+      "lat": 54.427978,
+      "lon": -3.125191,
+      "gridref": "NY271042",
+      "heightM": 705,
+      "labels": [
+        "rocky",
+        "viewpoint"
+      ],
+      "starred": false,
+      "description": "A 705m top with two rocky summits and an outstanding view of the Crinkles.",
+      "offRouteKm": 4.23,
+      "routeKm": 29.8,
+      "wainwright": true,
+      "verified": {
+        "demM": 687,
+        "deltaM": -18,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-harrison-stickle",
+      "title": "Harrison Stickle",
+      "lat": 54.456888,
+      "lon": -3.108992,
+      "gridref": "NY282073",
+      "heightM": 736,
+      "labels": [
+        "classic",
+        "rocky"
+      ],
+      "starred": true,
+      "description": "The highest of the Langdale Pikes at 736m, an abrupt rocky top with the whole valley beneath it.",
+      "offRouteKm": 2.111,
+      "routeKm": 31.41,
+      "wainwright": true,
+      "verified": {
+        "demM": 720,
+        "deltaM": -16,
+        "snappedToDemMaximum": true
+      }
+    },
+    {
+      "id": "peak-pavey-ark",
+      "title": "Pavey Ark",
+      "lat": 54.45783,
+      "lon": -3.110693,
+      "gridref": "NY285079",
+      "heightM": 700,
+      "labels": [
+        "scramble",
+        "dramatic"
+      ],
+      "starred": true,
+      "description": "A 700m crag above Stickle Tarn, crossed by Jack's Rake — a rising Grade 1 scramble up the face of the cliff that is exposed, polished and unforgiving when wet. The summit is reached easily from behind if the Rake is not wanted.",
+      "offRouteKm": 1.961,
+      "routeKm": 31.41,
+      "wainwright": true,
+      "verified": {
+        "demM": 707,
+        "deltaM": 7,
+        "snappedToDemMaximum": true
+      }
+    },
+    {
+      "id": "peak-pike-o-stickle",
+      "title": "Pike o’ Stickle",
+      "lat": 54.459469,
+      "lon": -3.115148,
+      "gridref": "NY274073",
+      "heightM": 709,
+      "labels": [
+        "rocky",
+        "heritage"
+      ],
+      "starred": false,
+      "description": "A 709m rock thumb above Mickleden, with a neolithic axe factory in the scree below its summit.",
+      "offRouteKm": 1.621,
+      "routeKm": 31.41,
+      "wainwright": true,
+      "verified": {
+        "demM": 676,
+        "deltaM": -33,
+        "snappedToDemMaximum": true
+      }
+    },
+    {
+      "id": "peak-loft-crag",
+      "title": "Loft Crag",
+      "lat": 54.457715,
+      "lon": -3.110473,
+      "gridref": "NY277071",
+      "heightM": 682,
+      "labels": [
+        "rocky"
+      ],
+      "starred": false,
+      "description": "A 682m Langdale Pike above Gimmer Crag.",
+      "offRouteKm": 1.98,
+      "routeKm": 31.41,
+      "wainwright": true,
+      "verified": {
+        "demM": 706,
+        "deltaM": 24,
+        "snappedToDemMaximum": true
+      }
+    },
+    {
+      "id": "peak-sergeant-man",
+      "title": "Sergeant Man",
+      "lat": 54.470422,
+      "lon": -3.10321,
+      "gridref": "NY286089",
+      "heightM": 736,
+      "labels": [
+        "quiet",
+        "rocky"
+      ],
+      "starred": false,
+      "description": "A 736m rocky knoll on the shoulder of High Raise, more distinct than its parent.",
+      "offRouteKm": 1.904,
+      "routeKm": 31.95,
+      "wainwright": true,
+      "verified": {
+        "demM": 718,
+        "deltaM": -18,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-high-raise-langdale",
+      "title": "High Raise (Langdale)",
+      "lat": 54.475729,
+      "lon": -3.112612,
+      "gridref": "NY280095",
+      "heightM": 762,
+      "labels": [
+        "central",
+        "broad"
+      ],
+      "starred": false,
+      "description": "At 762m the geographical centre of the Lake District, a broad grassy dome with a wide view.",
+      "offRouteKm": 1.325,
+      "routeKm": 32.27,
+      "wainwright": true,
+      "verified": {
+        "demM": 740,
+        "deltaM": -22,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-glaramara",
+      "title": "Glaramara",
+      "lat": 54.484219,
+      "lon": -3.165325,
+      "gridref": "NY246105",
+      "heightM": 783,
+      "labels": [
+        "knobbly",
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 783m ridge of rocky knolls and small tarns above Borrowdale.",
+      "offRouteKm": 1.753,
+      "routeKm": 33.29,
+      "wainwright": true,
+      "verified": {
+        "demM": 774,
+        "deltaM": -9,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-sergeant-s-crag",
+      "title": "Sergeant’s Crag",
+      "lat": 54.492715,
+      "lon": -3.122337,
+      "gridref": "NY274114",
+      "heightM": 574,
+      "labels": [
+        "quiet",
+        "crag"
+      ],
+      "starred": false,
+      "description": "A 574m crag above Langstrath, next to Eagle Crag.",
+      "offRouteKm": 0.705,
+      "routeKm": 34.4,
+      "wainwright": true,
+      "verified": {
+        "demM": 556,
+        "deltaM": -18,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-eagle-crag",
+      "title": "Eagle Crag",
+      "lat": 54.499033,
+      "lon": -3.119422,
+      "gridref": "NY276121",
+      "heightM": 521,
+      "labels": [
+        "dramatic",
+        "small"
+      ],
+      "starred": false,
+      "description": "A 521m crag standing proud at the fork of Langstrath and Greenup — far more imposing than its height.",
+      "offRouteKm": 0.661,
+      "routeKm": 35.82,
+      "wainwright": true,
+      "verified": {
+        "demM": 515,
+        "deltaM": -6,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-ullscarf",
+      "title": "Ullscarf",
+      "lat": 54.500144,
+      "lon": -3.09629,
+      "gridref": "NY291122",
+      "heightM": 726,
+      "labels": [
+        "remote",
+        "boggy"
+      ],
+      "starred": false,
+      "description": "A 726m watershed fell between Borrowdale and Thirlmere; wet underfoot and quiet.",
+      "offRouteKm": 1.911,
+      "routeKm": 36.2,
+      "wainwright": true,
+      "verified": {
+        "demM": 720,
+        "deltaM": -6,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-grange-fell",
+      "title": "Grange Fell",
+      "lat": 54.539293,
+      "lon": -3.139072,
+      "gridref": "NY264166",
+      "heightM": 415,
+      "labels": [
+        "small",
+        "wooded"
+      ],
+      "starred": false,
+      "description": "A 415m fell of wooded knolls in Borrowdale, with King's How as its finest top.",
+      "offRouteKm": 1.577,
+      "routeKm": 40.93,
+      "wainwright": true,
+      "verified": {
+        "demM": 378,
+        "deltaM": -37,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-castle-crag",
+      "title": "Castle Crag",
+      "lat": 54.532783,
+      "lon": -3.162072,
+      "gridref": "NY249159",
+      "heightM": 290,
+      "labels": [
+        "small",
+        "heritage",
+        "quarry"
+      ],
+      "starred": false,
+      "description": "The only fell under 1000ft in the Wainwrights, at 290m. A quarried knoll in the Jaws of Borrowdale with a war memorial on top and a slate-spoil path.",
+      "offRouteKm": 0.054,
+      "routeKm": 41.32,
+      "wainwright": true,
+      "verified": {
+        "demM": 242,
+        "deltaM": -48,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-maiden-moor",
+      "title": "Maiden Moor",
+      "lat": 54.553269,
+      "lon": -3.181209,
+      "gridref": "NY237182",
+      "heightM": 576,
+      "labels": [
+        "ridge"
+      ],
+      "starred": false,
+      "description": "A 576m top continuing the Cat Bells ridge southward.",
+      "offRouteKm": 2.569,
+      "routeKm": 41.39,
+      "wainwright": true,
+      "verified": {
+        "demM": 572,
+        "deltaM": -4,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-high-spy",
+      "title": "High Spy",
+      "lat": 54.535254,
+      "lon": -3.185325,
+      "gridref": "NY234162",
+      "heightM": 653,
+      "labels": [
+        "edge",
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 653m fell along the crag edge above the Jaws of Borrowdale.",
+      "offRouteKm": 1.379,
+      "routeKm": 42,
+      "wainwright": true,
+      "verified": {
+        "demM": 644,
+        "deltaM": -9,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-base-brown",
+      "title": "Base Brown",
+      "lat": 54.492887,
+      "lon": -3.197994,
+      "gridref": "NY225115",
+      "heightM": 646,
+      "labels": [
+        "steep",
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 646m fell above Seathwaite with a steep nose and the Hanging Stone.",
+      "offRouteKm": 2.03,
+      "routeKm": 45.42,
+      "wainwright": true,
+      "verified": {
+        "demM": 636,
+        "deltaM": -10,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-dale-head",
+      "title": "Dale Head",
+      "lat": 54.526999,
+      "lon": -3.202083,
+      "gridref": "NY223153",
+      "heightM": 753,
+      "labels": [
+        "viewpoint"
+      ],
+      "starred": false,
+      "description": "A 753m fell above Honister with a tall slate summit cairn and a fine view down Newlands.",
+      "offRouteKm": 1.591,
+      "routeKm": 46.24,
+      "wainwright": true,
+      "verified": {
+        "demM": 748,
+        "deltaM": -5,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-grey-knotts",
+      "title": "Grey Knotts",
+      "lat": 54.502648,
+      "lon": -3.210634,
+      "gridref": "NY217126",
+      "heightM": 697,
+      "labels": [
+        "quiet",
+        "rocky"
+      ],
+      "starred": false,
+      "description": "A 697m rocky top directly above Honister Pass.",
+      "offRouteKm": 0.878,
+      "routeKm": 46.76,
+      "wainwright": true,
+      "verified": {
+        "demM": 677,
+        "deltaM": -20,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-brandreth",
+      "title": "Brandreth",
+      "lat": 54.496327,
+      "lon": -3.213535,
+      "gridref": "NY215119",
+      "heightM": 715,
+      "labels": [
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 715m broad top on the Honister to Gable ridge.",
+      "offRouteKm": 1.572,
+      "routeKm": 46.76,
+      "wainwright": true,
+      "verified": {
+        "demM": 713,
+        "deltaM": -2,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-fleetwith-pike",
+      "title": "Fleetwith Pike",
+      "lat": 54.516836,
+      "lon": -3.226469,
+      "gridref": "NY205141",
+      "heightM": 648,
+      "labels": [
+        "viewpoint",
+        "steep"
+      ],
+      "starred": false,
+      "description": "A 648m fell whose nose rises straight from Gatesgarth at the head of Buttermere. Steep, direct, and a superb viewpoint down the valley.",
+      "offRouteKm": 0.666,
+      "routeKm": 48.55,
+      "wainwright": true,
+      "verified": {
+        "demM": 632,
+        "deltaM": -16,
+        "snappedToDemMaximum": true
+      }
+    },
+    {
+      "id": "peak-haystacks",
+      "title": "Haystacks",
+      "lat": 54.506763,
+      "lon": -3.247822,
+      "gridref": "NY193131",
+      "heightM": 597,
+      "labels": [
+        "classic",
+        "heritage"
+      ],
+      "starred": true,
+      "description": "At 597m, Wainwright's favourite fell and where his ashes were scattered. A knot of small tops, tarns and rock — far more interesting than its modest height suggests.",
+      "offRouteKm": 0.952,
+      "routeKm": 49.07,
+      "wainwright": true,
+      "verified": {
+        "demM": 568,
+        "deltaM": -29,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-hindscarth",
+      "title": "Hindscarth",
+      "lat": 54.537673,
+      "lon": -3.213216,
+      "gridref": "NY216165",
+      "heightM": 727,
+      "labels": [
+        "ridge"
+      ],
+      "starred": false,
+      "description": "A 727m fell with a long northern ridge into the Newlands valley.",
+      "offRouteKm": 2.562,
+      "routeKm": 50.18,
+      "wainwright": true,
+      "verified": {
+        "demM": 720,
+        "deltaM": -7,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-robinson",
+      "title": "Robinson",
+      "lat": 54.540134,
+      "lon": -3.236475,
+      "gridref": "NY201168",
+      "heightM": 737,
+      "labels": [
+        "broad"
+      ],
+      "starred": false,
+      "description": "A 737m fell of rocky shelves at the western end of the Newlands ridge.",
+      "offRouteKm": 1.915,
+      "routeKm": 50.35,
+      "wainwright": true,
+      "verified": {
+        "demM": 717,
+        "deltaM": -20,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-pillar",
+      "title": "Pillar",
+      "lat": 54.497423,
+      "lon": -3.281508,
+      "gridref": "NY171121",
+      "heightM": 892,
+      "labels": [
+        "serious",
+        "remote"
+      ],
+      "starred": true,
+      "description": "An 892m fell above Ennerdale, best known for Pillar Rock on its northern face — a true rock climb, not a walk. The summit itself is reached easily from Black Sail Pass.",
+      "offRouteKm": 3.209,
+      "routeKm": 50.92,
+      "wainwright": true,
+      "verified": {
+        "demM": 884,
+        "deltaM": -8,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-high-crag",
+      "title": "High Crag",
+      "lat": 54.514641,
+      "lon": -3.268144,
+      "gridref": "NY180140",
+      "heightM": 744,
+      "labels": [],
+      "starred": false,
+      "description": null,
+      "offRouteKm": 1.176,
+      "routeKm": 51.07,
+      "wainwright": true,
+      "verified": {
+        "demM": 725,
+        "deltaM": -19,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-high-stile",
+      "title": "High Stile",
+      "lat": 54.521666,
+      "lon": -3.283812,
+      "gridref": "NY170148",
+      "heightM": 807,
+      "labels": [
+        "ridge",
+        "dramatic"
+      ],
+      "starred": false,
+      "description": "The high point of the Buttermere ridge at 807m, looking straight down into the corrie above Bleaberry Tarn.",
+      "offRouteKm": 1.324,
+      "routeKm": 52.31,
+      "wainwright": true,
+      "verified": {
+        "demM": 802,
+        "deltaM": -5,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-whiteless-pike",
+      "title": "Whiteless Pike",
+      "lat": 54.559564,
+      "lon": -3.269538,
+      "gridref": "NY180190",
+      "heightM": 660,
+      "labels": [
+        "shapely"
+      ],
+      "starred": false,
+      "description": "A 660m peaked top on the ridge above Crummock Water.",
+      "offRouteKm": 2.08,
+      "routeKm": 54.16,
+      "wainwright": true,
+      "verified": {
+        "demM": 625,
+        "deltaM": -35,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-red-pike-buttermere",
+      "title": "Red Pike (Buttermere)",
+      "lat": 54.526891,
+      "lon": -3.299428,
+      "gridref": "NY160154",
+      "heightM": 755,
+      "labels": [
+        "ridge",
+        "red screes"
+      ],
+      "starred": false,
+      "description": "A 755m top of red syenite screes above Bleaberry Tarn.",
+      "offRouteKm": 1.397,
+      "routeKm": 55.17,
+      "wainwright": true,
+      "verified": {
+        "demM": 741,
+        "deltaM": -14,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-starling-dodd",
+      "title": "Starling Dodd",
+      "lat": 54.529285,
+      "lon": -3.32732,
+      "gridref": "NY142157",
+      "heightM": 633,
+      "labels": [
+        "remote",
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 633m grassy top on the high ridge above Ennerdale.",
+      "offRouteKm": 2.395,
+      "routeKm": 56.65,
+      "wainwright": true,
+      "verified": {
+        "demM": 619,
+        "deltaM": -14,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-great-borne",
+      "title": "Great Borne",
+      "lat": 54.534367,
+      "lon": -3.355304,
+      "gridref": "NY124163",
+      "heightM": 616,
+      "labels": [
+        "remote"
+      ],
+      "starred": false,
+      "description": "A 616m fell at the western end of the Ennerdale ridge.",
+      "offRouteKm": 3.546,
+      "routeKm": 56.83,
+      "wainwright": true,
+      "verified": {
+        "demM": 610,
+        "deltaM": -6,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-rannerdale-knotts",
+      "title": "Rannerdale Knotts",
+      "lat": 54.552164,
+      "lon": -3.289409,
+      "gridref": "NY167182",
+      "heightM": 355,
+      "labels": [
+        "small",
+        "bluebells"
+      ],
+      "starred": false,
+      "description": "A 355m rocky ridge above Crummock, famous for the bluebells that fill its valley in spring.",
+      "offRouteKm": 1,
+      "routeKm": 57.49,
+      "wainwright": true,
+      "verified": {
+        "demM": 309,
+        "deltaM": -46,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-mellbreak",
+      "title": "Mellbreak",
+      "lat": 54.555356,
+      "lon": -3.320424,
+      "gridref": "NY143186",
+      "heightM": 512,
+      "labels": [
+        "steep",
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 512m fell rising abruptly and independently from the shore of Crummock Water.",
+      "offRouteKm": 0.751,
+      "routeKm": 58.1,
+      "wainwright": true,
+      "verified": {
+        "demM": 489,
+        "deltaM": -23,
+        "snappedToDemMaximum": true
+      }
+    },
+    {
+      "id": "peak-hen-comb",
+      "title": "Hen Comb",
+      "lat": 54.550677,
+      "lon": -3.343476,
+      "gridref": "NY132181",
+      "heightM": 509,
+      "labels": [
+        "quiet",
+        "boggy"
+      ],
+      "starred": false,
+      "description": "A 509m isolated fell reached across marshy ground near Loweswater.",
+      "offRouteKm": 2.324,
+      "routeKm": 58.1,
+      "wainwright": true,
+      "verified": {
+        "demM": 497,
+        "deltaM": -12,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-blake-fell",
+      "title": "Blake Fell",
+      "lat": 54.56377,
+      "lon": -3.377933,
+      "gridref": "NY110196",
+      "heightM": 573,
+      "labels": [
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 573m high point of the Loweswater fells.",
+      "offRouteKm": 3.909,
+      "routeKm": 59.45,
+      "wainwright": true,
+      "verified": {
+        "demM": 518,
+        "deltaM": -55,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-low-fell",
+      "title": "Low Fell",
+      "lat": 54.591192,
+      "lon": -3.337071,
+      "gridref": "NY137226",
+      "heightM": 423,
+      "labels": [
+        "viewpoint"
+      ],
+      "starred": false,
+      "description": "A 423m fell with one of the best views of the Buttermere valley.",
+      "offRouteKm": 2.13,
+      "routeKm": 60.84,
+      "wainwright": true,
+      "verified": {
+        "demM": 413,
+        "deltaM": -10,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-fellbarrow",
+      "title": "Fellbarrow",
+      "lat": 54.605481,
+      "lon": -3.345281,
+      "gridref": "NY132242",
+      "heightM": 416,
+      "labels": [
+        "quiet",
+        "pastoral"
+      ],
+      "starred": false,
+      "description": "A 416m grassy top on the north-western fringe.",
+      "offRouteKm": 3.707,
+      "routeKm": 60.84,
+      "wainwright": true,
+      "verified": {
+        "demM": 413,
+        "deltaM": -3,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-grasmoor",
+      "title": "Grasmoor",
+      "lat": 54.571146,
+      "lon": -3.27918,
+      "gridref": "NY174203",
+      "heightM": 852,
+      "labels": [
+        "big",
+        "quiet"
+      ],
+      "starred": false,
+      "description": "At 852m the highest of the north-western fells, a broad whaleback above Crummock.",
+      "offRouteKm": 0.956,
+      "routeKm": 63.18,
+      "wainwright": true,
+      "verified": {
+        "demM": 811,
+        "deltaM": -41,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-whiteside",
+      "title": "Whiteside",
+      "lat": 54.587334,
+      "lon": -3.278083,
+      "gridref": "NY175219",
+      "heightM": 707,
+      "labels": [],
+      "starred": false,
+      "description": null,
+      "offRouteKm": 0.511,
+      "routeKm": 63.93,
+      "wainwright": true,
+      "verified": {
+        "demM": 699,
+        "deltaM": -8,
+        "snappedToDemMaximum": true
+      }
+    },
+    {
+      "id": "peak-hopegill-head",
+      "title": "Hopegill Head",
+      "lat": 54.587513,
+      "lon": -3.261122,
+      "gridref": "NY186221",
+      "heightM": 770,
+      "labels": [
+        "shapely",
+        "crag"
+      ],
+      "starred": false,
+      "description": "A 770m summit at the head of Hobcarton Crag, one of the sharpest tops here.",
+      "offRouteKm": 0.698,
+      "routeKm": 64.73,
+      "wainwright": true,
+      "verified": {
+        "demM": 751,
+        "deltaM": -19,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-crag-hill",
+      "title": "Crag Hill",
+      "lat": 54.571453,
+      "lon": -3.249798,
+      "gridref": "NY193203",
+      "heightM": 839,
+      "labels": [
+        "ridge"
+      ],
+      "starred": false,
+      "description": "An 839m hub of the Coledale fells with a trig point and steep drops north.",
+      "offRouteKm": 0.898,
+      "routeKm": 65.84,
+      "wainwright": true,
+      "verified": {
+        "demM": 829,
+        "deltaM": -10,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-knott-rigg",
+      "title": "Knott Rigg",
+      "lat": 54.55804,
+      "lon": -3.243202,
+      "gridref": "NY197188",
+      "heightM": 556,
+      "labels": [
+        "quiet",
+        "easy"
+      ],
+      "starred": false,
+      "description": "A 556m ridge walk from the top of Newlands Hause, little visited.",
+      "offRouteKm": 2.387,
+      "routeKm": 66.18,
+      "wainwright": true,
+      "verified": {
+        "demM": 538,
+        "deltaM": -18,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-sail",
+      "title": "Sail",
+      "lat": 54.571533,
+      "lon": -3.242066,
+      "gridref": "NY198203",
+      "heightM": 773,
+      "labels": [
+        "zigzag"
+      ],
+      "starred": false,
+      "description": "A 773m top reached by an engineered zigzag path on the Coledale ridge.",
+      "offRouteKm": 0.896,
+      "routeKm": 66.28,
+      "wainwright": true,
+      "verified": {
+        "demM": 761,
+        "deltaM": -12,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-ard-crags",
+      "title": "Ard Crags",
+      "lat": 54.567183,
+      "lon": -3.228013,
+      "gridref": "NY207198",
+      "heightM": 581,
+      "labels": [
+        "quiet",
+        "ridge"
+      ],
+      "starred": false,
+      "description": "A 581m narrow grassy ridge above the Newlands valley.",
+      "offRouteKm": 1.633,
+      "routeKm": 66.64,
+      "wainwright": true,
+      "verified": {
+        "demM": 563,
+        "deltaM": -18,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-causey-pike",
+      "title": "Causey Pike",
+      "lat": 54.576339,
+      "lon": -3.211271,
+      "gridref": "NY218208",
+      "heightM": 637,
+      "labels": [
+        "shapely",
+        "scramble"
+      ],
+      "starred": false,
+      "description": "A 637m fell with an unmistakable knobbly summit and a short scramble to reach it.",
+      "offRouteKm": 1.705,
+      "routeKm": 66.93,
+      "wainwright": true,
+      "verified": {
+        "demM": 577,
+        "deltaM": -60,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-outerside",
+      "title": "Outerside",
+      "lat": 54.581621,
+      "lon": -3.222258,
+      "gridref": "NY211214",
+      "heightM": 568,
+      "labels": [
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 568m fell tucked below the Coledale ridge, usually bypassed.",
+      "offRouteKm": 0.852,
+      "routeKm": 66.99,
+      "wainwright": true,
+      "verified": {
+        "demM": 546,
+        "deltaM": -22,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-grisedale-pike",
+      "title": "Grisedale Pike",
+      "lat": 54.591299,
+      "lon": -3.242668,
+      "gridref": "NY198225",
+      "heightM": 791,
+      "labels": [
+        "shapely",
+        "steep"
+      ],
+      "starred": false,
+      "description": "A 791m fell with a sharp profile above Braithwaite and a long ridge approach.",
+      "offRouteKm": 0.799,
+      "routeKm": 67.39,
+      "wainwright": true,
+      "verified": {
+        "demM": 769,
+        "deltaM": -22,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-barrow",
+      "title": "Barrow",
+      "lat": 54.585446,
+      "lon": -3.197532,
+      "gridref": "NY226215",
+      "heightM": 455,
+      "labels": [],
+      "starred": false,
+      "description": null,
+      "offRouteKm": 1.331,
+      "routeKm": 69.21,
+      "wainwright": true,
+      "verified": {
+        "demM": 440,
+        "deltaM": -15,
+        "snappedToDemMaximum": true
+      }
+    },
+    {
+      "id": "peak-lord-s-seat",
+      "title": "Lord’s Seat",
+      "lat": 54.627333,
+      "lon": -3.234472,
+      "gridref": "NY204265",
+      "heightM": 552,
+      "labels": [
+        "quiet",
+        "forest"
+      ],
+      "starred": false,
+      "description": "A 552m high point of the Whinlatter fells, among forestry.",
+      "offRouteKm": 3.585,
+      "routeKm": 70.55,
+      "wainwright": true,
+      "verified": {
+        "demM": 533,
+        "deltaM": -19,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-barf",
+      "title": "Barf",
+      "lat": 54.629302,
+      "lon": -3.217492,
+      "gridref": "NY215267",
+      "heightM": 468,
+      "labels": [
+        "steep",
+        "scree"
+      ],
+      "starred": false,
+      "description": "A 468m fell with a very steep scree face above Bassenthwaite.",
+      "offRouteKm": 3.174,
+      "routeKm": 70.55,
+      "wainwright": true,
+      "verified": {
+        "demM": 442,
+        "deltaM": -26,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-carl-side",
+      "title": "Carl Side",
+      "lat": 54.642488,
+      "lon": -3.155902,
+      "gridref": "NY255281",
+      "heightM": 746,
+      "labels": [
+        "approach"
+      ],
+      "starred": false,
+      "description": "A 746m top on the Longside ridge approach to Skiddaw.",
+      "offRouteKm": 4.195,
+      "routeKm": 74.69,
+      "wainwright": true,
+      "verified": {
+        "demM": 741,
+        "deltaM": -5,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-long-side",
+      "title": "Long Side",
+      "lat": 54.64508,
+      "lon": -3.166824,
+      "gridref": "NY248284",
+      "heightM": 734,
+      "labels": [
+        "ridge"
+      ],
+      "starred": false,
+      "description": "A 734m top on the finest ridge approach to Skiddaw.",
+      "offRouteKm": 4.545,
+      "routeKm": 74.69,
+      "wainwright": true,
+      "verified": {
+        "demM": 702,
+        "deltaM": -32,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-dodd",
+      "title": "Dodd",
+      "lat": 54.635136,
+      "lon": -3.172736,
+      "gridref": "NY244273",
+      "heightM": 502,
+      "labels": [
+        "wooded",
+        "small"
+      ],
+      "starred": false,
+      "description": "A 502m forested cone below Skiddaw with a cleared summit viewpoint.",
+      "offRouteKm": 3.561,
+      "routeKm": 74.69,
+      "wainwright": true,
+      "verified": {
+        "demM": 476,
+        "deltaM": -26,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-skiddaw-little-man",
+      "title": "Skiddaw Little Man",
+      "lat": 54.639969,
+      "lon": -3.137237,
+      "gridref": "NY267278",
+      "heightM": 865,
+      "labels": [
+        "viewpoint"
+      ],
+      "starred": false,
+      "description": "An 865m subsidiary top of Skiddaw with a better view than its parent.",
+      "offRouteKm": 4.033,
+      "routeKm": 75.14,
+      "wainwright": true,
+      "verified": {
+        "demM": 852,
+        "deltaM": -13,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-lonscale-fell",
+      "title": "Lonscale Fell",
+      "lat": 54.633938,
+      "lon": -3.109182,
+      "gridref": "NY285271",
+      "heightM": 715,
+      "labels": [
+        "quiet",
+        "edge"
+      ],
+      "starred": false,
+      "description": "A 715m eastern outlier of Skiddaw with an abrupt edge above the Glenderaterra.",
+      "offRouteKm": 4.008,
+      "routeKm": 75.53,
+      "wainwright": true,
+      "verified": {
+        "demM": 708,
+        "deltaM": -7,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-latrigg",
+      "title": "Latrigg",
+      "lat": 54.612288,
+      "lon": -3.117884,
+      "gridref": "NY279247",
+      "heightM": 368,
+      "labels": [
+        "viewpoint",
+        "easy"
+      ],
+      "starred": false,
+      "description": "A 368m grassy hill directly above Keswick, with the best low-level view of Derwent Water and Borrowdale on the whole route.",
+      "offRouteKm": 1.792,
+      "routeKm": 75.91,
+      "wainwright": true,
+      "verified": {
+        "demM": 358,
+        "deltaM": -10,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-cat-bells",
+      "title": "Cat Bells",
+      "lat": 54.568648,
+      "lon": -3.170826,
+      "gridref": "NY244199",
+      "heightM": 451,
+      "labels": [
+        "classic",
+        "family",
+        "busy"
+      ],
+      "starred": true,
+      "description": "A 451m ridge above Derwent Water, out of all proportion in popularity to its size — a short, rocky, thoroughly enjoyable up-and-down with a superb view over the lake.",
+      "offRouteKm": 2.816,
+      "routeKm": 78.77,
+      "wainwright": true,
+      "verified": {
+        "demM": 419,
+        "deltaM": -32,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-high-seat",
+      "title": "High Seat",
+      "lat": 54.552202,
+      "lon": -3.10387,
+      "gridref": "NY287180",
+      "heightM": 608,
+      "labels": [
+        "boggy",
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 608m top on notoriously wet ground on the Central Ridge.",
+      "offRouteKm": 3.747,
+      "routeKm": 79.23,
+      "wainwright": true,
+      "verified": {
+        "demM": 600,
+        "deltaM": -8,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-bleaberry-fell",
+      "title": "Bleaberry Fell",
+      "lat": 54.565665,
+      "lon": -3.105781,
+      "gridref": "NY286195",
+      "heightM": 590,
+      "labels": [
+        "quiet",
+        "boggy"
+      ],
+      "starred": false,
+      "description": "A 590m rocky top on the ridge above Keswick.",
+      "offRouteKm": 2.391,
+      "routeKm": 79.7,
+      "wainwright": true,
+      "verified": {
+        "demM": 580,
+        "deltaM": -10,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-walla-crag",
+      "title": "Walla Crag",
+      "lat": 54.580812,
+      "lon": -3.120116,
+      "gridref": "NY277212",
+      "heightM": 379,
+      "labels": [
+        "viewpoint",
+        "easy"
+      ],
+      "starred": false,
+      "description": "A 379m crag-edge above Derwent Water, minutes from the route.",
+      "offRouteKm": 0.477,
+      "routeKm": 79.83,
+      "wainwright": true,
+      "verified": {
+        "demM": 363,
+        "deltaM": -16,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-blencathra",
+      "title": "Blencathra",
+      "lat": 54.639854,
+      "lon": -3.050464,
+      "gridref": "NY323277",
+      "heightM": 868,
+      "labels": [
+        "scramble",
+        "exposed",
+        "classic"
+      ],
+      "starred": true,
+      "description": "An 868m fell with a superb north-eastern approach by Sharp Edge — a narrow, genuinely exposed Grade 1 arete that has caused many accidents and should be avoided when wet or windy. Scales Fell gives a straightforward alternative both up and down.",
+      "offRouteKm": 3.917,
+      "routeKm": 87.24,
+      "wainwright": true,
+      "verified": {
+        "demM": 849,
+        "deltaM": -19,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-clough-head",
+      "title": "Clough Head",
+      "lat": 54.593277,
+      "lon": -3.03224,
+      "gridref": "NY334225",
+      "heightM": 726,
+      "labels": [
+        "quiet",
+        "trig"
+      ],
+      "starred": false,
+      "description": "A 726m fell at the north end of the Dodds with a steep western face.",
+      "offRouteKm": 1.042,
+      "routeKm": 87.89,
+      "wainwright": true,
+      "verified": {
+        "demM": 723,
+        "deltaM": -3,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-great-dodd",
+      "title": "Great Dodd",
+      "lat": 54.575411,
+      "lon": -3.019412,
+      "gridref": "NY342205",
+      "heightM": 857,
+      "labels": [
+        "broad",
+        "quiet"
+      ],
+      "starred": false,
+      "description": "An 857m grassy dome at the northern end of the Helvellyn range.",
+      "offRouteKm": 2.325,
+      "routeKm": 102.72,
+      "wainwright": true,
+      "verified": {
+        "demM": 853,
+        "deltaM": -4,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-sheffield-pike",
+      "title": "Sheffield Pike",
+      "lat": 54.555089,
+      "lon": -2.977156,
+      "gridref": "NY369182",
+      "heightM": 675,
+      "labels": [
+        "quiet",
+        "mining"
+      ],
+      "starred": false,
+      "description": "A 675m fell between Glencoyne and Glenridding, above old lead workings.",
+      "offRouteKm": 0.792,
+      "routeKm": 103.37,
+      "wainwright": true,
+      "verified": {
+        "demM": 667,
+        "deltaM": -8,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-stybarrow-dodd",
+      "title": "Stybarrow Dodd",
+      "lat": 54.561048,
+      "lon": -3.017507,
+      "gridref": "NY343189",
+      "heightM": 843,
+      "labels": [
+        "broad"
+      ],
+      "starred": false,
+      "description": "An 843m grassy top on the northern Helvellyn ridge.",
+      "offRouteKm": 1.549,
+      "routeKm": 103.8,
+      "wainwright": true,
+      "verified": {
+        "demM": 840,
+        "deltaM": -3,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-raise",
+      "title": "Raise",
+      "lat": 54.54757,
+      "lon": -3.017171,
+      "gridref": "NY343174",
+      "heightM": 883,
+      "labels": [
+        "quiet",
+        "ski"
+      ],
+      "starred": false,
+      "description": "An 883m fell holding the Lake District Ski Club tow on its northern slope.",
+      "offRouteKm": 1.641,
+      "routeKm": 104.03,
+      "wainwright": true,
+      "verified": {
+        "demM": 878,
+        "deltaM": -5,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-white-side",
+      "title": "White Side",
+      "lat": 54.541215,
+      "lon": -3.024742,
+      "gridref": "NY338167",
+      "heightM": 863,
+      "labels": [
+        "quiet"
+      ],
+      "starred": false,
+      "description": "An 863m top on the main Helvellyn ridge, easily added.",
+      "offRouteKm": 2.43,
+      "routeKm": 104.03,
+      "wainwright": true,
+      "verified": {
+        "demM": 852,
+        "deltaM": -11,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-helvellyn",
+      "title": "Helvellyn",
+      "lat": 54.52689,
+      "lon": -3.018202,
+      "gridref": "NY342151",
+      "heightM": 950,
+      "labels": [
+        "classic",
+        "scramble",
+        "exposed"
+      ],
+      "starred": true,
+      "description": "At 950m, the most-climbed high fell in the district, with a summit shelter and trig point. Approaching by Striding Edge and leaving by Swirral Edge is the classic round: both are Grade 1 scrambles with real exposure, and neither is sensible in high wind, ice or poor visibility.",
+      "offRouteKm": 3.016,
+      "routeKm": 105.11,
+      "wainwright": true,
+      "verified": {
+        "demM": 942,
+        "deltaM": -8,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-catstye-cam",
+      "title": "Catstye Cam",
+      "lat": 54.533258,
+      "lon": -3.009088,
+      "gridref": "NY348158",
+      "heightM": 890,
+      "labels": [
+        "shapely",
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A sharply conical 890m top just north of Helvellyn, often bypassed entirely despite being ten minutes off Swirral Edge.",
+      "offRouteKm": 2.096,
+      "routeKm": 105.11,
+      "wainwright": true,
+      "verified": {
+        "demM": 867,
+        "deltaM": -23,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-nethermost-pike",
+      "title": "Nethermost Pike",
+      "lat": 54.518829,
+      "lon": -3.014912,
+      "gridref": "NY344142",
+      "heightM": 891,
+      "labels": [
+        "quiet",
+        "edge"
+      ],
+      "starred": false,
+      "description": "An 891m top immediately south of Helvellyn with a fine eastern edge, usually ignored.",
+      "offRouteKm": 3.651,
+      "routeKm": 105.11,
+      "wainwright": true,
+      "verified": {
+        "demM": 880,
+        "deltaM": -11,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-birkhouse-moor",
+      "title": "Birkhouse Moor",
+      "lat": 54.535246,
+      "lon": -2.985955,
+      "gridref": "NY363160",
+      "heightM": 718,
+      "labels": [
+        "approach"
+      ],
+      "starred": false,
+      "description": "A 718m shoulder crossed on the way to Striding Edge, with the Hole-in-the-Wall on it.",
+      "offRouteKm": 1.388,
+      "routeKm": 105.39,
+      "wainwright": true,
+      "verified": {
+        "demM": 705,
+        "deltaM": -13,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-glenridding-dodd",
+      "title": "Glenridding Dodd",
+      "lat": 54.548936,
+      "lon": -2.960003,
+      "gridref": "NY380175",
+      "heightM": 442,
+      "labels": [
+        "small",
+        "viewpoint"
+      ],
+      "starred": false,
+      "description": "A 442m small top above Glenridding with a good Ullswater view.",
+      "offRouteKm": 0.632,
+      "routeKm": 106.89,
+      "wainwright": true,
+      "verified": {
+        "demM": 426,
+        "deltaM": -16,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-dollywaggon-pike",
+      "title": "Dollywaggon Pike",
+      "lat": 54.508971,
+      "lon": -3.011578,
+      "gridref": "NY346131",
+      "heightM": 858,
+      "labels": [
+        "quiet"
+      ],
+      "starred": false,
+      "description": "An 858m top at the southern end of the Helvellyn ridge above Grisedale Tarn.",
+      "offRouteKm": 4.509,
+      "routeKm": 108.81,
+      "wainwright": true,
+      "verified": {
+        "demM": 836,
+        "deltaM": -22,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-st-sunday-crag",
+      "title": "St Sunday Crag",
+      "lat": 54.511959,
+      "lon": -2.976126,
+      "gridref": "NY369134",
+      "heightM": 841,
+      "labels": [
+        "ridge",
+        "dramatic"
+      ],
+      "starred": true,
+      "description": "An 841m fell with a long elegant ridge and the finest view of Helvellyn's eastern corries from across Grisedale.",
+      "offRouteKm": 2.681,
+      "routeKm": 108.81,
+      "wainwright": true,
+      "verified": {
+        "demM": 833,
+        "deltaM": -8,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-place-fell",
+      "title": "Place Fell",
+      "lat": 54.544755,
+      "lon": -2.919713,
+      "gridref": "NY406170",
+      "heightM": 657,
+      "labels": [
+        "viewpoint",
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 657m fell above Ullswater with a knobbly top and a superb lake view.",
+      "offRouteKm": 1.136,
+      "routeKm": 111.06,
+      "wainwright": true,
+      "verified": {
+        "demM": 639,
+        "deltaM": -18,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-beda-fell",
+      "title": "Beda Fell",
+      "lat": 54.545009,
+      "lon": -2.88571,
+      "gridref": "NY428170",
+      "heightM": 509,
+      "labels": [
+        "quiet",
+        "ridge"
+      ],
+      "starred": false,
+      "description": "A 509m narrow ridge in Martindale, one of the quietest corners of the district.",
+      "offRouteKm": 2.864,
+      "routeKm": 111.25,
+      "wainwright": true,
+      "verified": {
+        "demM": 499,
+        "deltaM": -10,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-angletarn-pikes",
+      "title": "Angletarn Pikes",
+      "lat": 54.525068,
+      "lon": -2.908455,
+      "gridref": "NY413148",
+      "heightM": 567,
+      "labels": [
+        "shapely",
+        "tarn"
+      ],
+      "starred": false,
+      "description": "A 567m twin-topped fell beside Angle Tarn, one of the prettiest small tops here.",
+      "offRouteKm": 0.788,
+      "routeKm": 112.69,
+      "wainwright": true,
+      "verified": {
+        "demM": 542,
+        "deltaM": -25,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-hart-crag",
+      "title": "Hart Crag",
+      "lat": 54.492178,
+      "lon": -2.977199,
+      "gridref": "NY368112",
+      "heightM": 822,
+      "labels": [
+        "rocky"
+      ],
+      "starred": false,
+      "description": "An 822m rocky top on the Fairfield horseshoe.",
+      "offRouteKm": 4.274,
+      "routeKm": 114.15,
+      "wainwright": true,
+      "verified": {
+        "demM": 785,
+        "deltaM": -37,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-hartsop-dodd",
+      "title": "Hartsop Dodd",
+      "lat": 54.498986,
+      "lon": -2.910964,
+      "gridref": "NY411119",
+      "heightM": 618,
+      "labels": [
+        "steep",
+        "small"
+      ],
+      "starred": false,
+      "description": "A 618m steep-fronted top above Hartsop village.",
+      "offRouteKm": 1.017,
+      "routeKm": 115.07,
+      "wainwright": true,
+      "verified": {
+        "demM": 613,
+        "deltaM": -5,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-gray-crag",
+      "title": "Gray Crag",
+      "lat": 54.497373,
+      "lon": -2.886224,
+      "gridref": "NY427117",
+      "heightM": 699,
+      "labels": [
+        "ridge",
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 699m long flat-topped ridge above Hayeswater.",
+      "offRouteKm": 1.013,
+      "routeKm": 116.58,
+      "wainwright": true,
+      "verified": {
+        "demM": 685,
+        "deltaM": -14,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-rest-dodd",
+      "title": "Rest Dodd",
+      "lat": 54.515412,
+      "lon": -2.877346,
+      "gridref": "NY433137",
+      "heightM": 696,
+      "labels": [
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 696m fell on the Martindale side of the High Street ridge.",
+      "offRouteKm": 0.66,
+      "routeKm": 117.14,
+      "wainwright": true,
+      "verified": {
+        "demM": 683,
+        "deltaM": -13,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-high-raise-high-street",
+      "title": "High Raise (High Street)",
+      "lat": 54.513781,
+      "lon": -2.854141,
+      "gridref": "NY448135",
+      "heightM": 802,
+      "labels": [
+        "broad",
+        "quiet"
+      ],
+      "starred": false,
+      "description": "An 802m broad top, the highest of the far eastern fells after High Street.",
+      "offRouteKm": 1.237,
+      "routeKm": 117.86,
+      "wainwright": true,
+      "verified": {
+        "demM": 794,
+        "deltaM": -8,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-rampsgill-head",
+      "title": "Rampsgill Head",
+      "lat": 54.507436,
+      "lon": -2.861731,
+      "gridref": "NY443128",
+      "heightM": 792,
+      "labels": [
+        "crag"
+      ],
+      "starred": false,
+      "description": "A 792m top with crags falling into Rampsgill, beside Kidsty Pike.",
+      "offRouteKm": 0.496,
+      "routeKm": 117.89,
+      "wainwright": true,
+      "verified": {
+        "demM": 792,
+        "deltaM": 0,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-the-knott",
+      "title": "The Knott",
+      "lat": 54.506471,
+      "lon": -2.870977,
+      "gridref": "NY437127",
+      "heightM": 739,
+      "labels": [
+        "junction"
+      ],
+      "starred": false,
+      "description": "A 739m rounded top at a junction of ridges above Hayeswater.",
+      "offRouteKm": 0.106,
+      "routeKm": 117.93,
+      "wainwright": true,
+      "verified": {
+        "demM": 725,
+        "deltaM": -14,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-kidsty-pike",
+      "title": "Kidsty Pike",
+      "lat": 54.505683,
+      "lon": -2.855517,
+      "gridref": "NY447126",
+      "heightM": 780,
+      "labels": [
+        "viewpoint"
+      ],
+      "starred": false,
+      "description": "A 780m top with a neat peaked profile above Riggindale, overlooking Haweswater.",
+      "offRouteKm": 0.829,
+      "routeKm": 118.48,
+      "wainwright": true,
+      "verified": {
+        "demM": 762,
+        "deltaM": -18,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-selside-pike",
+      "title": "Selside Pike",
+      "lat": 54.493554,
+      "lon": -2.788876,
+      "gridref": "NY490112",
+      "heightM": 655,
+      "labels": [
+        "remote",
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 655m fell on the eastern fringe, with a summit shelter.",
+      "offRouteKm": 4.829,
+      "routeKm": 119.3,
+      "wainwright": true,
+      "verified": {
+        "demM": 649,
+        "deltaM": -6,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-branstree",
+      "title": "Branstree",
+      "lat": 54.482648,
+      "lon": -2.807188,
+      "gridref": "NY478100",
+      "heightM": 713,
+      "labels": [
+        "broad",
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 713m grassy fell above Haweswater with survey pillars on its flank.",
+      "offRouteKm": 3.84,
+      "routeKm": 119.54,
+      "wainwright": true,
+      "verified": {
+        "demM": 711,
+        "deltaM": -2,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-high-street",
+      "title": "High Street",
+      "lat": 54.491239,
+      "lon": -2.864478,
+      "gridref": "NY441110",
+      "heightM": 828,
+      "labels": [
+        "roman road",
+        "broad"
+      ],
+      "starred": false,
+      "description": "An 828m whaleback carrying the line of a Roman road, with a wall along the top. Broad and easy going, and the route already crosses it.",
+      "offRouteKm": 0.049,
+      "routeKm": 119.68,
+      "wainwright": true,
+      "verified": {
+        "demM": 826,
+        "deltaM": -2,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-mardale-ill-bell",
+      "title": "Mardale Ill Bell",
+      "lat": 54.483229,
+      "lon": -2.853504,
+      "gridref": "NY448101",
+      "heightM": 760,
+      "labels": [
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 760m top between Nan Bield and High Street, above Blea Water.",
+      "offRouteKm": 1.038,
+      "routeKm": 120.11,
+      "wainwright": true,
+      "verified": {
+        "demM": 749,
+        "deltaM": -11,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-harter-fell-mardale",
+      "title": "Harter Fell (Mardale)",
+      "lat": 54.476169,
+      "lon": -2.834838,
+      "gridref": "NY460093",
+      "heightM": 778,
+      "labels": [
+        "viewpoint"
+      ],
+      "starred": false,
+      "description": "A 778m fell above Nan Bield Pass, with a summit cairn built partly of old iron fence posts and a fine view down Haweswater.",
+      "offRouteKm": 2.477,
+      "routeKm": 120.11,
+      "wainwright": true,
+      "verified": {
+        "demM": 776,
+        "deltaM": -2,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-thornthwaite-crag",
+      "title": "Thornthwaite Crag",
+      "lat": 54.482153,
+      "lon": -2.878177,
+      "gridref": "NY432100",
+      "heightM": 784,
+      "labels": [
+        "landmark"
+      ],
+      "starred": false,
+      "description": "A 784m top marked by a 4m stone beacon, at the junction of several ridges.",
+      "offRouteKm": 0.289,
+      "routeKm": 121.14,
+      "wainwright": true,
+      "verified": {
+        "demM": 775,
+        "deltaM": -9,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-stony-cove-pike",
+      "title": "Stony Cove Pike",
+      "lat": 54.481994,
+      "lon": -2.899782,
+      "gridref": "NY418100",
+      "heightM": 763,
+      "labels": [
+        "broad"
+      ],
+      "starred": false,
+      "description": "A 763m top also known as Caudale Moor, above the Kirkstone Pass.",
+      "offRouteKm": 1.563,
+      "routeKm": 121.33,
+      "wainwright": true,
+      "verified": {
+        "demM": 762,
+        "deltaM": -1,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-froswick",
+      "title": "Froswick",
+      "lat": 54.468708,
+      "lon": -2.87326,
+      "gridref": "NY435085",
+      "heightM": 720,
+      "labels": [
+        "shapely"
+      ],
+      "starred": false,
+      "description": "A 720m cone on the Kentmere horseshoe, a smaller echo of Ill Bell.",
+      "offRouteKm": 0.461,
+      "routeKm": 122.13,
+      "wainwright": true,
+      "verified": {
+        "demM": 706,
+        "deltaM": -14,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-ill-bell",
+      "title": "Ill Bell",
+      "lat": 54.46153,
+      "lon": -2.871565,
+      "gridref": "NY436077",
+      "heightM": 757,
+      "labels": [
+        "shapely",
+        "classic"
+      ],
+      "starred": false,
+      "description": "The finest top on the Kentmere horseshoe at 757m, cone-shaped with three large cairns.",
+      "offRouteKm": 0.797,
+      "routeKm": 122.88,
+      "wainwright": true,
+      "verified": {
+        "demM": 739,
+        "deltaM": -18,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-red-screes",
+      "title": "Red Screes",
+      "lat": 54.470055,
+      "lon": -2.933467,
+      "gridref": "NY396087",
+      "heightM": 776,
+      "labels": [
+        "viewpoint",
+        "steep"
+      ],
+      "starred": false,
+      "description": "A 776m fell rising directly from the top of the Kirkstone Pass, with a summit tarn.",
+      "offRouteKm": 3.257,
+      "routeKm": 123.2,
+      "wainwright": true,
+      "verified": {
+        "demM": 772,
+        "deltaM": -4,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-yoke",
+      "title": "Yoke",
+      "lat": 54.452567,
+      "lon": -2.86829,
+      "gridref": "NY438067",
+      "heightM": 706,
+      "labels": [
+        "broad",
+        "crag"
+      ],
+      "starred": false,
+      "description": "A 706m fell with Rainsborrow Crag on its Kentmere flank.",
+      "offRouteKm": 1.198,
+      "routeKm": 124.38,
+      "wainwright": true,
+      "verified": {
+        "demM": 701,
+        "deltaM": -5,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-sallows",
+      "title": "Sallows",
+      "lat": 54.428282,
+      "lon": -2.870859,
+      "gridref": "NY436040",
+      "heightM": 516,
+      "labels": [
+        "quiet",
+        "grassy"
+      ],
+      "starred": false,
+      "description": "A 516m grassy fell on the Kentmere fringe.",
+      "offRouteKm": 1.466,
+      "routeKm": 127.18,
+      "wainwright": true,
+      "verified": {
+        "demM": 510,
+        "deltaM": -6,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-sour-howes",
+      "title": "Sour Howes",
+      "lat": 54.421004,
+      "lon": -2.883034,
+      "gridref": "NY428032",
+      "heightM": 483,
+      "labels": [
+        "quiet",
+        "grassy"
+      ],
+      "starred": false,
+      "description": "A 483m undulating fell above Troutbeck.",
+      "offRouteKm": 0.92,
+      "routeKm": 128.01,
+      "wainwright": true,
+      "verified": {
+        "demM": 478,
+        "deltaM": -5,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-dove-crag",
+      "title": "Dove Crag",
+      "lat": 54.485064,
+      "lon": -2.967767,
+      "gridref": "NY374104",
+      "heightM": 792,
+      "labels": [
+        "crag"
+      ],
+      "starred": false,
+      "description": "A 792m fell with a fine crag and the Priest's Hole cave beneath it.",
+      "offRouteKm": 4.015,
+      "routeKm": 138.71,
+      "wainwright": true,
+      "verified": {
+        "demM": 784,
+        "deltaM": -8,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-loughrigg-fell",
+      "title": "Loughrigg Fell",
+      "lat": 54.4371,
+      "lon": -3.008264,
+      "gridref": "NY347051",
+      "heightM": 335,
+      "labels": [
+        "easy",
+        "busy",
+        "viewpoint"
+      ],
+      "starred": false,
+      "description": "A 335m maze of little tops, tarns and caves between Grasmere and Ambleside — much more rambling than its height suggests.",
+      "offRouteKm": 1.659,
+      "routeKm": 140.15,
+      "wainwright": true,
+      "verified": {
+        "demM": 323,
+        "deltaM": -12,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-heron-pike",
+      "title": "Heron Pike",
+      "lat": 54.465969,
+      "lon": -2.995088,
+      "gridref": "NY356083",
+      "heightM": 612,
+      "labels": [
+        "ridge",
+        "viewpoint"
+      ],
+      "starred": false,
+      "description": "A 612m top on the Rydal side of the Fairfield horseshoe.",
+      "offRouteKm": 1.548,
+      "routeKm": 140.52,
+      "wainwright": true,
+      "verified": {
+        "demM": 599,
+        "deltaM": -13,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-seat-sandal",
+      "title": "Seat Sandal",
+      "lat": 54.494568,
+      "lon": -3.014311,
+      "gridref": "NY344115",
+      "heightM": 736,
+      "labels": [
+        "quiet",
+        "steep"
+      ],
+      "starred": false,
+      "description": "A 736m fell above Grisedale Tarn and Dunmail Raise.",
+      "offRouteKm": 3.926,
+      "routeKm": 142.36,
+      "wainwright": true,
+      "verified": {
+        "demM": 725,
+        "deltaM": -11,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-fairfield",
+      "title": "Fairfield",
+      "lat": 54.496545,
+      "lon": -2.992743,
+      "gridref": "NY358117",
+      "heightM": 873,
+      "labels": [
+        "big",
+        "navigation"
+      ],
+      "starred": false,
+      "description": "An 873m fell with a broad flat summit plateau that is confusing in cloud — the drops on the north side are abrupt.",
+      "offRouteKm": 4.572,
+      "routeKm": 142.36,
+      "wainwright": true,
+      "verified": {
+        "demM": 863,
+        "deltaM": -10,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-great-rigg",
+      "title": "Great Rigg",
+      "lat": 54.484838,
+      "lon": -2.995547,
+      "gridref": "NY356104",
+      "heightM": 766,
+      "labels": [
+        "ridge"
+      ],
+      "starred": false,
+      "description": "A 766m top on the Fairfield horseshoe above Rydal.",
+      "offRouteKm": 3.353,
+      "routeKm": 142.36,
+      "wainwright": true,
+      "verified": {
+        "demM": 757,
+        "deltaM": -9,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-silver-how",
+      "title": "Silver How",
+      "lat": 54.45029,
+      "lon": -3.042519,
+      "gridref": "NY325066",
+      "heightM": 395,
+      "labels": [
+        "easy",
+        "viewpoint"
+      ],
+      "starred": false,
+      "description": "A 395m top above Grasmere with a fine view of the vale and the Langdale Pikes.",
+      "offRouteKm": 0.508,
+      "routeKm": 144,
+      "wainwright": true,
+      "verified": {
+        "demM": 380,
+        "deltaM": -15,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-blea-rigg",
+      "title": "Blea Rigg",
+      "lat": 54.460761,
+      "lon": -3.078267,
+      "gridref": "NY302078",
+      "heightM": 541,
+      "labels": [
+        "quiet",
+        "knobbly"
+      ],
+      "starred": false,
+      "description": "A 541m ridge of knolls between Easedale and Langdale.",
+      "offRouteKm": 3.003,
+      "routeKm": 145.64,
+      "wainwright": true,
+      "verified": {
+        "demM": 520,
+        "deltaM": -21,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-lingmoor-fell",
+      "title": "Lingmoor Fell",
+      "lat": 54.432008,
+      "lon": -3.077512,
+      "gridref": "NY302046",
+      "heightM": 469,
+      "labels": [
+        "viewpoint",
+        "quarry"
+      ],
+      "starred": false,
+      "description": "A 469m ridge between the two Langdales, with old slate quarries and a first-rate view of the Pikes.",
+      "offRouteKm": 1.836,
+      "routeKm": 149.02,
+      "wainwright": true,
+      "verified": {
+        "demM": 451,
+        "deltaM": -18,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-black-fell",
+      "title": "Black Fell",
+      "lat": 54.40556,
+      "lon": -3.018275,
+      "gridref": "NY340016",
+      "heightM": 323,
+      "labels": [
+        "small",
+        "viewpoint"
+      ],
+      "starred": false,
+      "description": "A 323m top with a National Trust monument column and a wide low-level view.",
+      "offRouteKm": 2.183,
+      "routeKm": 151.76,
+      "wainwright": true,
+      "verified": {
+        "demM": 311,
+        "deltaM": -12,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-holme-fell",
+      "title": "Holme Fell",
+      "lat": 54.396243,
+      "lon": -3.05655,
+      "gridref": "NY315006",
+      "heightM": 317,
+      "labels": [
+        "small",
+        "quarry"
+      ],
+      "starred": false,
+      "description": "A 317m knot of rock and old quarries with a view down Yewdale.",
+      "offRouteKm": 0.937,
+      "routeKm": 154.31,
+      "wainwright": true,
+      "verified": {
+        "demM": 304,
+        "deltaM": -13,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-wetherlam",
+      "title": "Wetherlam",
+      "lat": 54.400365,
+      "lon": -3.098248,
+      "gridref": "NY288011",
+      "heightM": 762,
+      "labels": [
+        "mining",
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 762m fell riddled with old mine levels and shafts on its southern flanks — stay on the paths.",
+      "offRouteKm": 1.25,
+      "routeKm": 155.28,
+      "wainwright": true,
+      "verified": {
+        "demM": 757,
+        "deltaM": -5,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-swirl-how",
+      "title": "Swirl How",
+      "lat": 54.394761,
+      "lon": -3.121201,
+      "gridref": "NY273005",
+      "heightM": 802,
+      "labels": [
+        "ridge"
+      ],
+      "starred": false,
+      "description": "An 802m hub of the Coniston fells, reached from Levers Hause or the Prison Band.",
+      "offRouteKm": 1.546,
+      "routeKm": 162.64,
+      "wainwright": true,
+      "verified": {
+        "demM": 794,
+        "deltaM": -8,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-great-carrs",
+      "title": "Great Carrs",
+      "lat": 54.398312,
+      "lon": -3.125919,
+      "gridref": "NY270009",
+      "heightM": 785,
+      "labels": [
+        "heritage",
+        "ridge"
+      ],
+      "starred": false,
+      "description": "A 785m top with the wreckage of a wartime Halifax bomber on the col below its summit.",
+      "offRouteKm": 2.044,
+      "routeKm": 162.64,
+      "wainwright": true,
+      "verified": {
+        "demM": 771,
+        "deltaM": -14,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-grey-friar",
+      "title": "Grey Friar",
+      "lat": 54.392762,
+      "lon": -3.142709,
+      "gridref": "NY259003",
+      "heightM": 773,
+      "labels": [
+        "quiet"
+      ],
+      "starred": false,
+      "description": "A 773m western outlier of the Coniston fells, looking over the Duddon.",
+      "offRouteKm": 2.426,
+      "routeKm": 162.83,
+      "wainwright": true,
+      "verified": {
+        "demM": 755,
+        "deltaM": -18,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-brim-fell",
+      "title": "Brim Fell",
+      "lat": 54.376762,
+      "lon": -3.12379,
+      "gridref": "SD271985",
+      "heightM": 796,
+      "labels": [
+        "broad"
+      ],
+      "starred": false,
+      "description": "A 796m grassy top on the ridge north of Coniston Old Man.",
+      "offRouteKm": 0.911,
+      "routeKm": 163.31,
+      "wainwright": true,
+      "verified": {
+        "demM": 792,
+        "deltaM": -4,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-coniston-old-man",
+      "title": "Coniston Old Man",
+      "lat": 54.370486,
+      "lon": -3.122079,
+      "gridref": "SD272978",
+      "heightM": 803,
+      "labels": [
+        "classic",
+        "mining"
+      ],
+      "starred": true,
+      "description": "An 803m fell rising straight from the village, its flanks full of slate quarries and copper workings. Large summit cairn and a view to the sea.",
+      "offRouteKm": 1.046,
+      "routeKm": 163.49,
+      "wainwright": true,
+      "verified": {
+        "demM": 787,
+        "deltaM": -16,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-dow-crag",
+      "title": "Dow Crag",
+      "lat": 54.370357,
+      "lon": -3.135929,
+      "gridref": "SD263978",
+      "heightM": 778,
+      "labels": [
+        "crag",
+        "dramatic"
+      ],
+      "starred": true,
+      "description": "A 778m summit perched above five great climbing buttresses dropping to Goats Water. The walk up is easy; the north face is not.",
+      "offRouteKm": 1.396,
+      "routeKm": 168.55,
+      "wainwright": true,
+      "verified": {
+        "demM": 740,
+        "deltaM": -38,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-harter-fell-eskdale",
+      "title": "Harter Fell (Eskdale)",
+      "lat": 54.386757,
+      "lon": -3.205679,
+      "gridref": "SD218997",
+      "heightM": 653,
+      "labels": [
+        "shapely",
+        "rocky"
+      ],
+      "starred": true,
+      "description": "A 653m fell of rocky tors above Eskdale, and one of the best-shaped small fells in the district. The true summit needs a short easy scramble.",
+      "offRouteKm": 1.193,
+      "routeKm": 179.65,
+      "wainwright": true,
+      "verified": {
+        "demM": 630,
+        "deltaM": -23,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-cold-pike",
+      "title": "Cold Pike",
+      "lat": 54.422472,
+      "lon": -3.13737,
+      "gridref": "NY263036",
+      "heightM": 701,
+      "labels": [
+        "quiet",
+        "rocky"
+      ],
+      "starred": false,
+      "description": "A 701m top of three rocky summits beside the Crinkles.",
+      "offRouteKm": 3.803,
+      "routeKm": 182.15,
+      "wainwright": true,
+      "verified": {
+        "demM": 689,
+        "deltaM": -12,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-hard-knott",
+      "title": "Hard Knott",
+      "lat": 54.410317,
+      "lon": -3.18634,
+      "gridref": "NY231023",
+      "heightM": 549,
+      "labels": [
+        "heritage",
+        "small"
+      ],
+      "starred": false,
+      "description": "A 549m rocky fell above the pass, with the remains of the Roman fort of Mediobogdum on its shoulder.",
+      "offRouteKm": 0.828,
+      "routeKm": 182.19,
+      "wainwright": true,
+      "verified": {
+        "demM": 532,
+        "deltaM": -17,
+        "snappedToDemMaximum": false
+      }
+    },
+    {
+      "id": "peak-green-crag",
+      "title": "Green Crag",
+      "lat": 54.373898,
+      "lon": -3.233013,
+      "gridref": "SD200983",
+      "heightM": 489,
+      "labels": [
+        "quiet",
+        "rocky"
+      ],
+      "starred": false,
+      "description": "A 489m rocky tor on the Eskdale moors, rarely visited.",
+      "offRouteKm": 2.229,
+      "routeKm": 185.68,
+      "wainwright": true,
+      "verified": {
+        "demM": 458,
+        "deltaM": -31,
+        "snappedToDemMaximum": false
+      }
+    }
+  ]
+}

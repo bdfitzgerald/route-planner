@@ -1,0 +1,20 @@
+{
+  "category": "peaks",
+  "label": "Peaks",
+  "glyph": "▲",
+  "source": "Where these came from and how they were verified.",
+  "items": [
+    {
+      "id": "peak-example",
+      "title": "Example Fell",
+      "lat": 54.4544,
+      "lon": -3.2114,
+      "gridref": "NY215072",
+      "heightM": 978,
+      "labels": ["classic", "rocky"],
+      "starred": true,
+      "description": "What it is and what the approach involves. Leave null rather than invent one.",
+      "via": null
+    }
+  ]
+}

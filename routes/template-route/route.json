@@ -1,0 +1,27 @@
+{
+  "id": "template-route",
+  "name": "Route name",
+  "baseGpx": "base-route.gpx",
+  "closedLoop": false,
+  "days": 7,
+  "startDate": "2027-01-01",
+  "directions": {
+    "fwd": { "label": "Forward", "reverse": false }
+  },
+  "planning": {
+    "maxDayKm": 30,
+    "targetAverageKm": 25,
+    "maxConsecutiveLongDays": 2,
+    "longDayKm": 27
+  },
+  "ascent": {
+    "smoothWindow": 5,
+    "thresholdM": 10,
+    "note": "If the base GPX has no <ele> data, heights are sampled from SRTM 30m."
+  },
+  "attribution": {
+    "baseRoute": "Where the GPX came from",
+    "elevation": "SRTM 30m via Open Topo Data",
+    "detourRouting": "BRouter hiking-mountain profile (OpenStreetMap)"
+  }
+}
