@@ -242,30 +242,19 @@ function deletePreset(name) {
 // The id set each built-in preset would produce, so the current selection can be
 // matched against them and the right button highlighted.
 function builtinSet(name) {
-  const items = allDetourItems();
-  const rec = new Set(state.data.recommended?.[state.direction]?.ids ?? []);
   if (name === 'none') return new Set();
-  if (name === 'all') return new Set(items.map((i) => i.id));
-  if (name === 'recommended') return rec;
-  if (name === 'no-backtrack') {
-    return new Set(state.data.recommendedNoBacktrack?.[state.direction]?.ids ?? []);
-  }
-  if (name === 'peaks' || name === 'swims') {
-    const cat = name === 'peaks' ? 'peaks' : 'wild-swim-spots';
-    return new Set(items.filter((i) => i.category === cat && rec.has(i.id)).map((i) => i.id));
-  }
+  if (name === 'recommended') return new Set(state.data.recommended?.[state.direction]?.ids ?? []);
   return null;
 }
 
 const sameSet = (a, b) => a.size === b.size && [...a].every((x) => b.has(x));
 
+// Just the two that mean something on their own. The others were combinations you can
+// reach anyway — the peaks setting has its own control, and "everything" always broke
+// the daily limits — and six buttons made the real choice harder to see.
 const BUILTIN_PRESETS = [
   { key: 'none', label: 'Base route' },
   { key: 'recommended', label: 'Recommended' },
-  { key: 'no-backtrack', label: 'No there-and-back' },
-  { key: 'peaks', label: '+ Peaks' },
-  { key: 'swims', label: '+ Swims' },
-  { key: 'all', label: 'Everything' },
 ];
 
 // Which preset the current selection corresponds to, if any. Null means the

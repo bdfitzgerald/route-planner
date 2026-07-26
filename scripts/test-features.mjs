@@ -285,7 +285,12 @@ check('updateCurrentPreset is a no-op with no target', (await ev('updateCurrentP
 ev("storePresets([]); state.presets = [];");
 check('deleting a preset works', !ev('loadPresets()').some(p => p.name === 'My plan'));
 check('base route preset is detected', (() => { ev("state.selected = new Set();"); return ev('activePreset()')?.key === 'none'; })());
-check('everything preset is detected', (() => { ev("state.selected = new Set(canonicalIds(allDetourItems()));"); return ev('activePreset()')?.key === 'all'; })());
+check('selecting everything now reads as modified, not a preset',
+      (() => { ev("state.selected = new Set(canonicalIds(allDetourItems()));"); return ev('activePreset()') === null; })());
+check('only base and recommended are built in',
+      ev('BUILTIN_PRESETS').map((p) => p.key).join(',') === 'none,recommended',
+      ev('BUILTIN_PRESETS').map((p) => p.key).join(','));
+check('a removed preset key resolves to nothing', ev("builtinSet('all')") === null);
 
 function all_count(sess) { return sess.evalIn('allDetourItems()').length; }
 

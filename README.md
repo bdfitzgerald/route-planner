@@ -375,8 +375,8 @@ Three refinements matter:
 
 ### Three ways to take detours
 
-The page offers a **Detours** control, and the build ships a plan and a GPX for the
-middle one:
+The page offers a **Peaks** control, and the build ships a plan and a GPX for the middle
+one:
 
 | Mode | What it does |
 | --- | --- |
@@ -439,7 +439,7 @@ description rather than an invented one.
   also carries a fingerprint of that id list, and a link made before a rebuild is
   reported as out of date rather than silently decoded into a different set of
   points. A link outranks whatever this browser has saved.
-- **Presets.** Six built-in ones, plus your own: *Save preset…* stores the current
+- **Presets.** Two built-in ones — *Base route* and *Recommended* — plus your own: *Save preset…* stores the current
   selection (with its direction and peaks setting) in this browser. The active preset
   is highlighted, and a **modified** badge appears when the selection no longer
   matches any of them. Switching preset while modified asks first, and offers to save
