@@ -1,0 +1,237 @@
+// THE resolver: decides how a day's selected points are actually walked.
+//
+// Deliberately dependency-free and side-effect-free. scripts/build.mjs and
+// scripts/verify.mjs import it directly; the build also emits a plain-script copy
+// to site/resolve.js for the browser, so all three run byte-identical logic.
+// Keeping three hand-written copies in step failed three times, each time as a
+// silent disagreement between the figures shown and the geometry exported.
+//
+// A point can be reached three ways:
+//   chain        one line over several summits, when all of them are selected
+//   traverse     leave the route, over the top, rejoin further along
+//   out-and-back double back from the nearest point — always possible
+//
+// A chain or traverse REPLACES the stretch of base route between its ends. Two of
+// them therefore cannot cover overlapping stretches, and a replaced stretch must
+// not contain the entry point of anything spliced as an out-and-back, or that
+// out-and-back would anchor onto the new line and add an unwalkable jump.
+//
+// Which traverses to use is a weighted interval scheduling problem — maximise the
+// distance saved across non-overlapping stretches — not something to decide in
+// route order, which lets a small saving shut out a large one.
+
+const EPS = 0.01;
+
+// A day's extent in canonical (clockwise) km, whichever way it is walked. Used to
+// reject a traverse that belongs to a different day: a point is assigned to a day by
+// where its out-and-back leaves the route, but its traverse can span a stretch on
+// the far side of a camp, and splicing that into the wrong day's line produces
+// nonsense geometry.
+export function dayWindow(day, reverse, totalKm) {
+  return reverse
+    ? { fromKm: totalKm - day.endKm, toKm: totalKm - day.startKm }
+    : { fromKm: day.startKm, toKm: day.endKm };
+}
+
+const overlaps = (a, b) => a.fromKm < b.toKm - EPS && a.toKm > b.fromKm + EPS;
+
+export function resolveSelection({
+  items,
+  chains = [],
+  dayNumber,
+  direction,
+  selectedIds,
+  allowTraverses = true,
+  excludeOutAndBack = false,
+  // Refusing to double back is about summits. A swim spot or a campsite a few
+  // hundred metres off the line is a normal thing to walk out to and back from, so
+  // the rule applies to peaks only unless told otherwise.
+  excludeCategories = ['peaks'],
+  window = null,
+}) {
+  const picked = items
+    .filter((i) => selectedIds.has(i.id) && i.dayByDirection[direction] === dayNumber)
+    .sort((a, b) => a.entryKm - b.entryKm || (a.id < b.id ? -1 : 1));
+  const pickedIds = new Set(picked.map((i) => i.id));
+
+  // Candidate stretches, each with what it saves against doubling back. With
+  // traverses switched off there are none, and everything doubles back.
+  const candidates = [];
+  if (!allowTraverses) return finish(picked, [], { excludeOutAndBack, excludeCategories });
+  for (const chain of chains) {
+    if (!chain.memberIds.every((id) => pickedIds.has(id))) continue;
+    const members = picked.filter((i) => chain.memberIds.includes(i.id));
+    const baseline = members.reduce((s, i) => s + (i.detour.addedKm ?? 0), 0);
+    candidates.push({
+      key: `chain:${chain.id}`,
+      kind: 'chain',
+      fromKm: chain.fromKm,
+      toKm: chain.toKm,
+      addedKm: chain.addedKm,
+      addedAscentM: chain.addedAscentM,
+      points: chain.points,
+      covers: chain.memberIds.slice(),
+      collects: (chain.collects ?? []).slice(),
+      saving: baseline - chain.addedKm,
+      chain,
+    });
+  }
+  for (const item of picked) {
+    if (!item.traverse) continue;
+    candidates.push({
+      key: `traverse:${item.id}`,
+      kind: 'traverse',
+      fromKm: item.traverse.fromKm,
+      toKm: item.traverse.toKm,
+      addedKm: item.traverse.addedKm,
+      addedAscentM: item.traverse.addedAscentM,
+      points: item.traverse.points,
+      covers: [item.id],
+      collects: (item.traverse.collects ?? []).slice(),
+      saving: (item.detour.addedKm ?? 0) - item.traverse.addedKm,
+      replacedKm: item.traverse.replacedKm,
+    });
+  }
+  // Drop any stretch that does not lie wholly inside this day. Its geometry is not
+  // part of this day's line, so it cannot be spliced here.
+  const inWindow = (c) =>
+    !window || (c.fromKm >= window.fromKm - EPS && c.toKm <= window.toKm + EPS);
+  const rejected = candidates.filter((c) => !inWindow(c));
+  const usable = candidates.filter(inWindow);
+  usable.sort((a, b) => a.fromKm - b.fromKm || a.toKm - b.toKm || (a.key < b.key ? -1 : 1));
+
+  // Maximum-saving set of non-overlapping stretches, by dynamic programming.
+  const pickBest = (pool) => {
+    const n = pool.length;
+    if (!n) return [];
+    const best = new Float64Array(n + 1);
+    const take = Array.from({ length: n + 1 }, () => false);
+    const prevCompatible = new Int32Array(n);
+    for (let i = 0; i < n; i += 1) {
+      let p = -1;
+      for (let j = i - 1; j >= 0; j -= 1) {
+        if (!overlaps(pool[j], pool[i])) {
+          p = j;
+          break;
+        }
+      }
+      prevCompatible[i] = p;
+    }
+    for (let i = 0; i < n; i += 1) {
+      const withIt = pool[i].saving + (prevCompatible[i] >= 0 ? best[prevCompatible[i] + 1] : 0);
+      if (withIt > best[i]) {
+        best[i + 1] = withIt;
+        take[i + 1] = true;
+      } else {
+        best[i + 1] = best[i];
+        take[i + 1] = false;
+      }
+    }
+    const chosen = [];
+    let i = n;
+    while (i > 0) {
+      if (take[i]) {
+        chosen.push(pool[i - 1]);
+        i = prevCompatible[i - 1] + 1;
+      } else {
+        i -= 1;
+      }
+    }
+    return chosen.reverse();
+  };
+
+  // Choose stretches, then withdraw any that would orphan an out-and-back, and
+  // re-choose from what is left. Withdrawing can free others, so iterate to a
+  // fixed point. Bounded by the candidate count.
+  let pool = usable.filter((c) => c.saving > 0);
+  let chosen = [];
+  for (let guard = 0; guard <= usable.length + 1; guard += 1) {
+    chosen = pickBest(pool);
+    const reached = new Set(chosen.flatMap((c) => [...c.covers, ...(c.collects ?? [])]));
+    // Only points left doubling back can be orphaned. A point covered by a chosen
+    // stretch, or simply passed close by it, is reached along the way and never
+    // anchors at its own entry.
+    // With doubling back excluded, nothing is spliced at its own entry point, so
+    // no traverse can orphan anything — which frees traverses that would
+    // otherwise be withdrawn.
+    const orphanable = excludeOutAndBack
+      ? []
+      : picked.filter((i) => !reached.has(i.id) && i.detour?.points?.length);
+    const offending = chosen.filter((c) =>
+      orphanable.some((i) => i.entryKm > c.fromKm + EPS && i.entryKm < c.toKm - EPS),
+    );
+    if (!offending.length) break;
+    // Drop the least valuable offender and try again.
+    offending.sort((a, b) => a.saving - b.saving || (a.key < b.key ? -1 : 1));
+    const victim = offending[0];
+    pool = pool.filter((c) => c.key !== victim.key);
+  }
+
+  return finish(picked, chosen, { excludeOutAndBack, excludeCategories, outOfWindow: rejected.length });
+}
+
+// Assemble the result: chosen stretches first (they replace base route), then
+// everything left doubling back (which only inserts).
+function finish(
+  picked,
+  chosen,
+  { excludeOutAndBack = false, excludeCategories = ['peaks'], outOfWindow = 0 } = {},
+) {
+  const covered = new Set(chosen.flatMap((c) => c.covers));
+  const collected = new Set(
+    chosen.flatMap((c) => (c.collects ?? []).filter((id) => !covered.has(id))),
+  );
+  const modes = new Map();
+  for (const c of chosen) {
+    for (const id of c.covers) modes.set(id, c.kind);
+  }
+
+  const replacing = chosen.map((c) => ({
+    points: c.points,
+    addedKm: c.addedKm,
+    addedAscentM: c.addedAscentM,
+  }));
+  const inserting = [];
+  let fallbacks = 0;
+  let excluded = 0;
+  for (const item of picked) {
+    if (covered.has(item.id)) continue;
+    // Passed on the way by a chosen traverse: nothing to add, nothing to splice.
+    if (collected.has(item.id)) {
+      modes.set(item.id, 'collected');
+      continue;
+    }
+    const isOnRoute = item.detour.kind === 'on-route';
+    if (!isOnRoute && excludeOutAndBack && excludeCategories.includes(item.category)) {
+      // Left out entirely: it can only be reached by doubling back, and the
+      // caller has asked for none of that. Costs nothing and is not spliced.
+      modes.set(item.id, 'excluded');
+      excluded += 1;
+      continue;
+    }
+    modes.set(item.id, isOnRoute ? 'on-route' : 'out-and-back');
+    if (item.traverse && !isOnRoute) fallbacks += 1;
+    if (item.detour.points?.length) {
+      inserting.push({
+        points: item.detour.points,
+        addedKm: item.detour.addedKm ?? 0,
+        addedAscentM: item.detour.addedAscentM ?? 0,
+      });
+    }
+  }
+
+  // Replacing stretches are spliced before inserting ones, so an out-and-back
+  // never lands inside a stretch that is about to be removed.
+  const parts = [...replacing, ...inserting];
+  return {
+    picked,
+    parts,
+    modes,
+    chosen,
+    fallbacks,
+    excluded,
+    outOfWindow,
+    addedKm: parts.reduce((s, p) => s + (p.addedKm ?? 0), 0),
+    addedAscentM: parts.reduce((s, p) => s + (p.addedAscentM ?? 0), 0),
+  };
+}
