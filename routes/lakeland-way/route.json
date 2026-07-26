@@ -23,7 +23,10 @@
     "endDayMaxKm": 20,
     "easyDayKm": 18,
     "minEasyMiddleDays": 2,
-    "_note": "endDayMaxKm caps the first and last legs because both are travel days. It applies to BOTH ends rather than one, because anticlockwise day 1 is the clockwise final leg reversed - a cap on only one end would be broken by walking the other way. 20km is the stated comfortable first-day distance and sits inside the 25km tolerance for the finish. easyDayKm/minEasyMiddleDays reserve short walking days among days 2-11 - still a full day's walk, just an easier one, not a rest day off the trail."
+    "_note": "endDayMaxKm caps the first and last legs because both are travel days. It applies to BOTH ends rather than one, because anticlockwise day 1 is the clockwise final leg reversed - a cap on only one end would be broken by walking the other way. 20km is the stated comfortable first-day distance and sits inside the 25km tolerance for the finish. easyDayKm/minEasyMiddleDays reserve short walking days among days 2-11 - still a full day's walk, just an easier one, not a rest day off the trail.",
+    "maxTraverseBypassKm": 10,
+    "maxChainBypassKm": 12,
+    "_bypassNote": "How much of the drawn route a detour may replace. A single traverse is held to 10km. A chain over several summits is allowed 12km, because it is doing more work for the ground it bypasses: at 10km only 46 of the 129 possible summit combinations can be routed, at 12km 126 of them can, which is the difference between the Scafell cluster offering pairs and offering a six-summit round."
   },
   "ascent": {
     "smoothWindow": 5,

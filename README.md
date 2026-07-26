@@ -364,8 +364,23 @@ drops from +5.9 km to +1.6 km, Cat Bells from +12.9 km to +3.1 km.
 
 Three refinements matter:
 
-- **Chains.** Summits that cluster (Coniston Old Man + Dow Crag) are re-routed as a
-  single line over both, cheaper than two separate traverses.
+- **Chains.** Overlapping traverses cannot both be spliced — each replaces the same
+  stretch of route. So **every combination is routed as one line**: summits whose
+  traverses overlap form a cluster, and every subset of two or more is routed
+  entry → summits in order → exit. On the Lakeland Way that is 4 clusters, 126
+  combinations, up to a seven-summit Scafell round. Whatever you tick has a real walk
+  covering exactly those tops, so ticking a summit never silently does nothing.
+
+  Two guards bound it: a chain may not replace more than `maxChainBypassKm` (12km, versus
+  10km for a single traverse — a chain does more work for the ground it bypasses), and may
+  not span a camp. Chains are judged against **doubling back**, not against walking their
+  summits separately: those traverses overlap by definition, so that baseline is not
+  available to the walker, and testing against it threw away the only line that delivered
+  those tops.
+
+  Net distance is **signed**. A high line can be shorter than the valley route it
+  replaces while climbing far more — Scafell + Scafell Pike is 0.7km shorter than the
+  Lakeland Way's dog-leg via Wasdale, and climbs 452m more.
 - **Collection.** A traverse walks past things. Anything within 300 m of its line is
   collected on the way at no extra cost — the Esk Falls traverse picks up both
   Lingcove Beck falls, which would otherwise cost nearly 8 km each.
@@ -394,9 +409,22 @@ walked over, and the count of points collected free rises from 6 to 11. On the
 Lakeland Way it gives 241 km / 9,667 m at 20 km a day, against 299 km / 12,764 m for
 the default and 351 km / 15,138 m if everything doubles back.
 
-Which traverses to use is solved as **weighted interval scheduling** — the
-maximum-saving set of non-overlapping stretches — rather than in route order, which
-would let a small saving shut out a large one.
+Which stretches to use is solved as **weighted interval scheduling** — the best set of
+non-overlapping stretches — rather than in route order, which would let a small saving
+shut out a large one.
+
+Two details there are easy to get wrong, and both were:
+
+- **Sort by finish, not start.** The predecessor of an interval is the last one that
+  *ends* before it starts. Sorting by start makes "the nearest earlier non-overlapping
+  interval" an invalid boundary, and the DP then picks two stretches that replace the same
+  base route. It was latent with a handful of candidates; with 126 chains it produced a
+  day 10km shorter than its own stated figures.
+- **What to maximise depends on the mode.** With doubling back allowed, a summit that
+  loses its stretch is still walked as an out-and-back, so only cost matters. With
+  doubling back refused, losing the stretch means not being walked at all — so coverage of
+  what was ticked must outrank kilometres saved, or ticking three summits yields the
+  cheaper two-summit chain and drops the third.
 
 **All of this lives in one file.** `scripts/lib/resolve.mjs` is imported by
 `build.mjs` and `verify.mjs`, and the build generates `site/resolve.js` from it for

@@ -99,9 +99,24 @@ function resolveSelection({
     !window || (c.fromKm >= window.fromKm - EPS && c.toKm <= window.toKm + EPS);
   const rejected = candidates.filter((c) => !inWindow(c));
   const usable = candidates.filter(inWindow);
-  usable.sort((a, b) => a.fromKm - b.fromKm || a.toKm - b.toKm || (a.key < b.key ? -1 : 1));
+  // Sorted by FINISH, which weighted interval scheduling requires: the predecessor of an
+  // interval is the last one that ends before it starts. Sorting by start looks
+  // equivalent but is not — "the nearest non-overlapping earlier interval" is then not a
+  // valid boundary, because something earlier still can overlap, and the DP happily
+  // selects two stretches that both replace the same base route. Latent with a handful
+  // of candidates; with 126 chains it produced a day 10km shorter than its own figures.
+  usable.sort((a, b) => a.toKm - b.toKm || a.fromKm - b.fromKm || (a.key < b.key ? -1 : 1));
 
-  // Maximum-saving set of non-overlapping stretches, by dynamic programming.
+  // What the scheduler should maximise depends on the mode, and getting this wrong is
+  // subtle: with doubling back allowed, a summit that loses its stretch still gets walked
+  // as an out-and-back, so only cost matters. With doubling back refused, losing the
+  // stretch means not being walked at all — so covering what was actually ticked matters
+  // far more than the kilometres saved. Without this, ticking Scafell, Great Gable and
+  // Scafell Pike gave the cheaper two-summit chain and silently dropped the third.
+  const COVERAGE_WEIGHT = excludeOutAndBack ? 1000 : 0;
+  const weightOf = (c) => COVERAGE_WEIGHT * c.covers.length + c.saving;
+
+  // Maximum-weight set of non-overlapping stretches, by dynamic programming.
   const pickBest = (pool) => {
     const n = pool.length;
     if (!n) return [];
@@ -109,9 +124,11 @@ function resolveSelection({
     const take = Array.from({ length: n + 1 }, () => false);
     const prevCompatible = new Int32Array(n);
     for (let i = 0; i < n; i += 1) {
+      // The largest j that finishes at or before i starts. Valid because the pool is
+      // sorted by finish, so scanning down gives the largest such j first.
       let p = -1;
       for (let j = i - 1; j >= 0; j -= 1) {
-        if (!overlaps(pool[j], pool[i])) {
+        if (pool[j].toKm <= pool[i].fromKm + EPS) {
           p = j;
           break;
         }
@@ -119,7 +136,7 @@ function resolveSelection({
       prevCompatible[i] = p;
     }
     for (let i = 0; i < n; i += 1) {
-      const withIt = pool[i].saving + (prevCompatible[i] >= 0 ? best[prevCompatible[i] + 1] : 0);
+      const withIt = weightOf(pool[i]) + (prevCompatible[i] >= 0 ? best[prevCompatible[i] + 1] : 0);
       if (withIt > best[i]) {
         best[i + 1] = withIt;
         take[i + 1] = true;
@@ -144,7 +161,9 @@ function resolveSelection({
   // Choose stretches, then withdraw any that would orphan an out-and-back, and
   // re-choose from what is left. Withdrawing can free others, so iterate to a
   // fixed point. Bounded by the candidate count.
-  let pool = usable.filter((c) => c.saving > 0);
+  // With doubling back refused, keep even a poor-value stretch: it may be the only way to
+  // include something that was ticked. Otherwise a negative saving is never worth taking.
+  let pool = usable.filter((c) => excludeOutAndBack || c.saving > 0);
   let chosen = [];
   for (let guard = 0; guard <= usable.length + 1; guard += 1) {
     chosen = pickBest(pool);

@@ -587,3 +587,6 @@ kbd {
   .palette-panel { margin-top: 4vh; width: calc(100vw - 1rem); }
   .day-figs { font-size: 0.62rem; }
 }
+
+/* An incompatible point is selected but not walked: warn, do not just mute it. */
+.poi-cost.warn { color: var(--warn); }

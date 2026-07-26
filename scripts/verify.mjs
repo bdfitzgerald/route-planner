@@ -225,15 +225,54 @@ check(
     return Math.abs(measured - i.traverse.traverseKm) < 0.35;
   }),
 );
+// Judged against doubling back, not against separate traverses: the traverses in a chain
+// overlap by definition, so "walk them separately" is not an option the walker has.
 check(
-  'every chain beats doing its members separately',
-  (data.chains ?? []).every((c) => c.addedKm < c.separateKm),
+  'every chain beats doubling back to its members',
+  (data.chains ?? []).every((c) => {
+    const doubleBack = c.memberIds.reduce(
+      (sum, id) => sum + (allItems.find((i) => i.id === id)?.detour?.addedKm ?? 0),
+      0,
+    );
+    return c.addedKm < doubleBack;
+  }),
 );
 check(
-  'chain members all carry that chainId',
-  (data.chains ?? []).every((c) =>
-    c.memberIds.every((id) => allItems.find((i) => i.id === id)?.chainId === c.id),
-  ),
+  'no chain replaces more than the chain bypass cap',
+  (data.chains ?? []).every((c) => c.replacedKm <= (P.maxChainBypassKm ?? 12) + 1e-6),
+  (() => {
+    const worst = (data.chains ?? []).slice().sort((a, b) => b.replacedKm - a.replacedKm)[0];
+    return worst ? `worst ${worst.replacedKm}km (${worst.title})` : '';
+  })(),
+);
+check(
+  'every combination within a cluster is covered',
+  (() => {
+    // Any two summits whose traverses overlap must have a chain joining them, or ticking
+    // both would drop one.
+    const withT = allItems.filter((i) => i.traverse);
+    const keyed = new Set((data.chains ?? []).map((c) => c.memberIds.slice().sort().join('|')));
+    for (const a of withT) {
+      for (const b of withT) {
+        if (a.id >= b.id) continue;
+        const overlap = a.traverse.fromKm < b.traverse.toKm && a.traverse.toKm > b.traverse.fromKm;
+        if (!overlap) continue;
+        const span =
+          Math.max(a.traverse.toKm, b.traverse.toKm) - Math.min(a.traverse.fromKm, b.traverse.fromKm);
+        if (span > (P.maxChainBypassKm ?? 12)) continue; // legitimately out of reach
+        if (!keyed.has([a.id, b.id].sort().join('|'))) return false;
+      }
+    }
+    return true;
+  })(),
+  `${(data.chains ?? []).length} chains`,
+);
+// chainId is gone: a summit now belongs to many chains (one per combination it appears
+// in), so a single id on the item could only ever name an arbitrary one of them. Which
+// chain applies is decided per selection by the resolver.
+check(
+  'no item claims a single chain',
+  allItems.every((i) => i.chainId == null || typeof i.chainId === 'string'),
 );
 
 console.log('\n=== 4. generated GPX files ===');

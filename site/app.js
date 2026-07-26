@@ -362,6 +362,9 @@ let markerLayer;
 
 const $ = (id) => document.getElementById(id);
 const km = (v) => v.toFixed(1);
+// A high-level line can be shorter than the valley route it replaces while climbing far
+// more, so added distance is genuinely signed. "+-0.7 km" is not an acceptable rendering.
+const signedKm = (v) => `${v < -0.05 ? '−' : '+'}${Math.abs(v).toFixed(1)}`;
 
 /* ---------------- geometry ---------------- */
 
@@ -440,7 +443,9 @@ function dayFigures(day) {
 function itemCost(item, figures) {
   const mode = figures.modes.get(item.id);
   if (mode === 'chain') {
-    const chain = (state.data.chains ?? []).find((c) => c.id === item.chainId);
+    // Which chain applies depends on what else is ticked, so take the one this day
+    // actually resolved to rather than any single id stored on the item.
+    const chain = (figures.chosen ?? []).find((c) => c.covers?.includes(item.id));
     return { mode, addedKm: chain?.addedKm ?? 0, addedAscentM: chain?.addedAscentM ?? 0, chain };
   }
   if (mode === 'traverse') return { mode, ...item.traverse };
@@ -526,24 +531,24 @@ function poiRow(item, dayOverBudget, figures) {
     const blockers = (info?.blockedBy ?? [])
       .map((id) => allDetourItems().find((x) => x.id === id)?.title)
       .filter(Boolean);
-    let why = 'only reachable by doubling back';
+    let why = 'no route to it without doubling back';
     if (info?.reason === 'stretch-taken') {
       why = blockers.length
-        ? `${blockers.join(' + ')} already uses this stretch — untick to walk over ${item.title} instead`
-        : 'another summit already uses this stretch';
+        ? `${blockers.join(' + ')} holds this stretch — untick to walk over ${item.title} instead`
+        : 'another summit holds this stretch';
     } else if (info?.reason === 'unavailable') {
-      why = 'its line cannot be used alongside the rest of this day';
+      why = 'no line over it works alongside the rest of this day';
     }
-    cost = `<span class="poi-cost muted">left out — ${why}</span>`;
+    cost = `<span class="poi-cost warn">incompatible with this day — ${why}</span>`;
   } else if (mode === 'collected') {
     cost = '<span class="poi-cost free">free · passed on the way</span>';
   } else if ((shown.addedKm ?? 0) > 0) {
     const alt =
       item.traverse && mode !== 'traverse' && mode !== 'chain'
-        ? ` <span class="alt-cost">or +${km(item.traverse.addedKm)} km if walked over</span>`
+        ? ` <span class="alt-cost">or ${signedKm(item.traverse.addedKm)} km if walked over</span>`
         : '';
     cost =
-      `<span class="poi-cost">+${km(shown.addedKm)} km · +${shown.addedAscentM} m` +
+      `<span class="poi-cost">${signedKm(shown.addedKm)} km · +${shown.addedAscentM} m` +
       `<span class="mode"> ${MODE_LABEL[mode] ?? ''}</span></span>${alt}`;
   } else {
     cost = '<span class="poi-cost free">on the route</span>';
@@ -554,8 +559,11 @@ function poiRow(item, dayOverBudget, figures) {
   const checked = selected ? 'checked' : '';
   // In over-only mode, anything that can only be reached by doubling back cannot
   // be added at all — say so rather than offering a tick that does nothing.
-  const unavailable = state.mode === 'over-only' && item.category === 'peaks' && item.noBacktrack === false;
-  const disabled = unavailable ? 'disabled' : '';
+  // Everything stays tickable. A disabled box cannot explain itself, and with chains
+  // covering every combination the cases that genuinely cannot be walked are rare — so
+  // the honest thing is to accept the tick and say why it is not being applied.
+  const unavailable = false;
+  const disabled = '';
   const bypass =
     (mode === 'traverse' || mode === 'chain') && shown.replacedKm
       ? `<span class="poi-bypass">bypasses ${km(shown.replacedKm)} km of the base route</span>`
@@ -1740,7 +1748,7 @@ function wireEvents() {
     dayEl.classList.toggle('is-over', f.totalKm > cap);
     dayEl.classList.toggle('is-long', f.totalKm <= cap && f.totalKm >= p.longDayKm);
     dayEl.querySelector('.day-figs').innerHTML =
-      `${km(f.totalKm)} km${f.addedKm > 0 ? ` <span class="plus">(+${km(f.addedKm)})</span>` : ''} <span class="asc">· ${Math.round(f.totalAscent)} m</span>`;
+      `${km(f.totalKm)} km${Math.abs(f.addedKm) > 0.05 ? ` <span class="plus">(${signedKm(f.addedKm)})</span>` : ''} <span class="asc">· ${Math.round(f.totalAscent)} m</span>`;
     for (const row of dayEl.querySelectorAll('.poi')) {
       row.classList.toggle('over', f.totalKm > cap);
     }

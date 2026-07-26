@@ -362,19 +362,29 @@ ev("storePresets([]); state.presets = [];");
   ev(`state.selected.add(${JSON.stringify(sp.id)}); state.selected.add(${JSON.stringify(sf.id)}); state.selected.add(${JSON.stringify(gg.id)});`);
   const f = ev(`dayFigures(currentDays().find((d) => d.day === ${sp.dayByDirection.cw}))`);
   const mode = (id) => f.modes.get(id);
-  check('the cheapest traverse wins the stretch', mode(sp.id) === 'traverse', mode(sp.id));
-  check('the others are excluded, not silently costed',
-        mode(sf.id) === 'excluded' && mode(gg.id) === 'excluded', `${mode(sf.id)}/${mode(gg.id)}`);
-  check('and the reason given is the clash, not "needs doubling back"',
-        f.excludedInfo.get(sf.id)?.reason === 'stretch-taken', f.excludedInfo.get(sf.id)?.reason);
-  check('naming the summit that took it',
-        (f.excludedInfo.get(sf.id)?.blockedBy ?? []).includes(sp.id));
+  // Was: "the cheapest traverse wins the stretch". It no longer should — winning the
+  // stretch alone meant dropping the other two summits, which was the bug.
+  check('the stretch is used by a chain, not a lone traverse', mode(sp.id) === 'chain', mode(sp.id));
+  // With every combination routed, all three are walked as one line instead of two of
+  // them winning and the third being dropped.
+  check('all three are included, as one chained walk',
+        mode(sp.id) === 'chain' && mode(sf.id) === 'chain' && mode(gg.id) === 'chain',
+        `${mode(sf.id)}/${mode(gg.id)}/${mode(sp.id)}`);
+  check('nothing is excluded', f.excluded === 0, `${f.excluded}`);
 
-  // The advice the row gives must actually work.
-  ev(`state.selected.delete(${JSON.stringify(sp.id)});`);
-  const f2 = ev(`dayFigures(currentDays().find((d) => d.day === ${sp.dayByDirection.cw}))`);
-  check('unticking the winner frees the stretch, as the row says',
-        f2.modes.get(sf.id) === 'traverse', f2.modes.get(sf.id));
+  // And the whole cluster at once.
+  const cluster = ['Illgill Head', 'Scafell', 'Emerald Pools', 'Great Gable', 'Scafell Pike', 'Bowfell', 'Crinkle Crags']
+    .map((n) => find(n))
+    .filter(Boolean);
+  ev(`state.selected = new Set(${JSON.stringify(cluster.map((i) => i.id))});`);
+  const fAll = ev(`dayFigures(currentDays().find((d) => d.day === ${sp.dayByDirection.cw}))`);
+  check(`all ${cluster.length} summits in the cluster can be walked together`,
+        fAll.excluded === 0 && cluster.every((i) => fAll.modes.get(i.id) === 'chain'),
+        `excluded=${fAll.excluded}`);
+
+  // Every point stays tickable now, so the reason has somewhere to be shown.
+  check('nothing is disabled in the day list',
+        !ev("renderDays(); document.getElementById('days').innerHTML").includes('disabled'));
   ev("state.selected = new Set(); setMode('over');");
 }
 

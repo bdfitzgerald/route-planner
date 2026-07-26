@@ -573,119 +573,124 @@ for (const key of Object.keys(directions)) {
 const isRecommended = (item, dirKey) => recommended[dirKey].ids.has(item.id);
 
 // --- chained traverses --------------------------------------------------------
-// Where several recommended summits sit on the same stretch, their traverses
-// overlap and splicing them one by one would corrupt the line and double-count
-// the shared climbing. The natural walk is a single line over all of them, so
-// each overlapping group is re-routed as one chain through every summit in route
-// order. Computed only for the recommended set, which keeps it to a handful of
-// routing calls.
+// Overlapping traverses cannot both be spliced: each replaces the same stretch of base
+// route, so taking two would cut the line twice and double-count the shared climbing.
+// Previously only one could win and the rest were dropped, which made ticking a summit
+// appear to do nothing.
+//
+// So every combination is routed as a single line instead. Summits whose traverses
+// overlap form a cluster; for each cluster, every subset of two or more is routed
+// entry -> summits in route order -> exit. Whatever is ticked then has a real walk
+// covering exactly those tops.
+//
+// Bounded by two guards that cannot be relaxed away: the chain may not replace more than
+// planning.maxChainBypassKm of the route, and may not span a camp, which would skip a
+// night. Subsets failing either are never routed.
 const chains = [];
 {
-  const byId = new Map();
-  for (const cat of categories.filter((c) => !isCamp(c))) {
-    for (const item of cat.items) byId.set(item.id, item);
-  }
-  const seenGroups = new Set();
-  for (const key of Object.keys(directions)) {
-    const withTraverse = [...recommended[key].ids]
-      .map((id) => byId.get(id))
-      .filter((i) => i?.traverse)
-      .sort((a, b) => a.traverse.fromKm - b.traverse.fromKm);
+  const MAX_CHAIN_BYPASS_KM = cfg.planning.maxChainBypassKm ?? MAX_BYPASS_KM;
+  const traversable = allDetourItems
+    .filter((i) => i.traverse)
+    .sort((a, b) => a.traverse.fromKm - b.traverse.fromKm);
 
-    // Group by overlapping [fromKm, toKm] ranges.
-    const groups = [];
-    for (const item of withTraverse) {
-      const last = groups[groups.length - 1];
-      if (last && item.traverse.fromKm < last.toKm - 0.01) {
-        last.items.push(item);
-        last.toKm = Math.max(last.toKm, item.traverse.toKm);
-      } else {
-        groups.push({ items: [item], fromKm: item.traverse.fromKm, toKm: item.traverse.toKm });
+  // Cluster by overlapping stretches.
+  const clusters = [];
+  for (const item of traversable) {
+    const last = clusters[clusters.length - 1];
+    if (last && item.traverse.fromKm < last.toKm - 0.01) {
+      last.items.push(item);
+      last.toKm = Math.max(last.toKm, item.traverse.toKm);
+    } else {
+      clusters.push({ items: [item], fromKm: item.traverse.fromKm, toKm: item.traverse.toKm });
+    }
+  }
+
+  const candidates = [];
+  for (const cluster of clusters.filter((c) => c.items.length > 1)) {
+    const n = cluster.items.length;
+    if (n > 12) continue; // 2^n subsets: refuse to enumerate an absurd cluster
+    for (let mask = 1; mask < 1 << n; mask += 1) {
+      const subset = cluster.items.filter((_, k) => mask & (1 << k));
+      if (subset.length < 2) continue;
+      const fromKm = Math.min(...subset.map((i) => i.traverse.fromKm));
+      const toKm = Math.max(...subset.map((i) => i.traverse.toKm));
+      if (toKm - fromKm > MAX_CHAIN_BYPASS_KM) continue;
+      if (spansCamp(fromKm, toKm)) continue;
+      candidates.push({ subset, fromKm, toKm });
+    }
+  }
+  // Smallest first, so a partial failure still leaves the simpler chains available.
+  candidates.sort((a, b) => a.subset.length - b.subset.length || a.fromKm - b.fromKm);
+  console.log(`  chains: routing ${candidates.length} summit combination(s)`);
+
+  const idxAtKm = (targetKm) => {
+    let best = 0;
+    let bestD = Infinity;
+    for (let i = 0; i < cum.length; i += 1) {
+      const d = Math.abs(cum[i] / 1000 - targetKm);
+      if (d < bestD) {
+        bestD = d;
+        best = i;
       }
     }
+    return best;
+  };
 
-    for (const group of groups) {
-      if (group.items.length < 2) continue;
-      const ids = group.items.map((i) => i.id).sort();
-      const groupKey = ids.join('|');
-      if (seenGroups.has(groupKey)) continue;
-      seenGroups.add(groupKey);
+  let adopted = 0;
+  for (const { subset, fromKm, toKm } of candidates) {
+    const aIdx = idxAtKm(fromKm);
+    const bIdx = idxAtKm(toKm);
+    const ordered = subset.slice().sort((a, b) => a.entryKm - b.entryKm);
+    const routedChain = await routing.route(
+      [
+        [track[aIdx][0], track[aIdx][1]],
+        ...ordered.map((i) => [i.lat, i.lon]),
+        [track[bIdx][0], track[bIdx][1]],
+      ],
+      { label: `chain: ${ordered.map((i) => i.title).join(' + ')}` },
+    );
+    if (!routedChain?.points?.length) continue;
 
-      const replacedKm = group.toKm - group.fromKm;
-      if (replacedKm > MAX_BYPASS_KM) continue;
-      if (spansCamp(group.fromKm, group.toKm)) continue;
+    const pts = elevation.attach(routedChain.points);
+    const replacedKm = toKm - fromKm;
+    const netKm = routedChain ? totalDistance(pts) / 1000 - replacedKm : 0;
+    const netAscent = totalAscent(pts, ascentOpts) - baseAscentBetween(aIdx, bIdx);
+    const separateKm = ordered.reduce((sum, i) => sum + i.traverse.addedKm, 0);
+    // Judge it against something achievable. Comparing with "these summits as separate
+    // traverses" was wrong: the traverses overlap, which is the whole reason the chain
+    // exists, so that baseline is impossible and the test threw away the only line that
+    // delivers those tops. Out-and-backs are always available, so that is the real
+    // alternative — and note netKm can legitimately be negative, because a high line can
+    // be shorter than the valley dog-leg it replaces while climbing far more.
+    const doubleBackKm = ordered.reduce((sum, i) => sum + (i.detour.addedKm ?? 0), 0);
+    if (netKm >= doubleBackKm) continue;
 
-      const entry = nearestIndex(track, [
-        track[Math.round((group.fromKm / totalKm) * (track.length - 1))][0],
-        track[Math.round((group.fromKm / totalKm) * (track.length - 1))][1],
-      ]);
-      // Resolve exact entry/exit indices from the km positions.
-      const idxAtKm = (targetKm) => {
-        let best = 0;
-        let bestD = Infinity;
-        for (let i = 0; i < cum.length; i += 1) {
-          const d = Math.abs(cum[i] / 1000 - targetKm);
-          if (d < bestD) {
-            bestD = d;
-            best = i;
-          }
-        }
-        return best;
-      };
-      const aIdx = idxAtKm(group.fromKm);
-      const bIdx = idxAtKm(group.toKm);
-      void entry;
-
-      // Visit the summits in the order the walk reaches them.
-      const ordered = group.items.slice().sort((a, b) => a.entryKm - b.entryKm);
-      const chained = await routing.route(
-        [
-          [track[aIdx][0], track[aIdx][1]],
-          ...ordered.map((i) => [i.lat, i.lon]),
-          [track[bIdx][0], track[bIdx][1]],
-        ],
-        { label: `chain: ${ordered.map((i) => i.title).join(' + ')}` },
-      );
-      if (!chained?.points?.length) continue;
-
-      const pts = elevation.attach(chained.points);
-      const chainKm = totalDistance(pts) / 1000;
-      const netKm = chainKm - replacedKm;
-      const netAscent = totalAscent(pts, ascentOpts) - baseAscentBetween(aIdx, bIdx);
-      const separateKm = ordered.reduce((s, i) => s + i.traverse.addedKm, 0);
-      // Only adopt the chain if it beats doing them as separate traverses.
-      if (netKm >= separateKm) continue;
-
-      const chainPoints = simplify(pts, EXPORT_TOLERANCE_M);
-      chains.push({
-        collects: poisNear(chainPoints, ordered.map((i) => i.id)),
-        id: `chain-${ids.map((i) => i.replace(/^(peak|swim)-/, '')).join('-')}`.slice(0, 90),
-        title: ordered.map((i) => i.title).join(' + '),
-        memberIds: ordered.map((i) => i.id),
-        addedKm: Number(netKm.toFixed(3)),
-        addedAscentM: Number(Math.max(0, netAscent).toFixed(0)),
-        replacedKm: Number(replacedKm.toFixed(3)),
-        fromKm: Number(group.fromKm.toFixed(3)),
-        toKm: Number(group.toKm.toFixed(3)),
-        separateKm: Number(separateKm.toFixed(3)),
-        points: simplify(pts, EXPORT_TOLERANCE_M).map((p) => [
-          Number(p[0].toFixed(6)),
-          Number(p[1].toFixed(6)),
-          p[2] == null ? null : Number(p[2].toFixed(1)),
-        ]),
-      });
-    }
+    const points = simplify(pts, EXPORT_TOLERANCE_M);
+    chains.push({
+      id: `chain-${ordered.map((i) => i.id.replace(/^(peak|swim)-/, '')).join('+')}`.slice(0, 160),
+      title: ordered.map((i) => i.title).join(' + '),
+      memberIds: ordered.map((i) => i.id),
+      collects: poisNear(points, ordered.map((i) => i.id)),
+      addedKm: Number(netKm.toFixed(3)),
+      addedAscentM: Number(Math.max(0, netAscent).toFixed(0)),
+      replacedKm: Number(replacedKm.toFixed(3)),
+      fromKm: Number(fromKm.toFixed(3)),
+      toKm: Number(toKm.toFixed(3)),
+      separateKm: Number(separateKm.toFixed(3)),
+      points: points.map((p) => [
+        Number(p[0].toFixed(6)),
+        Number(p[1].toFixed(6)),
+        p[2] == null ? null : Number(p[2].toFixed(1)),
+      ]),
+    });
+    adopted += 1;
   }
   elevation.flush();
   routing.flush();
-  if (chains.length) {
-    for (const c of chains) {
-      console.log(
-        `  chain: ${c.title} -> +${c.addedKm}km (vs ${c.separateKm}km separate), replaces ${c.replacedKm}km`,
-      );
-    }
-  } else {
-    console.log('  chains: none improved on separate traverses');
+  console.log(`  chains: ${adopted} adopted (beat walking their summits separately)`);
+  const biggest = chains.slice().sort((a, b) => b.memberIds.length - a.memberIds.length)[0];
+  if (biggest) {
+    console.log(`    largest: ${biggest.title} -> +${biggest.addedKm}km (vs ${biggest.separateKm}km separate)`);
   }
 }
 
