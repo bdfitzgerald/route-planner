@@ -71,13 +71,19 @@ npm run deploy:anon            # netlify deploy --dir=site --allow-anonymous
 Authentication for the non-anonymous commands comes from `netlify login` or a
 `NETLIFY_AUTH_TOKEN` environment variable.
 
-### Git-connected Netlify
+### Why the GitHub repository is not connected to Netlify
 
-Commit and push. `netlify.toml` sets `publish = "site"` with no build command, so
-Netlify uploads `site/` as-is. Note the caveat about `site/config.js` under
-[The OS Maps API key](#the-os-maps-api-key) — it is gitignored, so a git deploy falls
-back to OpenStreetMap tiles unless you add a build step that writes it from a Netlify
-environment variable.
+`git@github.com:bdfitzgerald/route-planner.git` is source history only. Deployment is
+`npm run deploy`, on purpose:
+
+- The build calls external APIs, so running it locally means a deploy can never fail
+  because the DEM or routing service is down.
+- `npm run deploy` runs the full test suite first. A push cannot.
+- `site/config.js` carries the OS Maps key and is gitignored, so a git-triggered build
+  would have no key and would fall back to OpenStreetMap tiles.
+
+If you later want push-to-deploy: set `OS_MAPS_KEY` in the Netlify site environment,
+add `command = "npm run build"` to `netlify.toml`, and connect the repository.
 
 `site/` must be committed, since Netlify does not build. `npm run build` writes:
 `route-data.json`, `resolve.js` (generated from `scripts/lib/resolve.mjs`), and

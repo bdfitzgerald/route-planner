@@ -1,7 +1,18 @@
-# The build runs locally, not on Netlify. scripts/build.mjs calls external APIs
-# (DEM elevation, BRouter routing) and its outputs — site/route-data.json and
-# routes/*/gpx-exports/ — are committed. Netlify only serves the static site, so
-# a deploy can never fail because a third-party API is down or rate-limited.
+# Deliberately no build command.
+#
+# The build runs locally: scripts/build.mjs calls external APIs (DEM elevation,
+# BRouter routing) and its outputs — site/route-data.json, site/resolve.js and
+# site/gpx/ — are committed. So a deploy can never fail because a third party is
+# down or rate-limited.
+#
+# Deployment is `npm run deploy`, which builds, runs the tests, and pushes site/
+# with the Netlify CLI. The GitHub repository is source history only and is NOT
+# connected for automatic deploys.
+#
+# If you ever do connect it: site/config.js carries the OS Maps key and is
+# gitignored, so a git-triggered deploy would fall back to OpenStreetMap tiles.
+# To fix that you would set OS_MAPS_KEY in the Netlify site environment and add
+# `command = "npm run build"` below.
 [build]
   publish = "site"
 
