@@ -34,7 +34,12 @@ const walk = (dir) =>
     return e.isDirectory() ? walk(full) : [full];
   });
 
-if (!args.has('--skip-build')) run('Build', process.execPath, ['scripts/build.mjs']);
+// Always production: a zip built in local mode would ship a page expecting a dev API
+// that will not exist on Netlify.
+if (!args.has('--skip-build')) {
+  process.env.APP_MODE = 'production';
+  run('Build (production mode)', process.execPath, ['scripts/build.mjs']);
+}
 if (!args.has('--skip-tests')) {
   run('Verify output', process.execPath, ['scripts/verify.mjs']);
   run('Page boots', process.execPath, ['scripts/test-site.mjs']);
@@ -54,6 +59,10 @@ if (missing.length) {
 // The zip is what gets deployed, so a missing key here means a deployed site with no
 // OS tiles. Warn loudly rather than shipping it silently.
 const runtime = fs.readFileSync(path.join(SITE, 'config.js'), 'utf8');
+if (/"mode":"local"/.test(runtime.replace(/\s/g, ''))) {
+  process.stderr.write('  ✗ site/config.js is in local mode — rebuild with APP_MODE=production\n');
+  process.exit(1);
+}
 if (/"osMapsKey":(null|"")/.test(runtime.replace(/\s/g, ''))) {
   process.stdout.write(
     '  ! no OS Maps key in this build — the deployed site will use OpenStreetMap tiles.\n' +

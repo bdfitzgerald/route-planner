@@ -131,6 +131,33 @@ Two false positives it used to report, now fixed and worth knowing about if you 
 it: `#a8452a` in the CSS is a colour literal, not an id selector; and an exported
 helper used inside its own module is not dead code.
 
+## Local and production mode
+
+`APP_MODE` decides where a saved preset goes, because the two situations are genuinely
+different: locally there is a filesystem, on Netlify there is not, and there is no login
+either way.
+
+| Mode | Set by | A saved preset goes to | Lasts |
+| --- | --- | --- | --- |
+| `local` | `npm run dev` | `routes/<route-id>/presets.json`, via the dev server | permanently, and deploys |
+| `production` | the default, and forced by `deploy`/`package` | the browser's `localStorage` | that browser only |
+
+The page shows which it is next to the presets, so it is never a mystery where a preset
+went.
+
+```bash
+npm run dev        # build in local mode + serve on :8080 with the write API
+```
+
+Planning happens locally: save a preset there and it lands in a committed file, so
+`npm run deploy` publishes it and it is on the phone next time. On the deployed site a
+saved preset stays in that browser — which is the right behaviour for a tweak on the
+hill, not a plan you want to keep. If you do want to keep one made on the phone, use
+**Copy link** and turn it into a shipped preset back at the laptop.
+
+`production` is the default so a stray build can never ship a page expecting a dev API,
+and `npm run package` refuses outright if it finds `mode: "local"` in the config.
+
 ## Shipping presets
 
 There is no login and no backend, so a preset that lives only in one browser is a
@@ -138,8 +165,10 @@ preset you will lose. Anything worth keeping is committed to
 `routes/<route-id>/presets.json` and baked into the build, which puts it on every origin
 — production, previews, and a local dev server — with nothing to import.
 
-The input is the **Copy link** URL from the planner, which already encodes direction,
-peaks mode and the whole selection:
+In local mode you can just use the page: save a preset and it is written to
+`presets.json` for you. The CLI is for turning a **Copy link** URL into a preset —
+handy for a plan made on your phone, since the link already encodes direction, peaks
+mode and the whole selection:
 
 ```bash
 npm run preset list
@@ -381,6 +410,9 @@ not reintroduce a second copy; edit the module and rebuild.
 | `scripts/verify.mjs` | Asserts the output is internally consistent |
 | `scripts/test-site.mjs` | Runs site/app.js headlessly against the real data |
 | `scripts/test-features.mjs` | Behavioural tests for persistence and search |
+| `scripts/test-server.mjs` | Tests the dev server's preset API against a real file |
+| `scripts/serve.mjs` | Dev server: serves `site/` plus the local preset API |
+| `scripts/preset.mjs` | Turn a Copy link URL into a shipped preset |
 | `scripts/lib/resolve.mjs` | The single shared resolver (see above) |
 | `scripts/research/try-traverse.mjs` | Explore traverse options for named summits |
 | `scripts/research/screen-peaks.mjs` | Grid-ref → WGS84 + DEM height validation |

@@ -470,3 +470,15 @@ kbd {
   color: var(--ink);
 }
 #confirm-area:focus { outline: none; border-color: var(--ink); }
+
+.mode-badge {
+  font-family: var(--mono);
+  font-size: 0.53rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 0.15rem 0.35rem;
+}
+.mode-badge.local { color: var(--green); border-color: var(--green); }

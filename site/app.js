@@ -8,6 +8,12 @@
 
 // Supplied by site/config.js, which the build generates from OS_MAPS_KEY. Absent in a
 // checkout with no key configured, in which case OpenStreetMap is used instead.
+// 'local' when served by scripts/serve.mjs, which offers a write API so a saved preset
+// lands in routes/<id>/presets.json permanently. 'production' on the deployed site,
+// where there is no filesystem: presets there are browser-local by necessity.
+const APP_MODE = globalThis.APP_CONFIG?.mode === 'local' ? 'local' : 'production';
+const IS_LOCAL = APP_MODE === 'local';
+
 const OS_KEY = globalThis.APP_CONFIG?.osMapsKey ?? null;
 const HAS_OS = Boolean(OS_KEY);
 const TILES = {
@@ -36,6 +42,7 @@ const state = {
   paletteOpen: false,
   paletteRows: [],
   presets: [],
+  localPresets: null, // presets.json as served by the dev server, local mode only
   basePresetName: null, // the saved preset being worked from, for re-saving
   restoring: false,
 };
@@ -105,13 +112,64 @@ const presetsKey = () => `route-planner:${state.data.route.id}:presets:v1`;
 // routes/<id>/presets.json and rebuilding.
 function shippedPresets() {
   const valid = new Set(allDetourItems().map((i) => i.id));
-  return (state.data.shippedPresets ?? []).map((p) => ({
+  // Locally the dev server hands us presets.json live, so a save shows up immediately
+  // without a rebuild. In production they come baked into route-data.json.
+  const source = IS_LOCAL && state.localPresets ? state.localPresets : (state.data.shippedPresets ?? []);
+  return source.map((p) => ({
     name: p.name,
     ids: p.ids.filter((id) => valid.has(id)),
     direction: state.data.directions[p.direction] ? p.direction : null,
     mode: ['over', 'over-only', 'back'].includes(p.mode) ? p.mode : null,
     shipped: true,
   }));
+}
+
+// --- local mode: presets persist to disk through the dev server ------------------
+async function fetchLocalPresets() {
+  try {
+    const res = await fetch('/api/presets');
+    if (!res.ok) return null;
+    return (await res.json()).presets ?? [];
+  } catch {
+    // Dev server not running: fall back to whatever the build baked in.
+    return null;
+  }
+}
+
+// Returns 'saved' | 'exists' | 'error'.
+async function saveLocalPreset(name, { overwrite = false } = {}) {
+  try {
+    const res = await fetch('/api/presets', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name,
+        ids: [...state.selected],
+        direction: state.direction,
+        mode: state.mode,
+        overwrite,
+      }),
+    });
+    if (res.status === 409) return 'exists';
+    if (!res.ok) return 'error';
+    state.localPresets = (await res.json()).presets ?? [];
+    state.basePresetName = name.trim();
+    return 'saved';
+  } catch {
+    return 'error';
+  }
+}
+
+async function deleteLocalPreset(name) {
+  try {
+    const res = await fetch(`/api/presets/${encodeURIComponent(name)}`, { method: 'DELETE' });
+    if (!res.ok) return false;
+    state.localPresets = (await res.json()).presets ?? [];
+    if (state.basePresetName === name) state.basePresetName = null;
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function loadPresets() {
@@ -237,9 +295,10 @@ const isModified = () => activePreset() == null;
 // working from a saved preset, or it already matches.
 function updatablePreset() {
   if (!state.basePresetName || !isModified()) return null;
-  // Only a locally-saved preset can be updated from the browser; a shipped one is
-  // changed with scripts/preset.mjs and a rebuild.
-  return (state.presets ?? []).find((p) => p.name === state.basePresetName) ?? null;
+  // Locally, presets.json is writable, so a shipped preset can be updated in place.
+  // In production it cannot: there is no filesystem, only this browser.
+  const pool = IS_LOCAL ? allPresets() : (state.presets ?? []);
+  return pool.find((p) => p.name === state.basePresetName) ?? null;
 }
 
 /* ---------------- shareable URL ---------------- */
@@ -1071,11 +1130,11 @@ function renderPresets() {
   }
   for (const p of allPresets()) {
     const on = active?.kind === 'custom' && active.key === p.name;
-    if (p.shipped) {
-      // No delete: it comes from routes/<id>/presets.json, not this browser.
+    if (p.shipped && !IS_LOCAL) {
+      // No delete in production: it comes from the build, not this browser.
       parts.push(
         `<button data-custom="${escapeAttr(p.name)}" aria-pressed="${on}" ` +
-          `title="Ships with the site — edit with scripts/preset.mjs">${p.name}</button>`,
+          `title="Ships with the site — edit it locally and deploy">${p.name}</button>`,
       );
     } else {
       parts.push(
@@ -1084,6 +1143,11 @@ function renderPresets() {
       );
     }
   }
+  parts.push(
+    IS_LOCAL
+      ? '<span class="mode-badge local" title="Saving a preset writes it to routes/&lt;route&gt;/presets.json, which deploys with the site">local</span>'
+      : '<span class="mode-badge" title="Saving a preset stores it in this browser only. To keep one, save it locally and deploy.">this browser</span>',
+  );
   if (!active) {
     parts.push(
       state.basePresetName
@@ -1246,12 +1310,20 @@ async function switchPreset(apply) {
 // in the prompt with a suggested name the user can still edit.
 // Overwrite the preset being worked from, directly. The button names it, so clicking
 // it is the confirmation.
-function updateCurrentPreset() {
+async function updateCurrentPreset() {
   const target = updatablePreset();
   if (!target) return false;
-  savePreset(target.name, { overwrite: true });
+  if (IS_LOCAL) {
+    const r = await saveLocalPreset(target.name, { overwrite: true });
+    if (r !== 'saved') {
+      toast('Could not write to presets.json — is the dev server running?');
+      return false;
+    }
+  } else {
+    savePreset(target.name, { overwrite: true });
+  }
   renderPresets();
-  toast(`Updated “${target.name}” — ${state.selected.size} point(s)`);
+  toast(`Updated “${target.name}” — ${state.selected.size} point(s)${IS_LOCAL ? ', saved to disk' : ''}`);
   return true;
 }
 
@@ -1270,15 +1342,23 @@ async function promptForPresetName() {
     if (answer === 'cancel') return false;
 
     const name = $('confirm-input').value;
-    const result = savePreset(name);
+    const result = IS_LOCAL
+      ? name.trim()
+        ? await saveLocalPreset(name)
+        : 'invalid'
+      : savePreset(name);
 
+    if (result === 'error') {
+      toast('Could not write to presets.json — is the dev server running?');
+      return false;
+    }
     if (result === 'invalid') {
       toast('That preset needs a name');
       initial = name;
       continue;
     }
     if (result === 'exists') {
-      const existing = loadPresets().find((p) => p.name.toLowerCase() === name.trim().toLowerCase());
+      const existing = allPresets().find((p) => p.name.toLowerCase() === name.trim().toLowerCase());
       const choice = await showDialog({
         title: `"${existing.name}" already exists`,
         body: `It currently holds ${existing.ids.length} point(s). Overwrite it with your ${state.selected.size}, or keep both?`,
@@ -1287,9 +1367,10 @@ async function promptForPresetName() {
       });
       if (choice === 'cancel') return false;
       if (choice === 'ok') {
-        savePreset(name, { overwrite: true });
+        if (IS_LOCAL) await saveLocalPreset(name, { overwrite: true });
+        else savePreset(name, { overwrite: true });
         renderPresets();
-        toast(`Updated "${existing.name}"`);
+        toast(`Updated "${existing.name}"${IS_LOCAL ? ' in presets.json' : ''}`);
         return true;
       }
       initial = uniquePresetName(name);
@@ -1297,7 +1378,11 @@ async function promptForPresetName() {
     }
 
     renderPresets();
-    toast(`Saved preset "${name.trim()}"`);
+    toast(
+      IS_LOCAL
+        ? `Saved "${name.trim()}" to presets.json — deploy to publish it`
+        : `Saved "${name.trim()}" in this browser only`,
+    );
     return true;
   }
   return false;
@@ -1362,11 +1447,19 @@ function wireEvents() {
         title: `Delete "${name}"?`,
         body: 'This removes the saved preset. Your current selection is untouched.',
         okLabel: 'Delete',
-      }).then((a) => {
+      }).then(async (a) => {
         if (a !== 'ok') return;
-        deletePreset(name);
+        const shipped = shippedPresets().some((p) => p.name === name);
+        if (IS_LOCAL && shipped) {
+          if (!(await deleteLocalPreset(name))) {
+            toast('Could not write to presets.json — is the dev server running?');
+            return;
+          }
+        } else {
+          deletePreset(name);
+        }
         renderPresets();
-        toast(`Deleted "${name}"`);
+        toast(`Deleted "${name}"${IS_LOCAL && shipped ? ' from presets.json' : ''}`);
       });
       return;
     }
@@ -1667,6 +1760,9 @@ async function boot() {
 
   // Restore the previous session if there is one, otherwise start from the
   // recommended plan.
+  // Local mode: presets.json is the store, fetched live so a save shows up without a
+  // rebuild. If the dev server is not answering, fall back to what the build baked in.
+  if (IS_LOCAL) state.localPresets = await fetchLocalPresets();
   state.presets = loadPresets();
 
   state.restoring = true;
