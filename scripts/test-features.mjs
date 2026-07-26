@@ -23,7 +23,7 @@ function makeCtx(store) {
       addEventListener(ev, fn){ handlers[`${id}:${ev}`] = fn; },
       querySelectorAll(){ return [] }, querySelector(){ return null }, tagName: 'DIV',
       closest(){ return null }, remove(){}, appendChild(){}, click(){},
-      select(){}, focus(){}, blur(){}, scrollIntoView(){},
+      select(){}, focus(){}, blur(){}, scrollIntoView(){}, setSelectionRange(){},
       getBoundingClientRect(){ return { height: 500, width: 900 } },
     };
   }
@@ -33,6 +33,7 @@ function makeCtx(store) {
     getElementById(id){ if(!registry.has(id)) registry.set(id, el(id)); return registry.get(id); },
     querySelectorAll(){ return [] }, createElement(){ return el('c') },
     body: { appendChild(){}, removeChild(){} },
+    execCommand(){ return true },
   };
   const layer = () => ({ addTo(){ return this }, remove(){}, clearLayers(){}, on(){},
     bindPopup(){ return this }, openPopup(){}, getBounds(){ return { isValid: () => true, pad(){return this} } } });
@@ -316,6 +317,40 @@ if (shipped.length) {
         ev('loadPresets()').every(p => p.name.toLowerCase() !== shipped[0].name.toLowerCase()));
 }
 ev("storePresets([]); state.presets = [];");
+
+// --- a saved preset survives a refresh and stays active ---
+// Regression: savePreset stored the preset but not the selection, so after a reload the
+// selection reverted to whatever was last persisted and the preset looked inactive —
+// indistinguishable from the save not having worked.
+{
+  const store2 = new Map();
+  const a = makeCtx(store2);
+  await new Promise((r) => setTimeout(r, 350));
+  const sa = a.evalIn('state');
+  sa.selected = new Set(a.evalIn('canonicalIds(allDetourItems())').slice(0, 7));
+  check('saving reports success', a.evalIn("savePreset('Refresh test')") === 'saved');
+  check('active immediately after saving', a.evalIn('activePreset()')?.key === 'Refresh test');
+
+  const b = makeCtx(store2);
+  await new Promise((r) => setTimeout(r, 350));
+  check('after a refresh the preset still exists',
+        b.evalIn('allPresets()').some((p) => p.name === 'Refresh test'));
+  check('after a refresh the selection is the one that was saved',
+        b.evalIn('state').selected.size === 7, `${b.evalIn('state').selected.size} points`);
+  check('after a refresh it is still the active preset',
+        b.evalIn('activePreset()')?.key === 'Refresh test',
+        JSON.stringify(b.evalIn('activePreset()')));
+  check('and it is remembered as the one being worked from',
+        b.evalIn('state').basePresetName === 'Refresh test', b.evalIn('state').basePresetName ?? 'null');
+}
+
+// --- clipboard ---
+// navigator.clipboard is unavailable over plain http, which is how a local dev domain
+// is served, so the fallback path is the one that actually matters day to day.
+check('copies when navigator.clipboard exists', (await ev("copyToClipboard('x')")) === true);
+ev("navigator.clipboard = undefined;");
+check('still copies without it, via execCommand', (await ev("copyToClipboard('y')")) === true);
+ev("navigator.clipboard = { writeText: async () => {} };");
 
 // --- share encoding comes from the generated module, shared with the CLI ---
 check('the generated share module is loaded', typeof ev('window.encodeShare') === 'function');

@@ -32,6 +32,7 @@ const document = {
   querySelectorAll(){ return [] },
   createElement(){ return el('created') },
   body: { appendChild(){}, removeChild(){} },
+    execCommand(){ return true },
 };
 
 const violations = [];

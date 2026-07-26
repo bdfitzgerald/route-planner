@@ -154,6 +154,7 @@ async function saveLocalPreset(name, { overwrite = false } = {}) {
     if (!res.ok) return 'error';
     state.localPresets = (await res.json()).presets ?? [];
     state.basePresetName = name.trim();
+    saveState();
     return 'saved';
   } catch {
     return 'error';
@@ -166,6 +167,7 @@ async function deleteLocalPreset(name) {
     if (!res.ok) return false;
     state.localPresets = (await res.json()).presets ?? [];
     if (state.basePresetName === name) state.basePresetName = null;
+    saveState();
     return true;
   } catch {
     return false;
@@ -218,6 +220,10 @@ function savePreset(name, { overwrite = false } = {}) {
   storePresets(kept);
   state.presets = kept;
   state.basePresetName = entry.name;
+  // Persist the selection too. Without this a refresh restores whatever selection was
+  // last saved by some other action, so the preset just saved is no longer the active
+  // one — it looks as though the save did not stick.
+  saveState();
   return 'saved';
 }
 
@@ -237,6 +243,7 @@ function deletePreset(name) {
   storePresets(list);
   state.presets = list;
   if (state.basePresetName === name) state.basePresetName = null;
+  saveState();
 }
 
 // The id set each built-in preset would produce, so the current selection can be
@@ -1206,6 +1213,7 @@ function showDialog({
   altLabel = null,
   prompt = false,
   initial = '',
+  value = null,
 }) {
   return new Promise((resolve) => {
     const el = $('confirm');
@@ -1216,11 +1224,22 @@ function showDialog({
     alt.hidden = !altLabel;
     if (altLabel) alt.textContent = altLabel;
     const wrap = $('confirm-input-wrap');
-    wrap.hidden = !prompt;
+    wrap.hidden = !prompt && value == null;
     const input = $('confirm-input');
+    input.hidden = !prompt;
     if (prompt) input.value = initial;
+    // A share link is far too long for a one-line input and must wrap, so it gets its
+    // own read-only field rather than being crammed into the body text.
+    const field = $('confirm-value');
+    field.hidden = value == null;
+    if (value != null) field.value = value;
     el.hidden = false;
     if (prompt) input.focus();
+    else if (value != null) {
+      // Pre-selected, so it is one keystroke away even if the copy failed.
+      field.focus();
+      field.select();
+    }
 
     const done = (result) => {
       el.hidden = true;
@@ -1231,6 +1250,37 @@ function showDialog({
     state.dialogResolve = done;
     state.dialogIsPrompt = prompt;
   });
+}
+
+// navigator.clipboard only exists in a secure context, so it is unavailable over plain
+// http — which is exactly how a local dev domain like route-planner.test is served.
+// Fall back to the old selection-and-execCommand trick, which has no such requirement.
+async function copyToClipboard(text) {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {
+    // Blocked or unavailable: try the fallback rather than giving up.
+  }
+  try {
+    const scratch = document.createElement('textarea');
+    scratch.value = text;
+    // Off-screen but focusable: execCommand needs a real selection in the document.
+    scratch.setAttribute('readonly', '');
+    scratch.style.position = 'fixed';
+    scratch.style.top = '-1000px';
+    scratch.style.opacity = '0';
+    document.body.appendChild(scratch);
+    scratch.select();
+    scratch.setSelectionRange(0, text.length);
+    const ok = document.execCommand('copy');
+    scratch.remove();
+    return ok;
+  } catch {
+    return false;
+  }
 }
 
 function toast(message) {
@@ -1473,13 +1523,16 @@ function wireEvents() {
 
   $('copy-link').addEventListener('click', async () => {
     const url = shareUrl();
-    try {
-      await navigator.clipboard.writeText(url);
-      toast('Link copied — it carries your direction, peaks setting and selection');
-    } catch {
-      // Clipboard blocked (no permission, or not a secure context): show it instead.
-      await showDialog({ title: 'Shareable link', body: url, okLabel: 'Close' });
-    }
+    const copied = await copyToClipboard(url);
+    await showDialog({
+      title: copied ? 'Link copied' : 'Shareable link',
+      body: copied
+        ? 'On your clipboard. It carries the direction, the peaks setting and every point you have selected.'
+        : 'Could not reach the clipboard, so here it is — already selected, so Cmd-C or Ctrl-C will take it.',
+      value: url,
+      okLabel: 'Close',
+    });
+    if (copied) toast('Link copied');
   });
 
   const dialogAnswer = (which) => {

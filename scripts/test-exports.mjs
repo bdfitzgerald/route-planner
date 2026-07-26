@@ -16,13 +16,13 @@ function boot() {
     set textContent(v){this._text=String(v)},get textContent(){return this._text},
     setAttribute(){},getAttribute(){return null},addEventListener(){},tagName:'DIV',
     querySelectorAll(){return[]},querySelector(){return null},closest(){return null},
-    remove(){},appendChild(){},click(){},select(){},focus(){},blur(){},scrollIntoView(){},hidden:false,
+    remove(){},appendChild(){},click(){},select(){},focus(){},blur(){},scrollIntoView(){},hidden:false,setSelectionRange(){},
     getBoundingClientRect(){return{height:500,width:900}}};}
   const reg=new Map();
   const document={title:'',addEventListener(){},
     getElementById(id){if(!reg.has(id))reg.set(id,el(id));return reg.get(id)},
     querySelectorAll(){return[]},createElement(){return el('c')},
-    body:{appendChild(){},removeChild(){}}};
+    body:{appendChild(){},removeChild(){}},execCommand(){return true}};
   // Track what the map is asked to do, and let the test move the view.
   const mapCalls=[];
   const layer=()=>({addTo(){return this},remove(){},clearLayers(){},on(){},

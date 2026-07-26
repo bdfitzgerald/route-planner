@@ -408,7 +408,13 @@ kbd {
   margin: 0 0 0.4rem;
   font-weight: 700;
 }
-.confirm-panel p { font-size: 0.85rem; color: var(--ink-soft); margin: 0 0 0.9rem; }
+.confirm-panel p {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin: 0 0 0.9rem;
+  /* A share link has no spaces, so without this it runs straight out of the panel. */
+  overflow-wrap: anywhere;
+}
 #confirm-input {
   width: 100%;
   font-family: var(--sans);
@@ -482,3 +488,21 @@ kbd {
   padding: 0.15rem 0.35rem;
 }
 .mode-badge.local { color: var(--green); border-color: var(--green); }
+
+/* A long value shown for copying: wraps, selectable, monospace so it reads as data. */
+#confirm-value {
+  width: 100%;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  line-height: 1.6;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  margin-bottom: 0.9rem;
+  background: var(--paper-2);
+  color: var(--ink);
+  resize: vertical;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+#confirm-value:focus { outline: none; border-color: var(--ink); }
