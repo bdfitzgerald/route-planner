@@ -46,11 +46,38 @@ archive root as the site root, so zipping the folder itself would serve the page
 
 Current output: 36 files, 6.04 MB on disk, **0.84 MB zipped**.
 
-Other options if you prefer:
+### Netlify CLI
 
-- **Git-connected Netlify** — commit and push. `netlify.toml` sets `publish = "site"`
-  with no build command, so Netlify uploads `site/` as-is.
-- **CLI** — `netlify deploy --prod --dir=site`.
+Better than Drop for repeat deploys, because it goes to the **same site and URL** every
+time. Drop creates a new site on each upload.
+
+```bash
+npx netlify-cli login          # once
+npx netlify-cli link           # once, to bind this folder to the existing site
+npm run deploy                 # build + test + deploy to production
+npm run deploy:preview         # same, but a preview URL instead of production
+```
+
+`npm run deploy` runs the build and all four test suites first, so nothing unverified
+reaches a URL. It sends `site/` directly — no zip needed.
+
+There is also a true equivalent of Drop's anonymous upload, which needs no login and
+gives you an hour to claim the site:
+
+```bash
+npm run deploy:anon            # netlify deploy --dir=site --allow-anonymous
+```
+
+Authentication for the non-anonymous commands comes from `netlify login` or a
+`NETLIFY_AUTH_TOKEN` environment variable.
+
+### Git-connected Netlify
+
+Commit and push. `netlify.toml` sets `publish = "site"` with no build command, so
+Netlify uploads `site/` as-is. Note the caveat about `site/config.js` under
+[The OS Maps API key](#the-os-maps-api-key) — it is gitignored, so a git deploy falls
+back to OpenStreetMap tiles unless you add a build step that writes it from a Netlify
+environment variable.
 
 `site/` must be committed, since Netlify does not build. `npm run build` writes:
 `route-data.json`, `resolve.js` (generated from `scripts/lib/resolve.mjs`), and

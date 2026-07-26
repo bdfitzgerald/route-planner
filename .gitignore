@@ -12,3 +12,6 @@ dist/
 # repository never does.
 .env
 site/config.js
+
+# Netlify CLI link state (site id, local only)
+.netlify/
