@@ -1,0 +1,60 @@
+#!/bin/sh
+# Pre-commit gate. Installed with `npm run hooks:install`, which points
+# core.hooksPath at this directory — so the hook is committed and shared rather than
+# living untracked in .git/hooks, and needs no husky or other dependency.
+#
+# Blocks on:
+#   - lint errors (warnings are reported, not blocking)
+#   - the generated browser copies drifting from their sources
+#
+# Reports without blocking:
+#   - the analysis summary
+#
+# Deliberately not running the test suite: it is only ~5s, so add `npm test` below if
+# you want it. Bypass the whole hook with `git commit --no-verify`.
+
+set -e
+FAILED=0
+
+printf '\n\033[1mpre-commit\033[0m\n'
+
+# --- lint -----------------------------------------------------------------------
+# oxlint exits non-zero only for errors, so its exit code is the gate. If it cannot run
+# at all (no network on a cold npx cache) warn rather than block: making commits
+# impossible offline is worse than deferring the check.
+printf '  lint          '
+if LINT_OUT=$(npm run lint --silent 2>&1); then
+  WARNINGS=$(printf '%s' "$LINT_OUT" | grep -c 'warning' || true)
+  printf '\033[32mok\033[0m (%s warning(s))\n' "$WARNINGS"
+elif printf '%s' "$LINT_OUT" | grep -qiE 'ENOTFOUND|ETIMEDOUT|EAI_AGAIN|network|registry'; then
+  printf '\033[33mskipped\033[0m — could not fetch the linter, commit allowed\n'
+else
+  printf '\033[31mERRORS\033[0m\n'
+  printf '%s\n' "$LINT_OUT" | grep 'error' | sed 's/^/    /'
+  FAILED=1
+fi
+
+# --- generated files in sync ----------------------------------------------------
+# site/resolve.js and site/share.js are generated from scripts/lib/*.mjs. Committing a
+# source change without rebuilding ships a page whose logic disagrees with the exports —
+# the exact class of bug that caused several silent mismatches here.
+printf '  generated     '
+if DRIFT=$(node scripts/check-generated.mjs 2>&1); then
+  printf '\033[32min sync\033[0m\n'
+else
+  printf '\033[31mSTALE\033[0m\n'
+  printf '%s\n' "$DRIFT" | sed 's/^/    /'
+  FAILED=1
+fi
+
+# --- analysis (informational) ---------------------------------------------------
+printf '  analysis\n'
+node scripts/analyse.mjs 2>/dev/null | sed -n '/^Summary/,$p' | sed 's/^/    /' || true
+
+if [ "$FAILED" -ne 0 ]; then
+  printf '\n\033[31mCommit blocked.\033[0m Fix the above, or bypass with --no-verify.\n\n'
+  exit 1
+fi
+
+printf '\n'
+exit 0

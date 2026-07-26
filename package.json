@@ -19,7 +19,7 @@
     "lint:dead": "npx --yes knip@latest --no-progress",
     "format:check": "npx --yes prettier@latest --check .",
     "format": "npx --yes prettier@latest --write .",
-    "check": "npm run lint && npm test",
+    "check": "npm run lint && node scripts/check-generated.mjs && npm test",
     "deploy": "APP_MODE=production npm run build && npm run check && npx --yes netlify-cli@latest deploy --prod --dir=site",
     "deploy:preview": "APP_MODE=production npm run build && npm run check && npx --yes netlify-cli@latest deploy --dir=site",
     "deploy:anon": "APP_MODE=production npm run build && npm run check && npx --yes netlify-cli@latest deploy --dir=site --allow-anonymous",
@@ -27,7 +27,9 @@
     "preset:list": "node scripts/preset.mjs list",
     "build:local": "APP_MODE=local node scripts/build.mjs",
     "dev": "APP_MODE=local node scripts/build.mjs && node scripts/serve.mjs",
-    "test:server": "node scripts/test-server.mjs"
+    "test:server": "node scripts/test-server.mjs",
+    "hooks:install": "git config core.hooksPath .githooks && echo \"pre-commit hook installed (bypass with --no-verify)\"",
+    "check:generated": "node scripts/check-generated.mjs"
   },
   "engines": {
     "node": ">=20"

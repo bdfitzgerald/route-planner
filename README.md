@@ -186,6 +186,30 @@ cannot disagree. A link made against an older build fails the fingerprint check 
 refused with an explanation, rather than being decoded into a different set of points.
 Stale ids in a committed preset are dropped at build time with a warning.
 
+## Pre-commit hook
+
+```bash
+npm run hooks:install      # points core.hooksPath at .githooks
+```
+
+Committed and shared rather than living untracked in `.git/hooks`, and with no husky or
+other dependency. It takes under a second and:
+
+- **blocks on lint errors** — warnings are counted and reported, not blocking, since
+  several are deliberate (see below)
+- **blocks if the generated browser copies are stale.** `site/resolve.js` and
+  `site/share.js` come from `scripts/lib/*.mjs`; committing a source edit without
+  rebuilding ships a page whose logic disagrees with the exports and the CLI, which on
+  this project has repeatedly meant the figures shown not matching the GPX downloaded
+- **reports the analysis summary** without blocking
+
+It does **not** run the tests. They only take ~5s, so add `npm test` to
+`.githooks/pre-commit` if you want that too. `npm run check` runs all three.
+
+If the linter cannot be fetched (no network, cold `npx` cache) the hook warns and lets
+the commit through — refusing to commit offline is worse than deferring the check.
+Bypass entirely with `git commit --no-verify`.
+
 ## Linting
 
 Nothing is installed — everything runs through `npx`, so there is no `node_modules`.
