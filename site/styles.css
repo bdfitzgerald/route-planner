@@ -103,11 +103,42 @@ button.alt[aria-pressed='true'] { background: var(--accent-2); border-color: var
 button:disabled { opacity: 0.45; cursor: not-allowed; }
 
 /* ---------- map ---------- */
+.map-wrap { position: relative; }
 #map {
   height: min(60vh, 560px);
   border: 1px solid var(--rule);
   border-radius: 2px;
   background: var(--paper-2);
+}
+/* Above Leaflet's own controls, which sit at z-index 1000. */
+.locate {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  z-index: 1100;
+  border: 1px solid var(--ink);
+  border-radius: 3px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 20%);
+}
+.locate.on { background: #1f6feb; border-color: #1f6feb; color: #fff; }
+.locate:disabled { opacity: 0.45; cursor: not-allowed; }
+.locate-status { color: #1f6feb; }
+/* The dot is deliberately plain: a heading arrow would imply a bearing this does not have. */
+.me {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #1f6feb;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 35%);
 }
 .map-note {
   font-family: var(--mono);

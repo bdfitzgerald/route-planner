@@ -359,6 +359,14 @@ let tileLayer;
 let baseLine;
 let detourLayer;
 let markerLayer;
+// Deliberately its own layer. renderMap() clears markerLayer on every change, so a
+// position dot living there would blink out the moment you ticked a peak.
+let locationLayer;
+
+// Kept out of `state` on purpose: state is what saveState() writes to localStorage, and
+// resuming location tracking on page load — without the button being pressed — is not
+// something a reload should ever do silently.
+const geo = { watchId: null, marker: null, ring: null, centred: false };
 
 const $ = (id) => document.getElementById(id);
 const km = (v) => v.toFixed(1);
@@ -924,6 +932,112 @@ function focusItem(id) {
     map.panTo([item.lat, item.lon]);
     marker.openPopup();
   }
+}
+
+// --- where am I ---------------------------------------------------------------------
+// Enough to spot yourself against the line on the fell. Not navigation: no heading, no
+// off-route alerting, and the accuracy ring is there precisely so a loose fix does not
+// read as a confident one.
+
+const GEO_MESSAGE = {
+  1: 'Location permission refused. Allow it for this site in your browser settings.',
+  2: 'No position available — no GPS or network fix right now.',
+  3: 'Timed out waiting for a fix. Under open sky it usually comes within a minute.',
+};
+
+// Geolocation needs a secure context: https, or localhost. Served over plain http from a
+// LAN address the browser refuses outright, so say so rather than appear broken.
+function locateUnavailableReason() {
+  // `typeof`, not `navigator?.` — optional chaining still throws ReferenceError on an
+  // undeclared global, which is how this took the whole boot down once.
+  if (typeof navigator === 'undefined' || !navigator.geolocation) {
+    return 'This browser has no location support.';
+  }
+  if (window.isSecureContext === false) return 'Location needs https, or localhost.';
+  return null;
+}
+
+function setLocateStatus(msg) {
+  const el = $('locate-status');
+  if (el) el.textContent = msg ?? '';
+}
+
+function setLocateButton(on) {
+  const btn = $('locate');
+  if (!btn) return;
+  btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  btn.classList.toggle('on', on);
+  btn.textContent = on ? 'Stop locating' : 'Locate me';
+}
+
+function onPosition(pos) {
+  const { latitude, longitude, accuracy } = pos.coords;
+  if (!map || !locationLayer) return;
+  if (geo.marker) {
+    geo.marker.setLatLng([latitude, longitude]);
+    geo.ring.setLatLng([latitude, longitude]);
+    geo.ring.setRadius(accuracy);
+  } else {
+    geo.ring = L.circle([latitude, longitude], {
+      radius: accuracy,
+      color: '#1f6feb',
+      weight: 1,
+      fillColor: '#1f6feb',
+      fillOpacity: 0.12,
+      interactive: false,
+    }).addTo(locationLayer);
+    geo.marker = L.marker([latitude, longitude], {
+      icon: L.divIcon({ className: '', html: '<div class="me"></div>', iconSize: [16, 16], iconAnchor: [8, 8] }),
+      zIndexOffset: 1200,
+      interactive: false,
+    }).addTo(locationLayer);
+  }
+  // Only the first fix moves the map. After that you may be panning around deliberately,
+  // and having the view yanked back every few seconds makes it unusable.
+  if (!geo.centred) {
+    map.setView([latitude, longitude], Math.max(map.getZoom?.() ?? 13, 13));
+    geo.centred = true;
+  }
+  setLocateStatus(`You are here · ±${Math.round(accuracy)} m`);
+}
+
+function onPositionError(err) {
+  stopLocate();
+  setLocateStatus(GEO_MESSAGE[err?.code] ?? `Could not get a position${err?.message ? ` (${err.message})` : ''}.`);
+}
+
+function startLocate() {
+  const reason = locateUnavailableReason();
+  if (reason) {
+    setLocateStatus(reason);
+    return;
+  }
+  geo.centred = false;
+  setLocateStatus('Waiting for a fix…');
+  setLocateButton(true);
+  geo.watchId = navigator.geolocation.watchPosition(onPosition, onPositionError, {
+    enableHighAccuracy: true,
+    maximumAge: 15000,
+    timeout: 20000,
+  });
+}
+
+function stopLocate() {
+  if (geo.watchId != null) {
+    navigator.geolocation.clearWatch(geo.watchId);
+    geo.watchId = null;
+  }
+  locationLayer?.clearLayers();
+  geo.marker = null;
+  geo.ring = null;
+  geo.centred = false;
+  setLocateButton(false);
+  setLocateStatus('');
+}
+
+function toggleLocate() {
+  if (geo.watchId != null) stopLocate();
+  else startLocate();
 }
 
 function renderMap() {
@@ -1720,6 +1834,10 @@ function wireEvents() {
     if (e.target.closest('[data-palette-close]')) closePalette();
   });
 
+  // Only ever from a press. Asking for a position on page load would prompt every visitor
+  // for no reason, and start tracking someone who never asked to be tracked.
+  $('locate')?.addEventListener('click', toggleLocate);
+
   // Add/remove straight from a map popup. Delegated, because renderMap() destroys and
   // rebuilds every popup, so there is nothing stable to bind to. Capture phase: Leaflet
   // calls disableClickPropagation on the popup wrapper, which stops mousedown rather
@@ -1896,6 +2014,7 @@ async function boot() {
 
       detourLayer = L.layerGroup().addTo(map);
       markerLayer = L.layerGroup().addTo(map);
+      locationLayer = L.layerGroup().addTo(map);
       const cfg = TILES[state.basemap];
       tileLayer = L.tileLayer(cfg.url, {
         attribution: cfg.attribution,
@@ -1915,6 +2034,17 @@ async function boot() {
       console.error('Map initialisation failed:', err);
       map = null;
       initMapFailed(`The map could not start: ${err.message}`);
+    }
+
+    // Nothing to plot a position on without a map, and nothing to plot it with outside a
+    // secure context — in either case say why rather than offer a button that does nothing.
+    const locateBtn = $('locate');
+    if (locateBtn) {
+      const reason = !map ? 'No map to show your position on.' : locateUnavailableReason();
+      if (reason) {
+        locateBtn.disabled = true;
+        locateBtn.title = reason;
+      }
     }
   }
 

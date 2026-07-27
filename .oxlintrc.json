@@ -64,6 +64,10 @@
           "_pts",
           "_popupHtml",
           "_opened",
+          "_kind",
+          "_children",
+          "_latlng",
+          "_radius",
           "_isMap",
           "__isMap"
         ]

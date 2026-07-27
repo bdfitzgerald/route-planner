@@ -50,6 +50,7 @@ const layer = (pts) => ({
     return this;
   },
   remove(){}, clearLayers(){}, on(){}, bindPopup(){ return this },
+  setLatLng(){ return this }, setRadius(){ return this },
   getBounds(){ return bounds(pts) },
 });
 const L = {
@@ -58,9 +59,11 @@ const L = {
     setView(){ mapHasView = true; return this },
     fitBounds(b){ if (!b) throw new TypeError("Cannot read properties of undefined (reading 'min')"); mapHasView = true; return this },
     remove(){}, on(){}, invalidateSize(){}, addLayer(){}, removeLayer(){},
+    getZoom(){ return 11 },
   } },
   tileLayer(){ return layer([]) },
   polyline(pts){ return layer(pts) },
+  circle(pt){ return layer([pt]) },
   layerGroup(){ return layer([]) },
   marker(pt){ return layer([pt]) },
   divIcon(){ return {} },
@@ -75,8 +78,16 @@ const localStorage = {
   setItem: (k, v) => store.set(k, String(v)),
   removeItem: (k) => store.delete(k),
 };
+let geolocationCalls = 0;
+const navigator = {
+  geolocation: {
+    watchPosition(){ geolocationCalls += 1; return 1 },
+    getCurrentPosition(){ geolocationCalls += 1; },
+    clearWatch(){},
+  },
+};
 const ctx = {
-  document, L, console,
+  document, L, console, navigator, isSecureContext: true,
   window: ctx_window, localStorage, Blob: class {}, URL: { createObjectURL(){return 'blob:'}, revokeObjectURL(){} },
   setTimeout, clearTimeout, Math, Date, JSON, Number, String, Array, Object, Set, Map, isNaN, Infinity,
   fetch: async () => ({ ok: true, status: 200, json: async () => data }),
@@ -103,7 +114,12 @@ try {
                 `(${violations.length} occurrences)`);
     process.exit(1);
   }
+  if (geolocationCalls !== 0) {
+    console.log('FAIL boot asked for a position without being asked to:', geolocationCalls, 'call(s)');
+    process.exit(1);
+  }
   console.log('PASS boot completed, no Leaflet invariant violations');
+  console.log('PASS boot requested no geolocation');
   console.log('  view set before layers :', mapHasView);
   console.log('  distance :', registry.get('stat-distance')?.innerHTML);
   console.log('  days     :', (registry.get('days')?.innerHTML||'').length, 'chars');

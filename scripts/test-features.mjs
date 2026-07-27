@@ -40,17 +40,27 @@ function makeCtx(store) {
     execCommand(){ return true },
   };
   // Popup content is recorded rather than discarded, so a test can assert what a marker
-  // actually offers, and count how often it was re-opened.
-  const layer = () => ({ addTo(){ return this }, remove(){}, clearLayers(){}, on(){},
+  // actually offers, and how often it was re-opened. Children are tracked too, so a test
+  // can prove a layer group still holds what was added to it after a re-render.
+  const layer = (kind) => ({
+    _kind: kind, _children: [],
+    addTo(p){ if (Array.isArray(p?._children)) p._children.push(this); return this },
+    remove(){}, on(){},
+    clearLayers(){ this._children.length = 0; },
     bindPopup(html){ this._popupHtml = String(html); return this },
     openPopup(){ this._opened = (this._opened ?? 0) + 1; },
-    getBounds(){ return { isValid: () => true, pad(){return this} } } });
+    setLatLng(ll){ this._latlng = ll; return this },
+    setRadius(r){ this._radius = r; return this },
+    getBounds(){ return { isValid: () => true, pad(){return this} } },
+  });
   const L = {
     map(){ return { __isMap:true, setView(){return this},
       fitBounds(){return this}, remove(){}, on(){}, invalidateSize(){},
-      addLayer(){}, removeLayer(){}, panTo(){} } },
-    tileLayer(){ return layer() }, polyline(){ return layer() }, layerGroup(){ return layer() },
-    marker(){ return layer() }, divIcon(){ return {} }, latLngBounds(b){ return b },
+      addLayer(){}, removeLayer(){}, panTo(){}, getZoom(){ return 11 } } },
+    tileLayer(){ return layer('tile') }, polyline(){ return layer('polyline') },
+    layerGroup(){ return layer('group') }, marker(){ return layer('marker') },
+    circle(){ return layer('circle') },
+    divIcon(){ return {} }, latLngBounds(b){ return b },
   };
   const data = JSON.parse(fs.readFileSync('site/route-data.json','utf8'));
   const localStorage = {
@@ -64,7 +74,22 @@ function makeCtx(store) {
     fetch: async () => ({ ok:true, status:200, json: async () => data }) };
   ctx.location = { origin: 'http://route-planner.test', pathname: '/site/index.html', hash: '' };
   ctx.history = { replaceState(_a, _b, h) { ctx.location.hash = String(h || ''); } };
-  ctx.navigator = { clipboard: { writeText: async () => {} } };
+  // Fake geolocation that records rather than acts, so a test can drive the callbacks and
+  // assert nothing asks for a position unless the button was pressed.
+  const geoCalls = { watch: 0, clear: 0, clearedId: null, options: null, cb: null };
+  ctx.navigator = {
+    clipboard: { writeText: async () => {} },
+    geolocation: {
+      watchPosition(ok, err, options){
+        geoCalls.watch += 1;
+        geoCalls.options = options;
+        geoCalls.cb = { ok, err };
+        return 42;
+      },
+      clearWatch(id){ geoCalls.clear += 1; geoCalls.clearedId = id; },
+    },
+  };
+  ctx.isSecureContext = true;
   ctx.APP_CONFIG = { osMapsKey: 'test-key-not-real' };
   ctx.globalThis = ctx; ctx.window = ctx;
   vm.createContext(ctx);
@@ -74,7 +99,7 @@ function makeCtx(store) {
   // Top-level `const` is lexical, not a property of globalThis, so reach it by
   // evaluating in the same context.
   const evalIn = (code) => new vm.Script(code).runInContext(ctx);
-  return { ctx, registry, handlers, evalIn };
+  return { ctx, registry, handlers, evalIn, geoCalls };
 }
 
 let fails = 0;
@@ -524,6 +549,82 @@ check('and its popup re-opened, so you keep your place', (after5?._opened ?? 0) 
 check('with the label flipped', (after5?._popupHtml ?? '').includes(!was5 ? 'Remove from route' : 'Add to route'));
 check('a click landing elsewhere is ignored',
       onPopupClick({ target: { closest: () => null } }) === undefined);
+
+// --- showing your own position ------------------------------------------------------
+console.log('\nMy location');
+const s6 = makeCtx(new Map());
+await new Promise(r=>setTimeout(r,400));
+const ev6 = (code) => s6.evalIn(code);
+const geo6 = s6.geoCalls;
+
+// The invariant that matters most: a page load must never ask where you are.
+check('booting asks for no position at all', geo6.watch === 0, `${geo6.watch} call(s)`);
+check('and starts with no watch running', ev6('geo').watchId === null);
+check('the location layer exists and is separate from the marker layer',
+      ev6('locationLayer') != null && ev6('locationLayer') !== ev6('markerLayer'));
+
+const locateClick = s6.handlers['locate:click'];
+check('the button is wired', typeof locateClick === 'function');
+locateClick();
+check('pressing it starts a watch', geo6.watch === 1, `${geo6.watch} call(s)`);
+check('asking for the best available fix', geo6.options?.enableHighAccuracy === true);
+check('with a timeout, so it cannot hang forever', typeof geo6.options?.timeout === 'number', `${geo6.options?.timeout} ms`);
+check('the button reads as pressed', s6.registry.get('locate').textContent === 'Stop locating');
+check('and says it is waiting', s6.registry.get('locate-status').textContent.includes('Waiting'));
+
+// Deliver a fix.
+geo6.cb.ok({ coords: { latitude: 54.4542, longitude: -3.2119, accuracy: 12 } });
+const locLayer = ev6('locationLayer');
+check('a fix draws a dot and an accuracy ring', locLayer._children.length === 2, `${locLayer._children.length} layer(s)`);
+check('the ring is a circle sized to the accuracy',
+      locLayer._children.some(c => c._kind === 'circle'), locLayer._children.map(c=>c._kind).join('+'));
+check('the accuracy is reported in metres', s6.registry.get('locate-status').textContent.includes('±12 m'),
+      s6.registry.get('locate-status').textContent);
+
+// The regression this design exists to prevent: ticking a peak re-renders the map, and
+// markerLayer.clearLayers() must not take the position dot with it.
+ev6('renderMap()');
+check('a map re-render leaves your position alone', ev6('locationLayer')._children.length === 2,
+      `${ev6('locationLayer')._children.length} layer(s) after renderMap`);
+
+// A second fix should move the existing dot, not stack another one on top.
+geo6.cb.ok({ coords: { latitude: 54.4550, longitude: -3.2100, accuracy: 8 } });
+check('a later fix moves the dot rather than adding one', ev6('locationLayer')._children.length === 2,
+      `${ev6('locationLayer')._children.length} layer(s)`);
+check('and resizes the ring', ev6('geo').ring._radius === 8, `${ev6('geo').ring._radius} m`);
+check('the readout follows', s6.registry.get('locate-status').textContent.includes('±8 m'));
+
+// Pressing again stops and tidies up.
+locateClick();
+check('pressing again clears the watch', geo6.clear === 1 && geo6.clearedId === 42);
+check('the dot is removed', ev6('locationLayer')._children.length === 0);
+check('the button resets', s6.registry.get('locate').textContent === 'Locate me');
+check('and so does the status line', s6.registry.get('locate-status').textContent === '');
+
+// Errors must be legible, and must not leave the button stuck on.
+for (const [code, expect] of [[1, 'permission'], [2, 'No position'], [3, 'Timed out']]) {
+  locateClick();
+  geo6.cb.err({ code });
+  const msg = s6.registry.get('locate-status').textContent;
+  check(`error ${code} explains itself`, msg.toLowerCase().includes(expect.toLowerCase()), msg.slice(0, 58));
+  check(`error ${code} resets the button`, ev6('geo').watchId === null &&
+        s6.registry.get('locate').textContent === 'Locate me');
+}
+
+// No geolocation at all: the button must be disabled with a reason, not silently dead.
+const s7 = makeCtx(new Map());
+s7.ctx.navigator = { clipboard: { writeText: async () => {} } };
+await new Promise(r=>setTimeout(r,400));
+check('without geolocation support the reason is stated',
+      /no location support/i.test(s7.evalIn('locateUnavailableReason()') ?? ''),
+      s7.evalIn('locateUnavailableReason()'));
+s7.ctx.isSecureContext = false;
+s7.ctx.navigator.geolocation = { watchPosition(){ return 1 }, clearWatch(){} };
+check('over plain http it says https is needed',
+      /https/i.test(s7.evalIn('locateUnavailableReason()') ?? ''),
+      s7.evalIn('locateUnavailableReason()'));
+check('and pressing the button then does nothing but explain',
+      (() => { s7.evalIn('startLocate()'); return s7.evalIn('geo').watchId === null; })());
 
 console.log(`\n${fails === 0 ? 'ALL FEATURE CHECKS PASSED' : fails + ' FAILED'}`);
 process.exit(fails ? 1 : 0);
