@@ -806,6 +806,7 @@ function renderPalette() {
     if (row.kind === 'command') {
       const on = row.cmd.active?.() ? '<span class="pr-in">✓ current</span>' : '';
       html.push(`<div class="pr" role="option" aria-selected="${selected}" data-row="${n}">
+        <span class="pr-check"></span>
         <span class="pr-glyph">▸</span>
         <span class="pr-body"><span class="pr-title">${highlight(row.cmd.title, state.search)}</span>
         ${row.cmd.hint ? `<span class="pr-sub">${row.cmd.hint}</span>` : ''}</span>
@@ -817,10 +818,18 @@ function renderPalette() {
       const mode = inPlan ? (modes.get(item.id) ?? 'out-and-back') : null;
       const day = item.dayByDirection[state.direction];
       html.push(`<div class="pr" role="option" aria-selected="${selected}" data-row="${n}">
+        <span class="pr-check${inPlan ? ' on' : ''}" aria-hidden="true">${inPlan ? '☑' : '☐'}</span>
         <span class="pr-glyph">${item._cat.glyph}</span>
         <span class="pr-body"><span class="pr-title">${highlight(item.title, state.search)}${item.heightM ? ` <span class="pr-meta">${item.heightM} m</span>` : ''}</span>
         ${item.description ? `<span class="pr-sub">${item.description.slice(0, 96)}${item.description.length > 96 ? '…' : ''}</span>` : ''}</span>
-        <span class="pr-meta">${day ? `day ${day}` : ''}${mode && mode !== 'excluded' ? ` · ${MODE_LABEL[mode]}` : ''} ${inPlan ? '<span class="pr-in">✓</span>' : ''}</span>
+        <span class="pr-meta">${day ? `<span class="pr-day">Day ${day}</span>` : ''}${
+          mode === 'excluded'
+            ? ' <span class="pr-warn">unreachable</span>'
+            : mode
+              ? ` ${MODE_LABEL[mode]}`
+              : ''
+        }</span>
+        <button type="button" class="pr-go" data-go="${item.id}" tabindex="-1" aria-label="Go to ${item.title} on the map" title="Go to it on the map">→</button>
       </div>`);
     }
   });
@@ -846,9 +855,21 @@ function closePalette() {
   $('palette-open')?.focus();
 }
 
-// Enter goes to the thing; Shift-Enter adds or removes it and keeps the palette up
-// so several can be adjusted in one pass.
-function runPaletteRow(n, { toggle = false } = {}) {
+// Add or remove a point, from wherever the request came from. The day panels do a
+// narrower re-render of their own to avoid collapsing the panel being worked in; here a
+// full render is wanted, because the palette and the map popups both sit above the page
+// and every figure on it may have moved.
+function togglePoint(id) {
+  if (state.selected.has(id)) state.selected.delete(id);
+  else state.selected.add(id);
+  render();
+  saveState();
+}
+
+// Enter adds or removes and leaves the palette up, so a handful of points can be ticked
+// in one pass without hunting down the page. Shift-Enter — or the row's → button — goes
+// to the thing on the map instead, and closes.
+function runPaletteRow(n, { jump = false } = {}) {
   const row = state.paletteRows?.[n];
   if (!row) return;
   if (row.kind === 'command') {
@@ -856,17 +877,13 @@ function runPaletteRow(n, { toggle = false } = {}) {
     row.cmd.run();
     return;
   }
-  const id = row.item.id;
-  if (toggle) {
-    if (state.selected.has(id)) state.selected.delete(id);
-    else state.selected.add(id);
-    render();
-    saveState();
-    renderPalette();
+  if (jump) {
+    closePalette();
+    focusItem(row.item.id);
     return;
   }
-  closePalette();
-  focusItem(id);
+  togglePoint(row.item.id);
+  renderPalette();
 }
 
 function applyDayFilters() {
@@ -985,7 +1002,11 @@ function renderMap() {
             ? '<br><em>Left out of this plan: it can only be reached by doubling back.</em>'
             : '') +
           (item.description ? `<br>${item.description}` : '') +
-          (item.needsEntryPoint ? '<br><em>Marker is the lake centre — choose your own shore access.</em>' : ''),
+          (item.needsEntryPoint ? '<br><em>Marker is the lake centre — choose your own shore access.</em>' : '') +
+          // Toggling from here saves scrolling to the day panel to find the same row.
+          `<button type="button" class="popup-toggle${state.selected.has(item.id) ? ' on' : ''}" data-popup-toggle="${item.id}">${
+            state.selected.has(item.id) ? 'Remove from route' : 'Add to route'
+          }</button>`,
         { maxWidth: 260 },
       )
       .addTo(markerLayer);
@@ -1677,7 +1698,7 @@ function wireEvents() {
       renderPalette();
     } else if (e.key === 'Enter' && n) {
       e.preventDefault();
-      runPaletteRow(state.searchIndex, { toggle: e.shiftKey });
+      runPaletteRow(state.searchIndex, { jump: e.shiftKey });
     } else if (e.key === 'Tab') {
       // Keep focus inside the panel: it is the only thing there is to interact with.
       e.preventDefault();
@@ -1685,13 +1706,39 @@ function wireEvents() {
   });
 
   $('palette-results').addEventListener('click', (e) => {
+    const go = e.target.closest('[data-go]');
+    if (go) {
+      closePalette();
+      focusItem(go.dataset.go);
+      return;
+    }
     const row = e.target.closest('[data-row]');
-    if (row) runPaletteRow(Number(row.dataset.row), { toggle: e.shiftKey });
+    if (row) runPaletteRow(Number(row.dataset.row), { jump: e.shiftKey });
   });
 
   $('palette').addEventListener('click', (e) => {
     if (e.target.closest('[data-palette-close]')) closePalette();
   });
+
+  // Add/remove straight from a map popup. Delegated, because renderMap() destroys and
+  // rebuilds every popup, so there is nothing stable to bind to. Capture phase: Leaflet
+  // calls disableClickPropagation on the popup wrapper, which stops mousedown rather
+  // than click today, but capturing means this does not rest on that staying true.
+  document.addEventListener(
+    'click',
+    (e) => {
+      const btn = e.target.closest?.('[data-popup-toggle]');
+      if (!btn) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const id = btn.dataset.popupToggle;
+      togglePoint(id);
+      // render() cleared the marker layer, so re-open the popup on the fresh marker —
+      // otherwise the map goes blank-looking at the exact spot you were reading.
+      markerById.get(id)?.openPopup();
+    },
+    true,
+  );
 
   document.addEventListener('keydown', (e) => {
     const key = (e.key ?? '').toLowerCase();

@@ -240,6 +240,21 @@ footer {
 
 .leaflet-popup-content { font-family: var(--sans); font-size: 0.8rem; }
 .leaflet-popup-content strong { font-family: var(--serif); font-size: 0.95rem; }
+.popup-toggle {
+  display: block;
+  width: 100%;
+  margin-top: 0.6rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--ink);
+  border-radius: 3px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+.popup-toggle.on { background: var(--paper); color: var(--ink); }
+.popup-toggle:hover { opacity: 0.85; }
 .pin {
   display: flex;
   align-items: center;
@@ -364,6 +379,49 @@ kbd {
   flex: none;
 }
 .pr-in { color: var(--green); }
+.pr-check {
+  width: 1rem;
+  flex: none;
+  text-align: center;
+  font-size: 0.9rem;
+  line-height: 1;
+  color: var(--muted);
+}
+.pr-check.on { color: var(--green); }
+.pr-day {
+  display: inline-block;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 0.05rem 0.4rem;
+  margin-right: 0.15rem;
+  background: var(--paper-2);
+  color: var(--ink-soft);
+}
+.pr-warn { color: var(--accent); }
+/* Hidden until the row is hovered or keyboard-selected: plain click now toggles, so this
+   is the escape hatch to the map rather than the primary action. */
+.pr-go {
+  flex: none;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--paper);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.7rem;
+  line-height: 1;
+  padding: 0.25rem 0.4rem;
+  cursor: pointer;
+  opacity: 0;
+}
+.pr:hover .pr-go,
+.pr[aria-selected='true'] .pr-go { opacity: 1; }
+.pr-go:hover { color: var(--ink); border-color: var(--muted); }
+.pr-go:focus-visible { opacity: 1; outline: 2px solid var(--accent); outline-offset: 1px; }
+/* No hover on a touch screen, so a hover-only control is simply unreachable there —
+   tapping the row toggles it, and this would be the only way to the map. */
+@media (hover: none), (max-width: 780px) {
+  .pr-go { opacity: 1; padding: 0.35rem 0.55rem; }
+}
 .pr-empty { padding: 1.1rem; font-size: 0.85rem; color: var(--muted); }
 .palette-foot {
   display: flex;

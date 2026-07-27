@@ -62,6 +62,8 @@
           "_html",
           "_text",
           "_pts",
+          "_popupHtml",
+          "_opened",
           "_isMap",
           "__isMap"
         ]

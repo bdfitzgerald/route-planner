@@ -29,14 +29,22 @@ function makeCtx(store) {
   }
   const registry = new Map();
   const document = {
-    title: '', addEventListener(){},
+    title: '',
+    // Capture-phase listeners get their own key: the popup add/remove button is
+    // delegated on document with capture, and would otherwise overwrite a bubble-phase
+    // listener for the same event.
+    addEventListener(ev, fn, capture){ handlers[`document:${ev}${capture ? ':capture' : ''}`] = fn; },
     getElementById(id){ if(!registry.has(id)) registry.set(id, el(id)); return registry.get(id); },
     querySelectorAll(){ return [] }, querySelector(){ return el('q') }, createElement(){ return el('c') },
     body: { appendChild(){}, removeChild(){} },
     execCommand(){ return true },
   };
+  // Popup content is recorded rather than discarded, so a test can assert what a marker
+  // actually offers, and count how often it was re-opened.
   const layer = () => ({ addTo(){ return this }, remove(){}, clearLayers(){}, on(){},
-    bindPopup(){ return this }, openPopup(){}, getBounds(){ return { isValid: () => true, pad(){return this} } } });
+    bindPopup(html){ this._popupHtml = String(html); return this },
+    openPopup(){ this._opened = (this._opened ?? 0) + 1; },
+    getBounds(){ return { isValid: () => true, pad(){return this} } } });
   const L = {
     map(){ return { __isMap:true, setView(){return this},
       fitBounds(){return this}, remove(){}, on(){}, invalidateSize(){},
@@ -165,7 +173,7 @@ check('open selects the first row', st.searchIndex === 0);
 close();
 check('close resets paletteOpen', s4.evalIn('state').paletteOpen === false);
 
-// Shift-Enter on a point toggles it without closing
+// Enter on a point toggles it without closing
 open();
 s4.evalIn("state.search='black moss'; state.searchIndex=0;");
 s4.evalIn('renderPalette()');
@@ -174,10 +182,10 @@ const firstItem = rows.findIndex(r=>r.kind==='item');
 check('a point row is present for toggling', firstItem >= 0);
 const targetId = rows[firstItem].item.id;
 const before = s4.evalIn('state').selected.has(targetId);
-s4.evalIn(`runPaletteRow(${firstItem}, { toggle: true })`);
+s4.evalIn(`runPaletteRow(${firstItem})`);
 const after = s4.evalIn('state').selected.has(targetId);
-check('shift-enter toggles selection', before !== after, `${before} -> ${after}`);
-check('shift-enter keeps the palette open', s4.evalIn('state').paletteOpen === true);
+check('enter toggles selection', before !== after, `${before} -> ${after}`);
+check('enter keeps the palette open', s4.evalIn('state').paletteOpen === true);
 close();
 
 // --- shareable URL ---
@@ -444,6 +452,78 @@ check('round-trips through decodeShare', rt.ok === true && rt.ids.length === ev(
       `${rt.ids?.length} vs ${ev('state').selected.size}`);
 check('a stale fingerprint is refused',
       ev("window.decodeShare('v1.000000.cw.over.ff00', allDetourItems()).stale") === true);
+
+// --- the palette is a control surface, not just a jump list ---
+// Enter used to navigate and close, which meant ticking three peaks was three round
+// trips through the page. It now toggles in place and the panel stays up.
+console.log('\nPalette toggling');
+const s5 = makeCtx(new Map());
+await new Promise(r=>setTimeout(r,400));
+const st5 = s5.evalIn('state');
+const ev5 = (code) => s5.evalIn(code);
+ev5('openPalette()');
+st5.search = 'scafell pike';
+ev5('renderPalette()');
+const paletteHtml = () => s5.registry.get('palette-results').innerHTML;
+const rows5 = st5.paletteRows;
+const idx5 = rows5.findIndex((r) => r.kind === 'item' && r.item.title === 'Scafell Pike');
+check('the palette lists a searched point', idx5 >= 0, `row ${idx5} of ${rows5.length}`);
+const id5 = rows5[idx5].item.id;
+
+check('every item row shows its day', /class="pr-day">Day \d+</.test(paletteHtml()),
+      (paletteHtml().match(/class="pr-day">Day \d+/) ?? ['none'])[0]);
+check('and a checkbox, so it reads as a toggle', /class="pr-check/.test(paletteHtml()) && /[☐☑]/.test(paletteHtml()));
+check('and its own go-to-the-map button', new RegExp(`class="pr-go" data-go="${id5}"`).test(paletteHtml()));
+
+const was5 = st5.selected.has(id5);
+ev5(`runPaletteRow(${idx5})`);
+check('plain Enter adds or removes', st5.selected.has(id5) === !was5, `${was5} -> ${st5.selected.has(id5)}`);
+check('and the palette stays open for the next one', st5.paletteOpen === true);
+check('the row redraws with the new state', paletteHtml().includes(!was5 ? '☑' : '☐'));
+ev5(`runPaletteRow(${idx5})`);
+check('toggling again puts it back', st5.selected.has(id5) === was5);
+check('still open', st5.paletteOpen === true);
+
+ev5(`runPaletteRow(${idx5}, { jump: true })`);
+check('Shift-Enter goes to it and closes instead', st5.paletteOpen === false);
+check('leaving the selection alone', st5.selected.has(id5) === was5);
+
+// A command row must still run and close, not try to toggle something.
+ev5('openPalette()');
+st5.search = 'anticlockwise';
+ev5('renderPalette()');
+const cmdIdx = st5.paletteRows.findIndex((r) => r.kind === 'command');
+check('command rows are still matched', cmdIdx >= 0);
+ev5(`runPaletteRow(${cmdIdx})`);
+check('and running one closes the palette', st5.paletteOpen === false);
+
+// --- add and remove from a map popup ---
+console.log('\nMap popup toggling');
+const markers5 = ev5('markerById');
+check('markers are registered', markers5.size > 0, `${markers5.size} markers`);
+const before5 = markers5.get(id5);
+check('a popup offers add/remove', /data-popup-toggle="/.test(before5?._popupHtml ?? ''));
+check('labelled for the current state',
+      (before5?._popupHtml ?? '').includes(was5 ? 'Remove from route' : 'Add to route'),
+      was5 ? 'selected -> Remove' : 'unselected -> Add');
+
+const onPopupClick = s5.handlers['document:click:capture'];
+check('the popup button is delegated on document, in capture phase', typeof onPopupClick === 'function');
+const fakeBtn = { dataset: { popupToggle: id5 } };
+let defaultPrevented = false;
+onPopupClick({
+  target: { closest: (sel) => (sel === '[data-popup-toggle]' ? fakeBtn : null) },
+  preventDefault(){ defaultPrevented = true; },
+  stopPropagation(){},
+});
+check('clicking it toggles the point', st5.selected.has(id5) === !was5, `${was5} -> ${st5.selected.has(id5)}`);
+check('and swallows the event, so the map does not also handle it', defaultPrevented === true);
+const after5 = ev5('markerById').get(id5);
+check('the marker was rebuilt by the re-render', after5 !== before5);
+check('and its popup re-opened, so you keep your place', (after5?._opened ?? 0) > 0, `${after5?._opened} open(s)`);
+check('with the label flipped', (after5?._popupHtml ?? '').includes(!was5 ? 'Remove from route' : 'Add to route'));
+check('a click landing elsewhere is ignored',
+      onPopupClick({ target: { closest: () => null } }) === undefined);
 
 console.log(`\n${fails === 0 ? 'ALL FEATURE CHECKS PASSED' : fails + ' FAILED'}`);
 process.exit(fails ? 1 : 0);
